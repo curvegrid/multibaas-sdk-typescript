@@ -1,0 +1,13 @@
+inputSpec: https://api.redocly.com/registry/bundle/curvegrid/multibaas/v0/openapi.yaml
+outputDir: .
+generatorName: typescript-axios
+gitUserId: curvegrid
+gitRepoId: multibaas-sdk-typescript
+templateDir: templates
+additionalProperties:
+  npmName: "@curvegrid/multibaas-sdk"
+  npmVersion: 1.0.0-beta1
+  disallowAdditionalPropertiesIfNotPresent: true
+  legacyDiscriminatorBehavior: false
+  withInterfaces: true
+  supportsES6: true

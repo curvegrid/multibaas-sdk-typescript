@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "@curvegrid/multibaas-sdk-example",
+  "version": "1.0.0",
+  "description": "A MultiBaas SDK example",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "start": "ts-node --esm index.ts"
+  },
+  "author": "Curvegrid",
+  "license": "MIT",
+  "dependencies": {
+    "@curvegrid/multibaas-sdk-typescript": "file:..",
+    "axios": "^1.2.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4",
+    "ts-node": "^10.9.1"
+  }
+}
