@@ -25,6 +25,8 @@ jobs:
     timeout-minutes: 10
     env:
       OPENAPI_GENERATOR_VERSION: "${{ github.event.inputs.openapi-generator-version }}"
+    permissions:
+      contents: write
     steps:
       - name: Check Tag
         id: check-tag
