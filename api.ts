@@ -194,6 +194,55 @@ export interface AddressLabel {
   address: string;
 }
 /**
+ * An audit log entry.
+ * @export
+ * @interface AuditLog
+ */
+export interface AuditLog {
+  /**
+   * The ID of the user who performed the action.
+   * @type {number}
+   * @memberof AuditLog
+   */
+  actionByID: number;
+  /**
+   * The ID of the user who was acted upon.
+   * @type {number}
+   * @memberof AuditLog
+   */
+  actionOnID?: number;
+  /**
+   * The email of the user who performed the action.
+   * @type {string}
+   * @memberof AuditLog
+   */
+  actionByUserEmail: string;
+  /**
+   * The email of the user who was acted upon.
+   * @type {string}
+   * @memberof AuditLog
+   */
+  actionOnUserEmail?: string;
+  /**
+   * The type of action that was performed.
+   * @type {string}
+   * @memberof AuditLog
+   */
+  type: string;
+  /**
+   * The time the action was performed.
+   * @type {string}
+   * @memberof AuditLog
+   */
+  createdAt: string;
+  /**
+   * The data associated with the action.
+   * @type {object}
+   * @memberof AuditLog
+   */
+  activityData: object;
+}
+/**
  * An object representing an HSM account.
  * @export
  * @interface AzureAccount
@@ -512,6 +561,31 @@ export interface BaseTransactionToSignTx {
    * @memberof BaseTransactionToSignTx
    */
   type: number;
+}
+/**
+ * A user.
+ * @export
+ * @interface BaseUser
+ */
+export interface BaseUser {
+  /**
+   * The user\'s email address.
+   * @type {string}
+   * @memberof BaseUser
+   */
+  email: string;
+  /**
+   * The user\'s first name.
+   * @type {string}
+   * @memberof BaseUser
+   */
+  firstName: string;
+  /**
+   * The user\'s last name.
+   * @type {string}
+   * @memberof BaseUser
+   */
+  lastName: string;
 }
 /**
  * A block in the Ethereum blockchain.
@@ -2632,6 +2706,44 @@ export interface ListAddresses200ResponseAllOf {
 /**
  *
  * @export
+ * @interface ListAuditLogs200Response
+ */
+export interface ListAuditLogs200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListAuditLogs200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListAuditLogs200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<AuditLog>}
+   * @memberof ListAuditLogs200Response
+   */
+  result: Array<AuditLog>;
+}
+/**
+ *
+ * @export
+ * @interface ListAuditLogs200ResponseAllOf
+ */
+export interface ListAuditLogs200ResponseAllOf {
+  /**
+   *
+   * @type {Array<AuditLog>}
+   * @memberof ListAuditLogs200ResponseAllOf
+   */
+  result: Array<AuditLog>;
+}
+/**
+ *
+ * @export
  * @interface ListContractVersions200Response
  */
 export interface ListContractVersions200Response {
@@ -2837,6 +2949,44 @@ export interface ListHsmWallets200ResponseAllOf {
    * @memberof ListHsmWallets200ResponseAllOf
    */
   result: Array<StandaloneWallet>;
+}
+/**
+ *
+ * @export
+ * @interface ListUsers200Response
+ */
+export interface ListUsers200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListUsers200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListUsers200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<User>}
+   * @memberof ListUsers200Response
+   */
+  result: Array<User>;
+}
+/**
+ *
+ * @export
+ * @interface ListUsers200ResponseAllOf
+ */
+export interface ListUsers200ResponseAllOf {
+  /**
+   *
+   * @type {Array<User>}
+   * @memberof ListUsers200ResponseAllOf
+   */
+  result: Array<User>;
 }
 /**
  *
@@ -3837,6 +3987,50 @@ export interface TypeConversionOptions {
   types?: Array<string> | null;
 }
 /**
+ * A user.
+ * @export
+ * @interface User
+ */
+export interface User {
+  /**
+   * The user\'s email address.
+   * @type {string}
+   * @memberof User
+   */
+  email: string;
+  /**
+   * The user\'s first name.
+   * @type {string}
+   * @memberof User
+   */
+  firstName: string;
+  /**
+   * The user\'s last name.
+   * @type {string}
+   * @memberof User
+   */
+  lastName: string;
+  /**
+   * The user ID.
+   * @type {number}
+   * @memberof User
+   */
+  id: number;
+}
+/**
+ *
+ * @export
+ * @interface UserAllOf
+ */
+export interface UserAllOf {
+  /**
+   * The user ID.
+   * @type {number}
+   * @memberof UserAllOf
+   */
+  id: number;
+}
+/**
  *
  * @export
  * @interface WalletTransaction
@@ -4363,6 +4557,214 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
   public setAddress(chain: ChainName, addressLabel?: AddressLabel, options?: AxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
       .setAddress(chain, addressLabel, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * AdminApi - axios parameter creator
+ * @export
+ */
+export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
+  return {
+    /**
+     * Returns the audit logs.
+     * @summary List audit logs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listAuditLogs: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/systemactivities`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Returns all the users.
+     * @summary List users
+     * @param {number} [groupID]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listUsers: async (groupID?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/users`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (groupID !== undefined) {
+        localVarQueryParameter['groupID'] = groupID;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    }
+  };
+};
+
+/**
+ * AdminApi - functional programming interface
+ * @export
+ */
+export const AdminApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Returns the audit logs.
+     * @summary List audit logs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listAuditLogs(
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAuditLogs200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listAuditLogs(options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Returns all the users.
+     * @summary List users
+     * @param {number} [groupID]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listUsers(
+      groupID?: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsers200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(groupID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    }
+  };
+};
+
+/**
+ * AdminApi - factory interface
+ * @export
+ */
+export const AdminApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+  const localVarFp = AdminApiFp(configuration);
+  return {
+    /**
+     * Returns the audit logs.
+     * @summary List audit logs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listAuditLogs(options?: any): AxiosPromise<ListAuditLogs200Response> {
+      return localVarFp.listAuditLogs(options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Returns all the users.
+     * @summary List users
+     * @param {number} [groupID]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listUsers(groupID?: number, options?: any): AxiosPromise<ListUsers200Response> {
+      return localVarFp.listUsers(groupID, options).then((request) => request(axios, basePath));
+    }
+  };
+};
+
+/**
+ * AdminApi - interface
+ * @export
+ * @interface AdminApi
+ */
+export interface AdminApiInterface {
+  /**
+   * Returns the audit logs.
+   * @summary List audit logs
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  listAuditLogs(options?: AxiosRequestConfig): AxiosPromise<ListAuditLogs200Response>;
+
+  /**
+   * Returns all the users.
+   * @summary List users
+   * @param {number} [groupID]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  listUsers(groupID?: number, options?: AxiosRequestConfig): AxiosPromise<ListUsers200Response>;
+}
+
+/**
+ * AdminApi - object-oriented interface
+ * @export
+ * @class AdminApi
+ * @extends {BaseAPI}
+ */
+export class AdminApi extends BaseAPI implements AdminApiInterface {
+  /**
+   * Returns the audit logs.
+   * @summary List audit logs
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public listAuditLogs(options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .listAuditLogs(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Returns all the users.
+   * @summary List users
+   * @param {number} [groupID]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public listUsers(groupID?: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .listUsers(groupID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
