@@ -1,6 +1,6 @@
 {
   "name": "@curvegrid/multibaas-sdk",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "description": "MultiBaas SDK for TypeScript / JavaScript",
   "author": "Curvegrid",
   "repository": {

@@ -2566,6 +2566,43 @@ export interface GetTransactionReceipt200ResponseAllOf {
   result: TransactionReceipt;
 }
 /**
+ * A group.
+ * @export
+ * @interface Group
+ */
+export interface Group {
+  /**
+   * The group ID.
+   * @type {number}
+   * @memberof Group
+   */
+  id: number;
+  /**
+   * The group name.
+   * @type {string}
+   * @memberof Group
+   */
+  name: string;
+  /**
+   * The group short name.
+   * @type {string}
+   * @memberof Group
+   */
+  shortName: string;
+  /**
+   * The group description.
+   * @type {string}
+   * @memberof Group
+   */
+  description: string;
+  /**
+   * The group roles.
+   * @type {Array<Role>}
+   * @memberof Group
+   */
+  roles: Array<Role>;
+}
+/**
  * Response body for returning HSM Data.
  * @export
  * @interface HSMData
@@ -2873,6 +2910,44 @@ export interface ListEventQueries200ResponseAllOf {
    * @memberof ListEventQueries200ResponseAllOf
    */
   result: Array<SavedEventQuery>;
+}
+/**
+ *
+ * @export
+ * @interface ListGroups200Response
+ */
+export interface ListGroups200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListGroups200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListGroups200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<Group>}
+   * @memberof ListGroups200Response
+   */
+  result: Array<Group>;
+}
+/**
+ *
+ * @export
+ * @interface ListGroups200ResponseAllOf
+ */
+export interface ListGroups200ResponseAllOf {
+  /**
+   *
+   * @type {Array<Group>}
+   * @memberof ListGroups200ResponseAllOf
+   */
+  result: Array<Group>;
 }
 /**
  *
@@ -3372,6 +3447,37 @@ export interface PreviewArgs {
    * @memberof PreviewArgs
    */
   outputs: Array<ContractABIMethodArgument>;
+}
+/**
+ * A role.
+ * @export
+ * @interface Role
+ */
+export interface Role {
+  /**
+   * The role ID.
+   * @type {number}
+   * @memberof Role
+   */
+  id: number;
+  /**
+   * The role name.
+   * @type {string}
+   * @memberof Role
+   */
+  name: string;
+  /**
+   * The role short name.
+   * @type {string}
+   * @memberof Role
+   */
+  shortName: string;
+  /**
+   * The role description.
+   * @type {string}
+   * @memberof Role
+   */
+  description: string;
 }
 /**
  * A saved event query.
@@ -4568,6 +4674,140 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
 export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
     /**
+     * Adds an API key to a group.
+     * @summary Add API key to group
+     * @param {number} groupID
+     * @param {number} apiKeyID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addGroupApikey: async (
+      groupID: number,
+      apiKeyID: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'groupID' is not null or undefined
+      assertParamExists('addGroupApikey', 'groupID', groupID);
+      // verify required parameter 'apiKeyID' is not null or undefined
+      assertParamExists('addGroupApikey', 'apiKeyID', apiKeyID);
+      const localVarPath = `/groups/{groupID}/api_keys/{apiKeyID}`
+        .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
+        .replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Adds a role to a group.
+     * @summary Add role to group
+     * @param {number} groupID
+     * @param {string} roleShortName
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addGroupRole: async (
+      groupID: number,
+      roleShortName: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'groupID' is not null or undefined
+      assertParamExists('addGroupRole', 'groupID', groupID);
+      // verify required parameter 'roleShortName' is not null or undefined
+      assertParamExists('addGroupRole', 'roleShortName', roleShortName);
+      const localVarPath = `/groups/{groupID}/roles/{roleShortName}`
+        .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
+        .replace(`{${'roleShortName'}}`, encodeURIComponent(String(roleShortName)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Adds a user to a group.
+     * @summary Add user to group
+     * @param {number} groupID
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addGroupUser: async (groupID: number, userID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'groupID' is not null or undefined
+      assertParamExists('addGroupUser', 'groupID', groupID);
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('addGroupUser', 'userID', userID);
+      const localVarPath = `/groups/{groupID}/users/{userID}`
+        .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
+        .replace(`{${'userID'}}`, encodeURIComponent(String(userID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Returns the audit logs.
      * @summary List audit logs
      * @param {*} [options] Override http request option.
@@ -4591,6 +4831,60 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Returns all the groups.
+     * @summary List groups
+     * @param {number} [userID]
+     * @param {number} [apiKeyID]
+     * @param {boolean} [assignable]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listGroups: async (
+      userID?: number,
+      apiKeyID?: number,
+      assignable?: boolean,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/groups`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (userID !== undefined) {
+        localVarQueryParameter['userID'] = userID;
+      }
+
+      if (apiKeyID !== undefined) {
+        localVarQueryParameter['apiKeyID'] = apiKeyID;
+      }
+
+      if (assignable !== undefined) {
+        localVarQueryParameter['assignable'] = assignable;
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4639,6 +4933,144 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
         url: toPathString(localVarUrlObj),
         options: localVarRequestOptions
       };
+    },
+    /**
+     * Removes an API key from a group.
+     * @summary Remove API key from group
+     * @param {number} groupID
+     * @param {number} apiKeyID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeGroupApikey: async (
+      groupID: number,
+      apiKeyID: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'groupID' is not null or undefined
+      assertParamExists('removeGroupApikey', 'groupID', groupID);
+      // verify required parameter 'apiKeyID' is not null or undefined
+      assertParamExists('removeGroupApikey', 'apiKeyID', apiKeyID);
+      const localVarPath = `/groups/{groupID}/api_keys/{apiKeyID}`
+        .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
+        .replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Removes a role from a group.
+     * @summary Remove role from group
+     * @param {number} groupID
+     * @param {string} roleShortName
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeGroupRole: async (
+      groupID: number,
+      roleShortName: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'groupID' is not null or undefined
+      assertParamExists('removeGroupRole', 'groupID', groupID);
+      // verify required parameter 'roleShortName' is not null or undefined
+      assertParamExists('removeGroupRole', 'roleShortName', roleShortName);
+      const localVarPath = `/groups/{groupID}/roles/{roleShortName}`
+        .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
+        .replace(`{${'roleShortName'}}`, encodeURIComponent(String(roleShortName)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Removes a user from a group.
+     * @summary Remove user from group
+     * @param {number} groupID
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeGroupUser: async (
+      groupID: number,
+      userID: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'groupID' is not null or undefined
+      assertParamExists('removeGroupUser', 'groupID', groupID);
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('removeGroupUser', 'userID', userID);
+      const localVarPath = `/groups/{groupID}/users/{userID}`
+        .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
+        .replace(`{${'userID'}}`, encodeURIComponent(String(userID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
     }
   };
 };
@@ -4651,6 +5083,54 @@ export const AdminApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration);
   return {
     /**
+     * Adds an API key to a group.
+     * @summary Add API key to group
+     * @param {number} groupID
+     * @param {number} apiKeyID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async addGroupApikey(
+      groupID: number,
+      apiKeyID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupApikey(groupID, apiKeyID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Adds a role to a group.
+     * @summary Add role to group
+     * @param {number} groupID
+     * @param {string} roleShortName
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async addGroupRole(
+      groupID: number,
+      roleShortName: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupRole(groupID, roleShortName, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Adds a user to a group.
+     * @summary Add user to group
+     * @param {number} groupID
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async addGroupUser(
+      groupID: number,
+      userID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupUser(groupID, userID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Returns the audit logs.
      * @summary List audit logs
      * @param {*} [options] Override http request option.
@@ -4660,6 +5140,24 @@ export const AdminApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAuditLogs200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listAuditLogs(options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Returns all the groups.
+     * @summary List groups
+     * @param {number} [userID]
+     * @param {number} [apiKeyID]
+     * @param {boolean} [assignable]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listGroups(
+      userID?: number,
+      apiKeyID?: number,
+      assignable?: boolean,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListGroups200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listGroups(userID, apiKeyID, assignable, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -4675,6 +5173,54 @@ export const AdminApiFp = function (configuration?: Configuration) {
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsers200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(groupID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Removes an API key from a group.
+     * @summary Remove API key from group
+     * @param {number} groupID
+     * @param {number} apiKeyID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeGroupApikey(
+      groupID: number,
+      apiKeyID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupApikey(groupID, apiKeyID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Removes a role from a group.
+     * @summary Remove role from group
+     * @param {number} groupID
+     * @param {string} roleShortName
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeGroupRole(
+      groupID: number,
+      roleShortName: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupRole(groupID, roleShortName, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Removes a user from a group.
+     * @summary Remove user from group
+     * @param {number} groupID
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeGroupUser(
+      groupID: number,
+      userID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupUser(groupID, userID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     }
   };
 };
@@ -4687,6 +5233,39 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
   const localVarFp = AdminApiFp(configuration);
   return {
     /**
+     * Adds an API key to a group.
+     * @summary Add API key to group
+     * @param {number} groupID
+     * @param {number} apiKeyID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addGroupApikey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.addGroupApikey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Adds a role to a group.
+     * @summary Add role to group
+     * @param {number} groupID
+     * @param {string} roleShortName
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addGroupRole(groupID: number, roleShortName: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.addGroupRole(groupID, roleShortName, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Adds a user to a group.
+     * @summary Add user to group
+     * @param {number} groupID
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addGroupUser(groupID: number, userID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.addGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
+    },
+    /**
      * Returns the audit logs.
      * @summary List audit logs
      * @param {*} [options] Override http request option.
@@ -4694,6 +5273,23 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      */
     listAuditLogs(options?: any): AxiosPromise<ListAuditLogs200Response> {
       return localVarFp.listAuditLogs(options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Returns all the groups.
+     * @summary List groups
+     * @param {number} [userID]
+     * @param {number} [apiKeyID]
+     * @param {boolean} [assignable]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listGroups(
+      userID?: number,
+      apiKeyID?: number,
+      assignable?: boolean,
+      options?: any
+    ): AxiosPromise<ListGroups200Response> {
+      return localVarFp.listGroups(userID, apiKeyID, assignable, options).then((request) => request(axios, basePath));
     },
     /**
      * Returns all the users.
@@ -4704,6 +5300,39 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      */
     listUsers(groupID?: number, options?: any): AxiosPromise<ListUsers200Response> {
       return localVarFp.listUsers(groupID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Removes an API key from a group.
+     * @summary Remove API key from group
+     * @param {number} groupID
+     * @param {number} apiKeyID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeGroupApikey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.removeGroupApikey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Removes a role from a group.
+     * @summary Remove role from group
+     * @param {number} groupID
+     * @param {string} roleShortName
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeGroupRole(groupID: number, roleShortName: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.removeGroupRole(groupID, roleShortName, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Removes a user from a group.
+     * @summary Remove user from group
+     * @param {number} groupID
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeGroupUser(groupID: number, userID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.removeGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
     }
   };
 };
@@ -4715,6 +5344,39 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
  */
 export interface AdminApiInterface {
   /**
+   * Adds an API key to a group.
+   * @summary Add API key to group
+   * @param {number} groupID
+   * @param {number} apiKeyID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  addGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Adds a role to a group.
+   * @summary Add role to group
+   * @param {number} groupID
+   * @param {string} roleShortName
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  addGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Adds a user to a group.
+   * @summary Add user to group
+   * @param {number} groupID
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  addGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
    * Returns the audit logs.
    * @summary List audit logs
    * @param {*} [options] Override http request option.
@@ -4722,6 +5384,23 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   listAuditLogs(options?: AxiosRequestConfig): AxiosPromise<ListAuditLogs200Response>;
+
+  /**
+   * Returns all the groups.
+   * @summary List groups
+   * @param {number} [userID]
+   * @param {number} [apiKeyID]
+   * @param {boolean} [assignable]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  listGroups(
+    userID?: number,
+    apiKeyID?: number,
+    assignable?: boolean,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<ListGroups200Response>;
 
   /**
    * Returns all the users.
@@ -4732,6 +5411,39 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   listUsers(groupID?: number, options?: AxiosRequestConfig): AxiosPromise<ListUsers200Response>;
+
+  /**
+   * Removes an API key from a group.
+   * @summary Remove API key from group
+   * @param {number} groupID
+   * @param {number} apiKeyID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  removeGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Removes a role from a group.
+   * @summary Remove role from group
+   * @param {number} groupID
+   * @param {string} roleShortName
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  removeGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Removes a user from a group.
+   * @summary Remove user from group
+   * @param {number} groupID
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 }
 
 /**
@@ -4741,6 +5453,51 @@ export interface AdminApiInterface {
  * @extends {BaseAPI}
  */
 export class AdminApi extends BaseAPI implements AdminApiInterface {
+  /**
+   * Adds an API key to a group.
+   * @summary Add API key to group
+   * @param {number} groupID
+   * @param {number} apiKeyID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public addGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .addGroupApikey(groupID, apiKeyID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Adds a role to a group.
+   * @summary Add role to group
+   * @param {number} groupID
+   * @param {string} roleShortName
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public addGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .addGroupRole(groupID, roleShortName, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Adds a user to a group.
+   * @summary Add user to group
+   * @param {number} groupID
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public addGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .addGroupUser(groupID, userID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    * Returns the audit logs.
    * @summary List audit logs
@@ -4755,6 +5512,22 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   }
 
   /**
+   * Returns all the groups.
+   * @summary List groups
+   * @param {number} [userID]
+   * @param {number} [apiKeyID]
+   * @param {boolean} [assignable]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public listGroups(userID?: number, apiKeyID?: number, assignable?: boolean, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .listGroups(userID, apiKeyID, assignable, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
    * Returns all the users.
    * @summary List users
    * @param {number} [groupID]
@@ -4765,6 +5538,51 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public listUsers(groupID?: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listUsers(groupID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes an API key from a group.
+   * @summary Remove API key from group
+   * @param {number} groupID
+   * @param {number} apiKeyID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public removeGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .removeGroupApikey(groupID, apiKeyID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes a role from a group.
+   * @summary Remove role from group
+   * @param {number} groupID
+   * @param {string} roleShortName
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public removeGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .removeGroupRole(groupID, roleShortName, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes a user from a group.
+   * @summary Remove user from group
+   * @param {number} groupID
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .removeGroupUser(groupID, userID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
