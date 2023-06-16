@@ -34,6 +34,86 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 
 /**
+ * An API key.
+ * @export
+ * @interface APIKey
+ */
+export interface APIKey {
+  /**
+   * A label.
+   * @type {string}
+   * @memberof APIKey
+   */
+  label: string;
+  /**
+   *
+   * @type {number}
+   * @memberof APIKey
+   */
+  id: number;
+  /**
+   * The time the API key was created.
+   * @type {string}
+   * @memberof APIKey
+   */
+  createdAt: string;
+  /**
+   * The time the API key was last used.
+   * @type {string}
+   * @memberof APIKey
+   */
+  lastUsedAt?: string;
+  /**
+   * The ID of the user that created the API key.
+   * @type {number}
+   * @memberof APIKey
+   */
+  createdBy: number;
+  /**
+   * The signature of the API key.
+   * @type {string}
+   * @memberof APIKey
+   */
+  signature: string;
+}
+/**
+ *
+ * @export
+ * @interface APIKeyAllOf
+ */
+export interface APIKeyAllOf {
+  /**
+   *
+   * @type {number}
+   * @memberof APIKeyAllOf
+   */
+  id: number;
+  /**
+   * The time the API key was created.
+   * @type {string}
+   * @memberof APIKeyAllOf
+   */
+  createdAt: string;
+  /**
+   * The time the API key was last used.
+   * @type {string}
+   * @memberof APIKeyAllOf
+   */
+  lastUsedAt?: string;
+  /**
+   * The ID of the user that created the API key.
+   * @type {number}
+   * @memberof APIKeyAllOf
+   */
+  createdBy: number;
+  /**
+   * The signature of the API key.
+   * @type {string}
+   * @memberof APIKeyAllOf
+   */
+  signature: string;
+}
+/**
  * Add key request data.
  * @export
  * @interface AddKey
@@ -397,6 +477,19 @@ export interface AzureWallet {
   publicAddress: string;
 }
 /**
+ * An API key.
+ * @export
+ * @interface BaseAPIKey
+ */
+export interface BaseAPIKey {
+  /**
+   * A label.
+   * @type {string}
+   * @memberof BaseAPIKey
+   */
+  label: string;
+}
+/**
  * A contract.
  * @export
  * @interface BaseContract
@@ -707,6 +800,25 @@ export interface Block {
    * @memberof Block
    */
   baseFeePerGas: string;
+}
+/**
+ * CORS Origin
+ * @export
+ * @interface CORSOrigin
+ */
+export interface CORSOrigin {
+  /**
+   *
+   * @type {number}
+   * @memberof CORSOrigin
+   */
+  id?: number;
+  /**
+   * The CORS Origin
+   * @type {string}
+   * @memberof CORSOrigin
+   */
+  origin?: string;
 }
 /**
  *
@@ -1501,6 +1613,76 @@ export interface CountWalletTransactions200ResponseAllOf {
 /**
  *
  * @export
+ * @interface CreateApiKey200Response
+ */
+export interface CreateApiKey200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof CreateApiKey200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof CreateApiKey200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {APIKey}
+   * @memberof CreateApiKey200Response
+   */
+  result: APIKey;
+}
+/**
+ *
+ * @export
+ * @interface CreateApiKey200ResponseAllOf
+ */
+export interface CreateApiKey200ResponseAllOf {
+  /**
+   *
+   * @type {APIKey}
+   * @memberof CreateApiKey200ResponseAllOf
+   */
+  result: APIKey;
+}
+/**
+ *
+ * @export
+ * @interface CreateApiKeyRequest
+ */
+export interface CreateApiKeyRequest {
+  /**
+   * A label.
+   * @type {string}
+   * @memberof CreateApiKeyRequest
+   */
+  label: string;
+  /**
+   *
+   * @type {Array<number>}
+   * @memberof CreateApiKeyRequest
+   */
+  groupIDs?: Array<number>;
+}
+/**
+ *
+ * @export
+ * @interface CreateApiKeyRequestAllOf
+ */
+export interface CreateApiKeyRequestAllOf {
+  /**
+   *
+   * @type {Array<number>}
+   * @memberof CreateApiKeyRequestAllOf
+   */
+  groupIDs?: Array<number>;
+}
+/**
+ *
+ * @export
  * @interface CreateHsmKey200Response
  */
 export interface CreateHsmKey200Response {
@@ -1566,6 +1748,25 @@ export interface CreateKey {
    * @memberof CreateKey
    */
   useHardwareModule: boolean;
+}
+/**
+ *
+ * @export
+ * @interface DeleteApiKey200Response
+ */
+export interface DeleteApiKey200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof DeleteApiKey200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof DeleteApiKey200Response
+   */
+  message: string;
 }
 /**
  *
@@ -2743,6 +2944,44 @@ export interface ListAddresses200ResponseAllOf {
 /**
  *
  * @export
+ * @interface ListApiKeys200Response
+ */
+export interface ListApiKeys200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListApiKeys200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListApiKeys200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<APIKey>}
+   * @memberof ListApiKeys200Response
+   */
+  result: Array<APIKey>;
+}
+/**
+ *
+ * @export
+ * @interface ListApiKeys200ResponseAllOf
+ */
+export interface ListApiKeys200ResponseAllOf {
+  /**
+   *
+   * @type {Array<APIKey>}
+   * @memberof ListApiKeys200ResponseAllOf
+   */
+  result: Array<APIKey>;
+}
+/**
+ *
+ * @export
  * @interface ListAuditLogs200Response
  */
 export interface ListAuditLogs200Response {
@@ -2872,6 +3111,44 @@ export interface ListContracts200ResponseAllOf {
    * @memberof ListContracts200ResponseAllOf
    */
   result: Array<ContractOverview>;
+}
+/**
+ *
+ * @export
+ * @interface ListCorsOrigins200Response
+ */
+export interface ListCorsOrigins200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListCorsOrigins200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListCorsOrigins200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<CORSOrigin>}
+   * @memberof ListCorsOrigins200Response
+   */
+  result: Array<CORSOrigin>;
+}
+/**
+ *
+ * @export
+ * @interface ListCorsOrigins200ResponseAllOf
+ */
+export interface ListCorsOrigins200ResponseAllOf {
+  /**
+   *
+   * @type {Array<CORSOrigin>}
+   * @memberof ListCorsOrigins200ResponseAllOf
+   */
+  result: Array<CORSOrigin>;
 }
 /**
  *
@@ -3656,25 +3933,6 @@ export interface StandaloneWallet {
   publicAddress: string;
 }
 /**
- *
- * @export
- * @interface SubmitSignedTransaction200Response
- */
-export interface SubmitSignedTransaction200Response {
-  /**
-   * The status code.
-   * @type {number}
-   * @memberof SubmitSignedTransaction200Response
-   */
-  status: number;
-  /**
-   * The human-readable status message.
-   * @type {string}
-   * @memberof SubmitSignedTransaction200Response
-   */
-  message: string;
-}
-/**
  * A transaction from the Ethereum Blockchain.
  * @export
  * @interface Transaction
@@ -4412,7 +4670,7 @@ export const AddressesApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       addressOrLabel: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAddress(chain, addressOrLabel, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -4482,11 +4740,7 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteAddress(
-      chain: ChainName,
-      addressOrLabel: string,
-      options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    deleteAddress(chain: ChainName, addressOrLabel: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.deleteAddress(chain, addressOrLabel, options).then((request) => request(axios, basePath));
     },
     /**
@@ -4549,7 +4803,7 @@ export interface AddressesApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Returns details about an address.
@@ -4673,6 +4927,44 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
  */
 export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
+    /**
+     * Adds a CORS origin.
+     * @summary Add CORS origin
+     * @param {CORSOrigin} [cORSOrigin]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addCorsOrigin: async (cORSOrigin?: CORSOrigin, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/cors`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(cORSOrigin, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
     /**
      * Adds an API key to a group.
      * @summary Add API key to group
@@ -4808,6 +5100,166 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       };
     },
     /**
+     * Creates an API key and adds it to group IDs.
+     * @summary Create API key
+     * @param {CreateApiKeyRequest} [createApiKeyRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createApiKey: async (
+      createApiKeyRequest?: CreateApiKeyRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/api_keys`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(createApiKeyRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Deletes an API key.
+     * @summary Delete API key
+     * @param {string} apiKeyLabel
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteApiKey: async (apiKeyLabel: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'apiKeyLabel' is not null or undefined
+      assertParamExists('deleteApiKey', 'apiKeyLabel', apiKeyLabel);
+      const localVarPath = `/api_keys/{apiKeyLabel}`.replace(
+        `{${'apiKeyLabel'}}`,
+        encodeURIComponent(String(apiKeyLabel))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Returns an API key.
+     * @summary Get API Key
+     * @param {string} apiKeyLabel
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getApiKey: async (apiKeyLabel: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'apiKeyLabel' is not null or undefined
+      assertParamExists('getApiKey', 'apiKeyLabel', apiKeyLabel);
+      const localVarPath = `/api_keys/{apiKeyLabel}`.replace(
+        `{${'apiKeyLabel'}}`,
+        encodeURIComponent(String(apiKeyLabel))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Returns all the API keys.
+     * @summary List API keys
+     * @param {boolean} [all] If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listApiKeys: async (all?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api_keys`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (all !== undefined) {
+        localVarQueryParameter['all'] = all;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Returns the audit logs.
      * @summary List audit logs
      * @param {*} [options] Override http request option.
@@ -4815,6 +5267,40 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      */
     listAuditLogs: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/systemactivities`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Returns a list of CORS origins.
+     * @summary List CORS origins
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listCorsOrigins: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/cors`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -4924,6 +5410,43 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       if (groupID !== undefined) {
         localVarQueryParameter['groupID'] = groupID;
       }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Removes a CORS origin.
+     * @summary Remove CORS Origin
+     * @param {number} originID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeCorsOrigin: async (originID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'originID' is not null or undefined
+      assertParamExists('removeCorsOrigin', 'originID', originID);
+      const localVarPath = `/cors/{originID}`.replace(`{${'originID'}}`, encodeURIComponent(String(originID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5083,6 +5606,20 @@ export const AdminApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration);
   return {
     /**
+     * Adds a CORS origin.
+     * @summary Add CORS origin
+     * @param {CORSOrigin} [cORSOrigin]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async addCorsOrigin(
+      cORSOrigin?: CORSOrigin,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.addCorsOrigin(cORSOrigin, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Adds an API key to a group.
      * @summary Add API key to group
      * @param {number} groupID
@@ -5131,6 +5668,62 @@ export const AdminApiFp = function (configuration?: Configuration) {
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
+     * Creates an API key and adds it to group IDs.
+     * @summary Create API key
+     * @param {CreateApiKeyRequest} [createApiKeyRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createApiKey(
+      createApiKeyRequest?: CreateApiKeyRequest,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createApiKey(createApiKeyRequest, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Deletes an API key.
+     * @summary Delete API key
+     * @param {string} apiKeyLabel
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteApiKey(
+      apiKeyLabel: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteApiKey(apiKeyLabel, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Returns an API key.
+     * @summary Get API Key
+     * @param {string} apiKeyLabel
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getApiKey(
+      apiKeyLabel: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getApiKey(apiKeyLabel, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Returns all the API keys.
+     * @summary List API keys
+     * @param {boolean} [all] If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listApiKeys(
+      all?: boolean,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListApiKeys200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listApiKeys(all, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Returns the audit logs.
      * @summary List audit logs
      * @param {*} [options] Override http request option.
@@ -5140,6 +5733,18 @@ export const AdminApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAuditLogs200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listAuditLogs(options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Returns a list of CORS origins.
+     * @summary List CORS origins
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listCorsOrigins(
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCorsOrigins200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listCorsOrigins(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5172,6 +5777,20 @@ export const AdminApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsers200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(groupID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Removes a CORS origin.
+     * @summary Remove CORS Origin
+     * @param {number} originID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeCorsOrigin(
+      originID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeCorsOrigin(originID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5233,6 +5852,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
   const localVarFp = AdminApiFp(configuration);
   return {
     /**
+     * Adds a CORS origin.
+     * @summary Add CORS origin
+     * @param {CORSOrigin} [cORSOrigin]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: any): AxiosPromise<DeleteApiKey200Response> {
+      return localVarFp.addCorsOrigin(cORSOrigin, options).then((request) => request(axios, basePath));
+    },
+    /**
      * Adds an API key to a group.
      * @summary Add API key to group
      * @param {number} groupID
@@ -5266,6 +5895,46 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       return localVarFp.addGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
     },
     /**
+     * Creates an API key and adds it to group IDs.
+     * @summary Create API key
+     * @param {CreateApiKeyRequest} [createApiKeyRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createApiKey(createApiKeyRequest?: CreateApiKeyRequest, options?: any): AxiosPromise<CreateApiKey200Response> {
+      return localVarFp.createApiKey(createApiKeyRequest, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Deletes an API key.
+     * @summary Delete API key
+     * @param {string} apiKeyLabel
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteApiKey(apiKeyLabel: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
+      return localVarFp.deleteApiKey(apiKeyLabel, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Returns an API key.
+     * @summary Get API Key
+     * @param {string} apiKeyLabel
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getApiKey(apiKeyLabel: string, options?: any): AxiosPromise<CreateApiKey200Response> {
+      return localVarFp.getApiKey(apiKeyLabel, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Returns all the API keys.
+     * @summary List API keys
+     * @param {boolean} [all] If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listApiKeys(all?: boolean, options?: any): AxiosPromise<ListApiKeys200Response> {
+      return localVarFp.listApiKeys(all, options).then((request) => request(axios, basePath));
+    },
+    /**
      * Returns the audit logs.
      * @summary List audit logs
      * @param {*} [options] Override http request option.
@@ -5273,6 +5942,15 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      */
     listAuditLogs(options?: any): AxiosPromise<ListAuditLogs200Response> {
       return localVarFp.listAuditLogs(options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Returns a list of CORS origins.
+     * @summary List CORS origins
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listCorsOrigins(options?: any): AxiosPromise<ListCorsOrigins200Response> {
+      return localVarFp.listCorsOrigins(options).then((request) => request(axios, basePath));
     },
     /**
      * Returns all the groups.
@@ -5300,6 +5978,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      */
     listUsers(groupID?: number, options?: any): AxiosPromise<ListUsers200Response> {
       return localVarFp.listUsers(groupID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Removes a CORS origin.
+     * @summary Remove CORS Origin
+     * @param {number} originID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeCorsOrigin(originID: number, options?: any): AxiosPromise<DeleteApiKey200Response> {
+      return localVarFp.removeCorsOrigin(originID, options).then((request) => request(axios, basePath));
     },
     /**
      * Removes an API key from a group.
@@ -5344,6 +6032,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
  */
 export interface AdminApiInterface {
   /**
+   * Adds a CORS origin.
+   * @summary Add CORS origin
+   * @param {CORSOrigin} [cORSOrigin]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  addCorsOrigin(cORSOrigin?: CORSOrigin, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+
+  /**
    * Adds an API key to a group.
    * @summary Add API key to group
    * @param {number} groupID
@@ -5377,6 +6075,49 @@ export interface AdminApiInterface {
   addGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
+   * Creates an API key and adds it to group IDs.
+   * @summary Create API key
+   * @param {CreateApiKeyRequest} [createApiKeyRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  createApiKey(
+    createApiKeyRequest?: CreateApiKeyRequest,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<CreateApiKey200Response>;
+
+  /**
+   * Deletes an API key.
+   * @summary Delete API key
+   * @param {string} apiKeyLabel
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  deleteApiKey(apiKeyLabel: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+
+  /**
+   * Returns an API key.
+   * @summary Get API Key
+   * @param {string} apiKeyLabel
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  getApiKey(apiKeyLabel: string, options?: AxiosRequestConfig): AxiosPromise<CreateApiKey200Response>;
+
+  /**
+   * Returns all the API keys.
+   * @summary List API keys
+   * @param {boolean} [all] If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  listApiKeys(all?: boolean, options?: AxiosRequestConfig): AxiosPromise<ListApiKeys200Response>;
+
+  /**
    * Returns the audit logs.
    * @summary List audit logs
    * @param {*} [options] Override http request option.
@@ -5384,6 +6125,15 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   listAuditLogs(options?: AxiosRequestConfig): AxiosPromise<ListAuditLogs200Response>;
+
+  /**
+   * Returns a list of CORS origins.
+   * @summary List CORS origins
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  listCorsOrigins(options?: AxiosRequestConfig): AxiosPromise<ListCorsOrigins200Response>;
 
   /**
    * Returns all the groups.
@@ -5411,6 +6161,16 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   listUsers(groupID?: number, options?: AxiosRequestConfig): AxiosPromise<ListUsers200Response>;
+
+  /**
+   * Removes a CORS origin.
+   * @summary Remove CORS Origin
+   * @param {number} originID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  removeCorsOrigin(originID: number, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Removes an API key from a group.
@@ -5453,6 +6213,20 @@ export interface AdminApiInterface {
  * @extends {BaseAPI}
  */
 export class AdminApi extends BaseAPI implements AdminApiInterface {
+  /**
+   * Adds a CORS origin.
+   * @summary Add CORS origin
+   * @param {CORSOrigin} [cORSOrigin]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public addCorsOrigin(cORSOrigin?: CORSOrigin, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .addCorsOrigin(cORSOrigin, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    * Adds an API key to a group.
    * @summary Add API key to group
@@ -5499,6 +6273,62 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   }
 
   /**
+   * Creates an API key and adds it to group IDs.
+   * @summary Create API key
+   * @param {CreateApiKeyRequest} [createApiKeyRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public createApiKey(createApiKeyRequest?: CreateApiKeyRequest, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .createApiKey(createApiKeyRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Deletes an API key.
+   * @summary Delete API key
+   * @param {string} apiKeyLabel
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public deleteApiKey(apiKeyLabel: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .deleteApiKey(apiKeyLabel, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Returns an API key.
+   * @summary Get API Key
+   * @param {string} apiKeyLabel
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public getApiKey(apiKeyLabel: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .getApiKey(apiKeyLabel, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Returns all the API keys.
+   * @summary List API keys
+   * @param {boolean} [all] If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public listApiKeys(all?: boolean, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .listApiKeys(all, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
    * Returns the audit logs.
    * @summary List audit logs
    * @param {*} [options] Override http request option.
@@ -5508,6 +6338,19 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public listAuditLogs(options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listAuditLogs(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Returns a list of CORS origins.
+   * @summary List CORS origins
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public listCorsOrigins(options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .listCorsOrigins(options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -5538,6 +6381,20 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public listUsers(groupID?: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listUsers(groupID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes a CORS origin.
+   * @summary Remove CORS Origin
+   * @param {number} originID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public removeCorsOrigin(originID: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .removeCorsOrigin(originID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -5961,7 +6818,7 @@ export const ChainsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.submitSignedTransaction(
         chain,
         signedTransactionSubmission,
@@ -6064,7 +6921,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
       options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    ): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp
         .submitSignedTransaction(chain, signedTransactionSubmission, options)
         .then((request) => request(axios, basePath));
@@ -6161,7 +7018,7 @@ export interface ChainsApiInterface {
     chain: ChainName,
     signedTransactionSubmission?: SignedTransactionSubmission,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Returns a transaction for sending the native token between addresses.
@@ -7247,7 +8104,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     async createContracts(
       baseContract?: Array<BaseContract>,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createContracts(baseContract, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -7608,10 +8465,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createContracts(
-      baseContract?: Array<BaseContract>,
-      options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    createContracts(baseContract?: Array<BaseContract>, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.createContracts(baseContract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -7912,7 +8766,7 @@ export interface ContractsApiInterface {
   createContracts(
     baseContract?: Array<BaseContract>,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Deletes a contract and all its versions.
@@ -8833,7 +9687,7 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
     async deleteEventQuery(
       eventQuery: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEventQuery(eventQuery, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -8916,7 +9770,7 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
       eventQuery: string,
       eventQuery2?: EventQuery,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setEventQuery(eventQuery, eventQuery2, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     }
@@ -8951,7 +9805,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteEventQuery(eventQuery: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    deleteEventQuery(eventQuery: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.deleteEventQuery(eventQuery, options).then((request) => request(axios, basePath));
     },
     /**
@@ -9019,11 +9873,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    setEventQuery(
-      eventQuery: string,
-      eventQuery2?: EventQuery,
-      options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.setEventQuery(eventQuery, eventQuery2, options).then((request) => request(axios, basePath));
     }
   };
@@ -9056,7 +9906,7 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
+  deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Executes an arbitrary event query.
@@ -9124,7 +9974,7 @@ export interface EventQueriesApiInterface {
     eventQuery: string,
     eventQuery2?: EventQuery,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<DeleteApiKey200Response>;
 }
 
 /**
@@ -10359,7 +11209,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async addHsmConfig(
       azureAccountConfig?: AzureAccountConfig,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmConfig(azureAccountConfig, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -10373,7 +11223,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async addHsmKey(
       addKey?: AddKey,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmKey(addKey, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -10401,7 +11251,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async deleteHsmConfig(
       clientId: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteHsmConfig(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -10415,7 +11265,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async deleteHsmKey(
       walletAddress: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteHsmKey(walletAddress, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -10483,7 +11333,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setLocalNonce(
         chain,
         walletAddress,
@@ -10545,10 +11395,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmConfig(
-      azureAccountConfig?: AzureAccountConfig,
-      options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    addHsmConfig(azureAccountConfig?: AzureAccountConfig, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.addHsmConfig(azureAccountConfig, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10558,7 +11405,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmKey(addKey?: AddKey, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    addHsmKey(addKey?: AddKey, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.addHsmKey(addKey, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10578,7 +11425,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteHsmConfig(clientId: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    deleteHsmConfig(clientId: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.deleteHsmConfig(clientId, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10588,7 +11435,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteHsmKey(walletAddress: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    deleteHsmKey(walletAddress: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp.deleteHsmKey(walletAddress, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10643,7 +11490,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
       options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    ): AxiosPromise<DeleteApiKey200Response> {
       return localVarFp
         .setLocalNonce(chain, walletAddress, setNonceRequest, options)
         .then((request) => request(axios, basePath));
@@ -10696,7 +11543,7 @@ export interface HsmApiInterface {
   addHsmConfig(
     azureAccountConfig?: AzureAccountConfig,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Adds an existing key configuration.
@@ -10706,7 +11553,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
+  addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Creates a new key in the Azure KeyVault.
@@ -10726,7 +11573,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  deleteHsmConfig(clientId: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
+  deleteHsmConfig(clientId: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Deletes the specified key configuration.
@@ -10736,7 +11583,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  deleteHsmKey(walletAddress: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
+  deleteHsmKey(walletAddress: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Returns a list of HSM configs and their associated wallets.
@@ -10789,7 +11636,7 @@ export interface HsmApiInterface {
     walletAddress: string,
     setNonceRequest?: SetNonceRequest,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<DeleteApiKey200Response>;
 
   /**
    * Signs and submits the given transaction using an HSM address.
