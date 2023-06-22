@@ -126,13 +126,13 @@ export interface AddKey {
    */
   clientID: string;
   /**
-   *
+   * The name of the key.
    * @type {string}
    * @memberof AddKey
    */
   keyName: string;
   /**
-   * The current version of your key.
+   * The version of the key.
    * @type {string}
    * @memberof AddKey
    */
@@ -323,90 +323,66 @@ export interface AuditLog {
   activityData: object;
 }
 /**
- * An object representing an HSM account.
+ * An Azure account.
  * @export
  * @interface AzureAccount
  */
 export interface AzureAccount {
+  /**
+   * A label.
+   * @type {string}
+   * @memberof AzureAccount
+   */
+  label: string;
+  /**
+   * The Application ID that will be accessing the Key Vault.
+   * @type {string}
+   * @memberof AzureAccount
+   */
+  clientID: string;
+  /**
+   * The application’s secret key that you generate when you first register the application in Azure.
+   * @type {string}
+   * @memberof AzureAccount
+   */
+  clientSecret: string;
+  /**
+   * Also known as Directory ID.
+   * @type {string}
+   * @memberof AzureAccount
+   */
+  tenantID: string;
+  /**
+   * The ID linked to your subscription to Azure services.
+   * @type {string}
+   * @memberof AzureAccount
+   */
+  subscriptionID: string;
+  /**
+   * The Resource Group Name for the resource being accessed.
+   * @type {string}
+   * @memberof AzureAccount
+   */
+  baseGroupName: string;
   /**
    *
    * @type {number}
    * @memberof AzureAccount
    */
   id: number;
-  /**
-   * The Application ID accesses the Key Vault.
-   * @type {string}
-   * @memberof AzureAccount
-   */
-  clientID: string;
-  /**
-   * The application’s secret key that you generate when you first register the application in Azure.
-   * @type {string}
-   * @memberof AzureAccount
-   */
-  clientSecret: string;
-  /**
-   * Also known as Directory ID.
-   * @type {string}
-   * @memberof AzureAccount
-   */
-  tenantID: string;
-  /**
-   * The ID linked to your subscription to Azure services.
-   * @type {string}
-   * @memberof AzureAccount
-   */
-  subscriptionID: string;
-  /**
-   * The Resource Group Name for the resource being accessed.
-   * @type {string}
-   * @memberof AzureAccount
-   */
-  baseGroupName: string;
-  /**
-   *
-   * @type {string}
-   * @memberof AzureAccount
-   */
-  deletedAt?: string | null;
 }
 /**
- * Add Config request data.
+ *
  * @export
- * @interface AzureAccountConfig
+ * @interface AzureAccountAllOf
  */
-export interface AzureAccountConfig {
+export interface AzureAccountAllOf {
   /**
-   * The Application ID that will be accessing the Key Vault.
-   * @type {string}
-   * @memberof AzureAccountConfig
+   *
+   * @type {number}
+   * @memberof AzureAccountAllOf
    */
-  clientID: string;
-  /**
-   * The application’s secret key that you generate when you first register the application in Azure.
-   * @type {string}
-   * @memberof AzureAccountConfig
-   */
-  clientSecret: string;
-  /**
-   * Also known as Directory ID.
-   * @type {string}
-   * @memberof AzureAccountConfig
-   */
-  tenantID: string;
-  /**
-   * The ID linked to your subscription to Azure services.
-   * @type {string}
-   * @memberof AzureAccountConfig
-   */
-  subscriptionID: string;
-  /**
-   * The Resource Group Name for the resource being accessed.
-   * @type {string}
-   * @memberof AzureAccountConfig
-   */
-  baseGroupName: string;
+  id: number;
 }
 /**
  * An HSM Wallet
@@ -433,13 +409,13 @@ export interface AzureHardwareWallet {
    */
   vaultName: string;
   /**
-   *
+   * The name of the key.
    * @type {string}
    * @memberof AzureHardwareWallet
    */
   keyName: string;
   /**
-   * The current version of your key.
+   * The version of the key.
    * @type {string}
    * @memberof AzureHardwareWallet
    */
@@ -458,13 +434,13 @@ export interface AzureHardwareWallet {
  */
 export interface AzureWallet {
   /**
-   *
+   * The name of the key.
    * @type {string}
    * @memberof AzureWallet
    */
   keyName: string;
   /**
-   * The current version of your key.
+   * The version of the key.
    * @type {string}
    * @memberof AzureWallet
    */
@@ -488,6 +464,49 @@ export interface BaseAPIKey {
    * @memberof BaseAPIKey
    */
   label: string;
+}
+/**
+ * An Azure account.
+ * @export
+ * @interface BaseAzureAccount
+ */
+export interface BaseAzureAccount {
+  /**
+   * A label.
+   * @type {string}
+   * @memberof BaseAzureAccount
+   */
+  label: string;
+  /**
+   * The Application ID that will be accessing the Key Vault.
+   * @type {string}
+   * @memberof BaseAzureAccount
+   */
+  clientID: string;
+  /**
+   * The application’s secret key that you generate when you first register the application in Azure.
+   * @type {string}
+   * @memberof BaseAzureAccount
+   */
+  clientSecret: string;
+  /**
+   * Also known as Directory ID.
+   * @type {string}
+   * @memberof BaseAzureAccount
+   */
+  tenantID: string;
+  /**
+   * The ID linked to your subscription to Azure services.
+   * @type {string}
+   * @memberof BaseAzureAccount
+   */
+  subscriptionID: string;
+  /**
+   * The Resource Group Name for the resource being accessed.
+   * @type {string}
+   * @memberof BaseAzureAccount
+   */
+  baseGroupName: string;
 }
 /**
  * A contract.
@@ -1731,7 +1750,7 @@ export interface CreateKey {
    */
   clientID: string;
   /**
-   *
+   * The name of the key.
    * @type {string}
    * @memberof CreateKey
    */
@@ -3914,13 +3933,13 @@ export interface StandaloneWallet {
    */
   vaultName?: string;
   /**
-   *
+   * The name of the key.
    * @type {string}
    * @memberof StandaloneWallet
    */
   keyName: string;
   /**
-   * The current version of your key.
+   * The version of the key.
    * @type {string}
    * @memberof StandaloneWallet
    */
@@ -10739,12 +10758,12 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
     /**
      * Adds a new Azure account configuration.
      * @summary Add HSM config
-     * @param {AzureAccountConfig} [azureAccountConfig]
+     * @param {BaseAzureAccount} [baseAzureAccount]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     addHsmConfig: async (
-      azureAccountConfig?: AzureAccountConfig,
+      baseAzureAccount?: BaseAzureAccount,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/hsm/config`;
@@ -10770,7 +10789,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(azureAccountConfig, localVarRequestOptions, configuration);
+      localVarRequestOptions.data = serializeDataIfNeeded(baseAzureAccount, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -11202,15 +11221,15 @@ export const HsmApiFp = function (configuration?: Configuration) {
     /**
      * Adds a new Azure account configuration.
      * @summary Add HSM config
-     * @param {AzureAccountConfig} [azureAccountConfig]
+     * @param {BaseAzureAccount} [baseAzureAccount]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async addHsmConfig(
-      azureAccountConfig?: AzureAccountConfig,
+      baseAzureAccount?: BaseAzureAccount,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmConfig(azureAccountConfig, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmConfig(baseAzureAccount, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -11391,12 +11410,12 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
     /**
      * Adds a new Azure account configuration.
      * @summary Add HSM config
-     * @param {AzureAccountConfig} [azureAccountConfig]
+     * @param {BaseAzureAccount} [baseAzureAccount]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmConfig(azureAccountConfig?: AzureAccountConfig, options?: any): AxiosPromise<DeleteApiKey200Response> {
-      return localVarFp.addHsmConfig(azureAccountConfig, options).then((request) => request(axios, basePath));
+    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: any): AxiosPromise<DeleteApiKey200Response> {
+      return localVarFp.addHsmConfig(baseAzureAccount, options).then((request) => request(axios, basePath));
     },
     /**
      * Adds an existing key configuration.
@@ -11535,13 +11554,13 @@ export interface HsmApiInterface {
   /**
    * Adds a new Azure account configuration.
    * @summary Add HSM config
-   * @param {AzureAccountConfig} [azureAccountConfig]
+   * @param {BaseAzureAccount} [baseAzureAccount]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
   addHsmConfig(
-    azureAccountConfig?: AzureAccountConfig,
+    baseAzureAccount?: BaseAzureAccount,
     options?: AxiosRequestConfig
   ): AxiosPromise<DeleteApiKey200Response>;
 
@@ -11679,14 +11698,14 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   /**
    * Adds a new Azure account configuration.
    * @summary Add HSM config
-   * @param {AzureAccountConfig} [azureAccountConfig]
+   * @param {BaseAzureAccount} [baseAzureAccount]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public addHsmConfig(azureAccountConfig?: AzureAccountConfig, options?: AxiosRequestConfig) {
+  public addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: AxiosRequestConfig) {
     return HsmApiFp(this.configuration)
-      .addHsmConfig(azureAccountConfig, options)
+      .addHsmConfig(baseAzureAccount, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
