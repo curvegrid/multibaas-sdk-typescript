@@ -5200,6 +5200,43 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       };
     },
     /**
+     * Deletes a user.
+     * @summary Delete user
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteUser: async (userID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('deleteUser', 'userID', userID);
+      const localVarPath = `/users/{userID}`.replace(`{${'userID'}}`, encodeURIComponent(String(userID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Returns an API key.
      * @summary Get API Key
      * @param {string} apiKeyLabel
@@ -5715,6 +5752,20 @@ export const AdminApiFp = function (configuration?: Configuration) {
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
+     * Deletes a user.
+     * @summary Delete user
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteUser(
+      userID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(userID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Returns an API key.
      * @summary Get API Key
      * @param {string} apiKeyLabel
@@ -5934,6 +5985,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       return localVarFp.deleteApiKey(apiKeyLabel, options).then((request) => request(axios, basePath));
     },
     /**
+     * Deletes a user.
+     * @summary Delete user
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteUser(userID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.deleteUser(userID, options).then((request) => request(axios, basePath));
+    },
+    /**
      * Returns an API key.
      * @summary Get API Key
      * @param {string} apiKeyLabel
@@ -6115,6 +6176,16 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   deleteApiKey(apiKeyLabel: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+
+  /**
+   * Deletes a user.
+   * @summary Delete user
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  deleteUser(userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns an API key.
@@ -6316,6 +6387,20 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public deleteApiKey(apiKeyLabel: string, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .deleteApiKey(apiKeyLabel, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Deletes a user.
+   * @summary Delete user
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public deleteUser(userID: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .deleteUser(userID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

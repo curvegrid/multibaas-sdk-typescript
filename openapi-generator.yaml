@@ -6,7 +6,7 @@ gitRepoId: multibaas-sdk-typescript
 templateDir: templates
 additionalProperties:
   npmName: "@curvegrid/multibaas-sdk"
-  npmVersion: 1.0.0-beta5
+  npmVersion: 1.0.0-beta6
   disallowAdditionalPropertiesIfNotPresent: true
   legacyDiscriminatorBehavior: false
   withInterfaces: true
