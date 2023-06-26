@@ -687,17 +687,11 @@ export interface BaseUser {
    */
   email: string;
   /**
-   * The user\'s first name.
+   * The user\'s name.
    * @type {string}
    * @memberof BaseUser
    */
-  firstName: string;
-  /**
-   * The user\'s last name.
-   * @type {string}
-   * @memberof BaseUser
-   */
-  lastName: string;
+  name: string;
 }
 /**
  * A block in the Ethereum blockchain.
@@ -4382,17 +4376,11 @@ export interface User {
    */
   email: string;
   /**
-   * The user\'s first name.
+   * The user\'s name.
    * @type {string}
    * @memberof User
    */
-  firstName: string;
-  /**
-   * The user\'s last name.
-   * @type {string}
-   * @memberof User
-   */
-  lastName: string;
+  name: string;
   /**
    * The user ID.
    * @type {number}
