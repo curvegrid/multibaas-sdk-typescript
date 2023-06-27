@@ -1765,25 +1765,6 @@ export interface CreateKey {
 /**
  *
  * @export
- * @interface DeleteApiKey200Response
- */
-export interface DeleteApiKey200Response {
-  /**
-   * The status code.
-   * @type {number}
-   * @memberof DeleteApiKey200Response
-   */
-  status: number;
-  /**
-   * The human-readable status message.
-   * @type {string}
-   * @memberof DeleteApiKey200Response
-   */
-  message: string;
-}
-/**
- *
- * @export
  * @interface DeployContract200Response
  */
 export interface DeployContract200Response {
@@ -3946,6 +3927,25 @@ export interface StandaloneWallet {
   publicAddress: string;
 }
 /**
+ *
+ * @export
+ * @interface SubmitSignedTransaction200Response
+ */
+export interface SubmitSignedTransaction200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof SubmitSignedTransaction200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof SubmitSignedTransaction200Response
+   */
+  message: string;
+}
+/**
  * A transaction from the Ethereum Blockchain.
  * @export
  * @interface Transaction
@@ -4677,7 +4677,7 @@ export const AddressesApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       addressOrLabel: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAddress(chain, addressOrLabel, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -4747,7 +4747,11 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteAddress(chain: ChainName, addressOrLabel: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    deleteAddress(
+      chain: ChainName,
+      addressOrLabel: string,
+      options?: any
+    ): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.deleteAddress(chain, addressOrLabel, options).then((request) => request(axios, basePath));
     },
     /**
@@ -4810,7 +4814,7 @@ export interface AddressesApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     options?: AxiosRequestConfig
-  ): AxiosPromise<DeleteApiKey200Response>;
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Returns details about an address.
@@ -5150,17 +5154,14 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     /**
      * Deletes an API key.
      * @summary Delete API key
-     * @param {string} apiKeyLabel
+     * @param {number} apiKeyID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteApiKey: async (apiKeyLabel: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'apiKeyLabel' is not null or undefined
-      assertParamExists('deleteApiKey', 'apiKeyLabel', apiKeyLabel);
-      const localVarPath = `/api_keys/{apiKeyLabel}`.replace(
-        `{${'apiKeyLabel'}}`,
-        encodeURIComponent(String(apiKeyLabel))
-      );
+    deleteApiKey: async (apiKeyID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'apiKeyID' is not null or undefined
+      assertParamExists('deleteApiKey', 'apiKeyID', apiKeyID);
+      const localVarPath = `/api_keys/{apiKeyID}`.replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -5227,17 +5228,14 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     /**
      * Returns an API key.
      * @summary Get API Key
-     * @param {string} apiKeyLabel
+     * @param {number} apiKeyID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getApiKey: async (apiKeyLabel: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'apiKeyLabel' is not null or undefined
-      assertParamExists('getApiKey', 'apiKeyLabel', apiKeyLabel);
-      const localVarPath = `/api_keys/{apiKeyLabel}`.replace(
-        `{${'apiKeyLabel'}}`,
-        encodeURIComponent(String(apiKeyLabel))
-      );
+    getApiKey: async (apiKeyID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'apiKeyID' is not null or undefined
+      assertParamExists('getApiKey', 'apiKeyID', apiKeyID);
+      const localVarPath = `/api_keys/{apiKeyID}`.replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -5638,6 +5636,51 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
         url: toPathString(localVarUrlObj),
         options: localVarRequestOptions
       };
+    },
+    /**
+     * Updates an API key.
+     * @summary Update API key
+     * @param {number} apiKeyID
+     * @param {BaseAPIKey} [baseAPIKey]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateApiKey: async (
+      apiKeyID: number,
+      baseAPIKey?: BaseAPIKey,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'apiKeyID' is not null or undefined
+      assertParamExists('updateApiKey', 'apiKeyID', apiKeyID);
+      const localVarPath = `/api_keys/{apiKeyID}`.replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(baseAPIKey, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
     }
   };
 };
@@ -5659,7 +5702,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async addCorsOrigin(
       cORSOrigin?: CORSOrigin,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addCorsOrigin(cORSOrigin, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -5728,15 +5771,15 @@ export const AdminApiFp = function (configuration?: Configuration) {
     /**
      * Deletes an API key.
      * @summary Delete API key
-     * @param {string} apiKeyLabel
+     * @param {number} apiKeyID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async deleteApiKey(
-      apiKeyLabel: string,
+      apiKeyID: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteApiKey(apiKeyLabel, options);
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteApiKey(apiKeyID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5756,15 +5799,15 @@ export const AdminApiFp = function (configuration?: Configuration) {
     /**
      * Returns an API key.
      * @summary Get API Key
-     * @param {string} apiKeyLabel
+     * @param {number} apiKeyID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getApiKey(
-      apiKeyLabel: string,
+      apiKeyID: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getApiKey(apiKeyLabel, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getApiKey(apiKeyID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5847,7 +5890,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async removeCorsOrigin(
       originID: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeCorsOrigin(originID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -5898,6 +5941,22 @@ export const AdminApiFp = function (configuration?: Configuration) {
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupUser(groupID, userID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Updates an API key.
+     * @summary Update API key
+     * @param {number} apiKeyID
+     * @param {BaseAPIKey} [baseAPIKey]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateApiKey(
+      apiKeyID: number,
+      baseAPIKey?: BaseAPIKey,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updateApiKey(apiKeyID, baseAPIKey, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     }
   };
 };
@@ -5916,7 +5975,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.addCorsOrigin(cORSOrigin, options).then((request) => request(axios, basePath));
     },
     /**
@@ -5965,12 +6024,12 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
     /**
      * Deletes an API key.
      * @summary Delete API key
-     * @param {string} apiKeyLabel
+     * @param {number} apiKeyID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteApiKey(apiKeyLabel: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
-      return localVarFp.deleteApiKey(apiKeyLabel, options).then((request) => request(axios, basePath));
+    deleteApiKey(apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.deleteApiKey(apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
      * Deletes a user.
@@ -5985,12 +6044,12 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
     /**
      * Returns an API key.
      * @summary Get API Key
-     * @param {string} apiKeyLabel
+     * @param {number} apiKeyID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getApiKey(apiKeyLabel: string, options?: any): AxiosPromise<CreateApiKey200Response> {
-      return localVarFp.getApiKey(apiKeyLabel, options).then((request) => request(axios, basePath));
+    getApiKey(apiKeyID: number, options?: any): AxiosPromise<CreateApiKey200Response> {
+      return localVarFp.getApiKey(apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
      * Returns all the API keys.
@@ -6054,7 +6113,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeCorsOrigin(originID: number, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    removeCorsOrigin(originID: number, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.removeCorsOrigin(originID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6089,6 +6148,17 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      */
     removeGroupUser(groupID: number, userID: number, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.removeGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Updates an API key.
+     * @summary Update API key
+     * @param {number} apiKeyID
+     * @param {BaseAPIKey} [baseAPIKey]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.updateApiKey(apiKeyID, baseAPIKey, options).then((request) => request(axios, basePath));
     }
   };
 };
@@ -6107,7 +6177,10 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addCorsOrigin(cORSOrigin?: CORSOrigin, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+  addCorsOrigin(
+    cORSOrigin?: CORSOrigin,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Adds an API key to a group.
@@ -6158,12 +6231,12 @@ export interface AdminApiInterface {
   /**
    * Deletes an API key.
    * @summary Delete API key
-   * @param {string} apiKeyLabel
+   * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  deleteApiKey(apiKeyLabel: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+  deleteApiKey(apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Deletes a user.
@@ -6178,12 +6251,12 @@ export interface AdminApiInterface {
   /**
    * Returns an API key.
    * @summary Get API Key
-   * @param {string} apiKeyLabel
+   * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  getApiKey(apiKeyLabel: string, options?: AxiosRequestConfig): AxiosPromise<CreateApiKey200Response>;
+  getApiKey(apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<CreateApiKey200Response>;
 
   /**
    * Returns all the API keys.
@@ -6248,7 +6321,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  removeCorsOrigin(originID: number, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+  removeCorsOrigin(originID: number, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Removes an API key from a group.
@@ -6282,6 +6355,17 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Updates an API key.
+   * @summary Update API key
+   * @param {number} apiKeyID
+   * @param {BaseAPIKey} [baseAPIKey]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 }
 
 /**
@@ -6367,14 +6451,14 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   /**
    * Deletes an API key.
    * @summary Delete API key
-   * @param {string} apiKeyLabel
+   * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public deleteApiKey(apiKeyLabel: string, options?: AxiosRequestConfig) {
+  public deleteApiKey(apiKeyID: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
-      .deleteApiKey(apiKeyLabel, options)
+      .deleteApiKey(apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -6395,14 +6479,14 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   /**
    * Returns an API key.
    * @summary Get API Key
-   * @param {string} apiKeyLabel
+   * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public getApiKey(apiKeyLabel: string, options?: AxiosRequestConfig) {
+  public getApiKey(apiKeyID: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
-      .getApiKey(apiKeyLabel, options)
+      .getApiKey(apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -6532,6 +6616,21 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeGroupUser(groupID, userID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Updates an API key.
+   * @summary Update API key
+   * @param {number} apiKeyID
+   * @param {BaseAPIKey} [baseAPIKey]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .updateApiKey(apiKeyID, baseAPIKey, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -6910,7 +7009,7 @@ export const ChainsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.submitSignedTransaction(
         chain,
         signedTransactionSubmission,
@@ -7013,7 +7112,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
       options?: any
-    ): AxiosPromise<DeleteApiKey200Response> {
+    ): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp
         .submitSignedTransaction(chain, signedTransactionSubmission, options)
         .then((request) => request(axios, basePath));
@@ -7110,7 +7209,7 @@ export interface ChainsApiInterface {
     chain: ChainName,
     signedTransactionSubmission?: SignedTransactionSubmission,
     options?: AxiosRequestConfig
-  ): AxiosPromise<DeleteApiKey200Response>;
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Returns a transaction for sending the native token between addresses.
@@ -8196,7 +8295,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     async createContracts(
       baseContract?: Array<BaseContract>,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createContracts(baseContract, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -8557,7 +8656,10 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createContracts(baseContract?: Array<BaseContract>, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    createContracts(
+      baseContract?: Array<BaseContract>,
+      options?: any
+    ): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.createContracts(baseContract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -8858,7 +8960,7 @@ export interface ContractsApiInterface {
   createContracts(
     baseContract?: Array<BaseContract>,
     options?: AxiosRequestConfig
-  ): AxiosPromise<DeleteApiKey200Response>;
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Deletes a contract and all its versions.
@@ -9779,7 +9881,7 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
     async deleteEventQuery(
       eventQuery: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEventQuery(eventQuery, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -9862,7 +9964,7 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
       eventQuery: string,
       eventQuery2?: EventQuery,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setEventQuery(eventQuery, eventQuery2, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     }
@@ -9897,7 +9999,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteEventQuery(eventQuery: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    deleteEventQuery(eventQuery: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.deleteEventQuery(eventQuery, options).then((request) => request(axios, basePath));
     },
     /**
@@ -9965,7 +10067,11 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    setEventQuery(
+      eventQuery: string,
+      eventQuery2?: EventQuery,
+      options?: any
+    ): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.setEventQuery(eventQuery, eventQuery2, options).then((request) => request(axios, basePath));
     }
   };
@@ -9998,7 +10104,7 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+  deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Executes an arbitrary event query.
@@ -10066,7 +10172,7 @@ export interface EventQueriesApiInterface {
     eventQuery: string,
     eventQuery2?: EventQuery,
     options?: AxiosRequestConfig
-  ): AxiosPromise<DeleteApiKey200Response>;
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 }
 
 /**
@@ -11301,7 +11407,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async addHsmConfig(
       baseAzureAccount?: BaseAzureAccount,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmConfig(baseAzureAccount, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -11315,7 +11421,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async addHsmKey(
       addKey?: AddKey,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmKey(addKey, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -11343,7 +11449,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async deleteHsmConfig(
       clientId: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteHsmConfig(clientId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -11357,7 +11463,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async deleteHsmKey(
       walletAddress: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteHsmKey(walletAddress, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -11425,7 +11531,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setLocalNonce(
         chain,
         walletAddress,
@@ -11487,7 +11593,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.addHsmConfig(baseAzureAccount, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11497,7 +11603,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmKey(addKey?: AddKey, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    addHsmKey(addKey?: AddKey, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.addHsmKey(addKey, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11517,7 +11623,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteHsmConfig(clientId: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    deleteHsmConfig(clientId: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.deleteHsmConfig(clientId, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11527,7 +11633,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteHsmKey(walletAddress: string, options?: any): AxiosPromise<DeleteApiKey200Response> {
+    deleteHsmKey(walletAddress: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp.deleteHsmKey(walletAddress, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11582,7 +11688,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
       options?: any
-    ): AxiosPromise<DeleteApiKey200Response> {
+    ): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp
         .setLocalNonce(chain, walletAddress, setNonceRequest, options)
         .then((request) => request(axios, basePath));
@@ -11635,7 +11741,7 @@ export interface HsmApiInterface {
   addHsmConfig(
     baseAzureAccount?: BaseAzureAccount,
     options?: AxiosRequestConfig
-  ): AxiosPromise<DeleteApiKey200Response>;
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Adds an existing key configuration.
@@ -11645,7 +11751,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+  addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Creates a new key in the Azure KeyVault.
@@ -11665,7 +11771,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  deleteHsmConfig(clientId: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+  deleteHsmConfig(clientId: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Deletes the specified key configuration.
@@ -11675,7 +11781,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  deleteHsmKey(walletAddress: string, options?: AxiosRequestConfig): AxiosPromise<DeleteApiKey200Response>;
+  deleteHsmKey(walletAddress: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Returns a list of HSM configs and their associated wallets.
@@ -11728,7 +11834,7 @@ export interface HsmApiInterface {
     walletAddress: string,
     setNonceRequest?: SetNonceRequest,
     options?: AxiosRequestConfig
-  ): AxiosPromise<DeleteApiKey200Response>;
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Signs and submits the given transaction using an HSM address.
