@@ -77,43 +77,6 @@ export interface APIKey {
   signature: string;
 }
 /**
- *
- * @export
- * @interface APIKeyAllOf
- */
-export interface APIKeyAllOf {
-  /**
-   *
-   * @type {number}
-   * @memberof APIKeyAllOf
-   */
-  id: number;
-  /**
-   * The time the API key was created.
-   * @type {string}
-   * @memberof APIKeyAllOf
-   */
-  createdAt: string;
-  /**
-   * The time the API key was last used.
-   * @type {string}
-   * @memberof APIKeyAllOf
-   */
-  lastUsedAt?: string;
-  /**
-   * The ID of the user that created the API key.
-   * @type {number}
-   * @memberof APIKeyAllOf
-   */
-  createdBy: number;
-  /**
-   * The signature of the API key.
-   * @type {string}
-   * @memberof APIKeyAllOf
-   */
-  signature: string;
-}
-/**
  * Add key request data.
  * @export
  * @interface AddKey
@@ -202,55 +165,6 @@ export interface Address {
    *
    * @type {Array<ContractMetadata>}
    * @memberof Address
-   */
-  contracts: Array<ContractMetadata>;
-}
-/**
- *
- * @export
- * @interface AddressAllOf
- */
-export interface AddressAllOf {
-  /**
-   *
-   * @type {string}
-   * @memberof AddressAllOf
-   */
-  balance?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof AddressAllOf
-   */
-  chain: string;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof AddressAllOf
-   */
-  modules: Array<string>;
-  /**
-   * The next transaction nonce for this address (obtained from the blockchain node).
-   * @type {number}
-   * @memberof AddressAllOf
-   */
-  nonce?: number;
-  /**
-   * The next transaction nonce for this address when using the nonce management feature.
-   * @type {number}
-   * @memberof AddressAllOf
-   */
-  localNonce?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof AddressAllOf
-   */
-  codeAt?: string;
-  /**
-   *
-   * @type {Array<ContractMetadata>}
-   * @memberof AddressAllOf
    */
   contracts: Array<ContractMetadata>;
 }
@@ -368,19 +282,6 @@ export interface AzureAccount {
    *
    * @type {number}
    * @memberof AzureAccount
-   */
-  id: number;
-}
-/**
- *
- * @export
- * @interface AzureAccountAllOf
- */
-export interface AzureAccountAllOf {
-  /**
-   *
-   * @type {number}
-   * @memberof AzureAccountAllOf
    */
   id: number;
 }
@@ -859,19 +760,6 @@ export interface CallContractFunction200Response {
   result: CallContractFunction200ResponseAllOfResult;
 }
 /**
- *
- * @export
- * @interface CallContractFunction200ResponseAllOf
- */
-export interface CallContractFunction200ResponseAllOf {
-  /**
-   *
-   * @type {CallContractFunction200ResponseAllOfResult}
-   * @memberof CallContractFunction200ResponseAllOf
-   */
-  result: CallContractFunction200ResponseAllOfResult;
-}
-/**
  * @type CallContractFunction200ResponseAllOfResult
  * @export
  */
@@ -1329,25 +1217,6 @@ export interface ContractABITypeConversion {
   decimalsFunction: string | null;
 }
 /**
- *
- * @export
- * @interface ContractAllOf
- */
-export interface ContractAllOf {
-  /**
-   *
-   * @type {ContractABI}
-   * @memberof ContractAllOf
-   */
-  abi: ContractABI;
-  /**
-   * List of the contract instances.
-   * @type {Array<ContractInstance>}
-   * @memberof ContractAllOf
-   */
-  instances?: Array<ContractInstance>;
-}
-/**
  * Type conversion options for an event.
  * @export
  * @interface ContractEventOptions
@@ -1575,19 +1444,6 @@ export interface CountEventQueryRecords200Response {
 /**
  *
  * @export
- * @interface CountEventQueryRecords200ResponseAllOf
- */
-export interface CountEventQueryRecords200ResponseAllOf {
-  /**
-   * The record count.
-   * @type {number}
-   * @memberof CountEventQueryRecords200ResponseAllOf
-   */
-  result: number;
-}
-/**
- *
- * @export
  * @interface CountWalletTransactions200Response
  */
 export interface CountWalletTransactions200Response {
@@ -1607,19 +1463,6 @@ export interface CountWalletTransactions200Response {
    * The transaction count.
    * @type {number}
    * @memberof CountWalletTransactions200Response
-   */
-  result: number;
-}
-/**
- *
- * @export
- * @interface CountWalletTransactions200ResponseAllOf
- */
-export interface CountWalletTransactions200ResponseAllOf {
-  /**
-   * The transaction count.
-   * @type {number}
-   * @memberof CountWalletTransactions200ResponseAllOf
    */
   result: number;
 }
@@ -1651,19 +1494,6 @@ export interface CreateApiKey200Response {
 /**
  *
  * @export
- * @interface CreateApiKey200ResponseAllOf
- */
-export interface CreateApiKey200ResponseAllOf {
-  /**
-   *
-   * @type {APIKey}
-   * @memberof CreateApiKey200ResponseAllOf
-   */
-  result: APIKey;
-}
-/**
- *
- * @export
  * @interface CreateApiKeyRequest
  */
 export interface CreateApiKeyRequest {
@@ -1677,19 +1507,6 @@ export interface CreateApiKeyRequest {
    *
    * @type {Array<number>}
    * @memberof CreateApiKeyRequest
-   */
-  groupIDs?: Array<number>;
-}
-/**
- *
- * @export
- * @interface CreateApiKeyRequestAllOf
- */
-export interface CreateApiKeyRequestAllOf {
-  /**
-   *
-   * @type {Array<number>}
-   * @memberof CreateApiKeyRequestAllOf
    */
   groupIDs?: Array<number>;
 }
@@ -1715,19 +1532,6 @@ export interface CreateHsmKey200Response {
    *
    * @type {AzureWallet}
    * @memberof CreateHsmKey200Response
-   */
-  result: AzureWallet;
-}
-/**
- *
- * @export
- * @interface CreateHsmKey200ResponseAllOf
- */
-export interface CreateHsmKey200ResponseAllOf {
-  /**
-   *
-   * @type {AzureWallet}
-   * @memberof CreateHsmKey200ResponseAllOf
    */
   result: AzureWallet;
 }
@@ -1788,19 +1592,6 @@ export interface DeployContract200Response {
   result: DeployContractTransaction;
 }
 /**
- *
- * @export
- * @interface DeployContract200ResponseAllOf
- */
-export interface DeployContract200ResponseAllOf {
-  /**
-   *
-   * @type {DeployContractTransaction}
-   * @memberof DeployContract200ResponseAllOf
-   */
-  result: DeployContractTransaction;
-}
-/**
  * The transaction returned when you deploy a contracts.
  * @export
  * @interface DeployContractTransaction
@@ -1828,25 +1619,6 @@ export interface DeployContractTransaction {
    * A label.
    * @type {string}
    * @memberof DeployContractTransaction
-   */
-  label?: string;
-}
-/**
- *
- * @export
- * @interface DeployContractTransactionAllOf
- */
-export interface DeployContractTransactionAllOf {
-  /**
-   *
-   * @type {string}
-   * @memberof DeployContractTransactionAllOf
-   */
-  deployAt?: string;
-  /**
-   * A label.
-   * @type {string}
-   * @memberof DeployContractTransactionAllOf
    */
   label?: string;
 }
@@ -2239,19 +2011,6 @@ export interface ExecuteArbitraryEventQuery200Response {
   result: EventQueryResults;
 }
 /**
- *
- * @export
- * @interface ExecuteArbitraryEventQuery200ResponseAllOf
- */
-export interface ExecuteArbitraryEventQuery200ResponseAllOf {
-  /**
-   *
-   * @type {EventQueryResults}
-   * @memberof ExecuteArbitraryEventQuery200ResponseAllOf
-   */
-  result: EventQueryResults;
-}
-/**
  * The field type in a select or filter.
  * @export
  * @enum {string}
@@ -2307,44 +2066,6 @@ export interface GasParams {
 /**
  *
  * @export
- * @interface GetAllEvents200Response
- */
-export interface GetAllEvents200Response {
-  /**
-   * The status code.
-   * @type {number}
-   * @memberof GetAllEvents200Response
-   */
-  status: number;
-  /**
-   * The human-readable status message.
-   * @type {string}
-   * @memberof GetAllEvents200Response
-   */
-  message: string;
-  /**
-   *
-   * @type {Array<Event>}
-   * @memberof GetAllEvents200Response
-   */
-  result: Array<Event>;
-}
-/**
- *
- * @export
- * @interface GetAllEvents200ResponseAllOf
- */
-export interface GetAllEvents200ResponseAllOf {
-  /**
-   *
-   * @type {Array<Event>}
-   * @memberof GetAllEvents200ResponseAllOf
-   */
-  result: Array<Event>;
-}
-/**
- *
- * @export
  * @interface GetBlock200Response
  */
 export interface GetBlock200Response {
@@ -2364,19 +2085,6 @@ export interface GetBlock200Response {
    *
    * @type {Block}
    * @memberof GetBlock200Response
-   */
-  result: Block;
-}
-/**
- *
- * @export
- * @interface GetBlock200ResponseAllOf
- */
-export interface GetBlock200ResponseAllOf {
-  /**
-   *
-   * @type {Block}
-   * @memberof GetBlock200ResponseAllOf
    */
   result: Block;
 }
@@ -2408,19 +2116,6 @@ export interface GetChainStatus200Response {
 /**
  *
  * @export
- * @interface GetChainStatus200ResponseAllOf
- */
-export interface GetChainStatus200ResponseAllOf {
-  /**
-   *
-   * @type {ChainStatus}
-   * @memberof GetChainStatus200ResponseAllOf
-   */
-  result: ChainStatus;
-}
-/**
- *
- * @export
  * @interface GetContract200Response
  */
 export interface GetContract200Response {
@@ -2440,19 +2135,6 @@ export interface GetContract200Response {
    *
    * @type {Contract}
    * @memberof GetContract200Response
-   */
-  result: Contract;
-}
-/**
- *
- * @export
- * @interface GetContract200ResponseAllOf
- */
-export interface GetContract200ResponseAllOf {
-  /**
-   *
-   * @type {Contract}
-   * @memberof GetContract200ResponseAllOf
    */
   result: Contract;
 }
@@ -2484,19 +2166,6 @@ export interface GetContractVersions200Response {
 /**
  *
  * @export
- * @interface GetContractVersions200ResponseAllOf
- */
-export interface GetContractVersions200ResponseAllOf {
-  /**
-   *
-   * @type {Array<Contract>}
-   * @memberof GetContractVersions200ResponseAllOf
-   */
-  result: Array<Contract>;
-}
-/**
- *
- * @export
  * @interface GetEventCount200Response
  */
 export interface GetEventCount200Response {
@@ -2516,19 +2185,6 @@ export interface GetEventCount200Response {
    * The number of events.
    * @type {number}
    * @memberof GetEventCount200Response
-   */
-  result: number;
-}
-/**
- *
- * @export
- * @interface GetEventCount200ResponseAllOf
- */
-export interface GetEventCount200ResponseAllOf {
-  /**
-   * The number of events.
-   * @type {number}
-   * @memberof GetEventCount200ResponseAllOf
    */
   result: number;
 }
@@ -2560,19 +2216,6 @@ export interface GetEventMonitorStatus200Response {
 /**
  *
  * @export
- * @interface GetEventMonitorStatus200ResponseAllOf
- */
-export interface GetEventMonitorStatus200ResponseAllOf {
-  /**
-   *
-   * @type {EventMonitorStatus}
-   * @memberof GetEventMonitorStatus200ResponseAllOf
-   */
-  result: EventMonitorStatus;
-}
-/**
- *
- * @export
  * @interface GetEventQuery200Response
  */
 export interface GetEventQuery200Response {
@@ -2592,19 +2235,6 @@ export interface GetEventQuery200Response {
    *
    * @type {EventQuery}
    * @memberof GetEventQuery200Response
-   */
-  result: EventQuery;
-}
-/**
- *
- * @export
- * @interface GetEventQuery200ResponseAllOf
- */
-export interface GetEventQuery200ResponseAllOf {
-  /**
-   *
-   * @type {EventQuery}
-   * @memberof GetEventQuery200ResponseAllOf
    */
   result: EventQuery;
 }
@@ -2636,19 +2266,6 @@ export interface GetEventTypeConversions200Response {
 /**
  *
  * @export
- * @interface GetEventTypeConversions200ResponseAllOf
- */
-export interface GetEventTypeConversions200ResponseAllOf {
-  /**
-   *
-   * @type {EventTypeConversionOptions}
-   * @memberof GetEventTypeConversions200ResponseAllOf
-   */
-  result: EventTypeConversionOptions;
-}
-/**
- *
- * @export
  * @interface GetFunctionTypeConversions200Response
  */
 export interface GetFunctionTypeConversions200Response {
@@ -2668,19 +2285,6 @@ export interface GetFunctionTypeConversions200Response {
    *
    * @type {MethodTypeConversionOptions}
    * @memberof GetFunctionTypeConversions200Response
-   */
-  result: MethodTypeConversionOptions;
-}
-/**
- *
- * @export
- * @interface GetFunctionTypeConversions200ResponseAllOf
- */
-export interface GetFunctionTypeConversions200ResponseAllOf {
-  /**
-   *
-   * @type {MethodTypeConversionOptions}
-   * @memberof GetFunctionTypeConversions200ResponseAllOf
    */
   result: MethodTypeConversionOptions;
 }
@@ -2712,19 +2316,6 @@ export interface GetTransaction200Response {
 /**
  *
  * @export
- * @interface GetTransaction200ResponseAllOf
- */
-export interface GetTransaction200ResponseAllOf {
-  /**
-   *
-   * @type {TransactionData}
-   * @memberof GetTransaction200ResponseAllOf
-   */
-  result: TransactionData;
-}
-/**
- *
- * @export
  * @interface GetTransactionReceipt200Response
  */
 export interface GetTransactionReceipt200Response {
@@ -2744,19 +2335,6 @@ export interface GetTransactionReceipt200Response {
    *
    * @type {TransactionReceipt}
    * @memberof GetTransactionReceipt200Response
-   */
-  result: TransactionReceipt;
-}
-/**
- *
- * @export
- * @interface GetTransactionReceipt200ResponseAllOf
- */
-export interface GetTransactionReceipt200ResponseAllOf {
-  /**
-   *
-   * @type {TransactionReceipt}
-   * @memberof GetTransactionReceipt200ResponseAllOf
    */
   result: TransactionReceipt;
 }
@@ -2925,19 +2503,6 @@ export interface ListAddresses200Response {
 /**
  *
  * @export
- * @interface ListAddresses200ResponseAllOf
- */
-export interface ListAddresses200ResponseAllOf {
-  /**
-   *
-   * @type {Array<AddressLabel>}
-   * @memberof ListAddresses200ResponseAllOf
-   */
-  result: Array<AddressLabel>;
-}
-/**
- *
- * @export
  * @interface ListApiKeys200Response
  */
 export interface ListApiKeys200Response {
@@ -2957,19 +2522,6 @@ export interface ListApiKeys200Response {
    *
    * @type {Array<APIKey>}
    * @memberof ListApiKeys200Response
-   */
-  result: Array<APIKey>;
-}
-/**
- *
- * @export
- * @interface ListApiKeys200ResponseAllOf
- */
-export interface ListApiKeys200ResponseAllOf {
-  /**
-   *
-   * @type {Array<APIKey>}
-   * @memberof ListApiKeys200ResponseAllOf
    */
   result: Array<APIKey>;
 }
@@ -3001,19 +2553,6 @@ export interface ListAuditLogs200Response {
 /**
  *
  * @export
- * @interface ListAuditLogs200ResponseAllOf
- */
-export interface ListAuditLogs200ResponseAllOf {
-  /**
-   *
-   * @type {Array<AuditLog>}
-   * @memberof ListAuditLogs200ResponseAllOf
-   */
-  result: Array<AuditLog>;
-}
-/**
- *
- * @export
  * @interface ListContractVersions200Response
  */
 export interface ListContractVersions200Response {
@@ -3033,19 +2572,6 @@ export interface ListContractVersions200Response {
    *
    * @type {ListContractVersions200ResponseAllOfResult}
    * @memberof ListContractVersions200Response
-   */
-  result: ListContractVersions200ResponseAllOfResult;
-}
-/**
- *
- * @export
- * @interface ListContractVersions200ResponseAllOf
- */
-export interface ListContractVersions200ResponseAllOf {
-  /**
-   *
-   * @type {ListContractVersions200ResponseAllOfResult}
-   * @memberof ListContractVersions200ResponseAllOf
    */
   result: ListContractVersions200ResponseAllOfResult;
 }
@@ -3096,19 +2622,6 @@ export interface ListContracts200Response {
 /**
  *
  * @export
- * @interface ListContracts200ResponseAllOf
- */
-export interface ListContracts200ResponseAllOf {
-  /**
-   *
-   * @type {Array<ContractOverview>}
-   * @memberof ListContracts200ResponseAllOf
-   */
-  result: Array<ContractOverview>;
-}
-/**
- *
- * @export
  * @interface ListCorsOrigins200Response
  */
 export interface ListCorsOrigins200Response {
@@ -3128,19 +2641,6 @@ export interface ListCorsOrigins200Response {
    *
    * @type {Array<CORSOrigin>}
    * @memberof ListCorsOrigins200Response
-   */
-  result: Array<CORSOrigin>;
-}
-/**
- *
- * @export
- * @interface ListCorsOrigins200ResponseAllOf
- */
-export interface ListCorsOrigins200ResponseAllOf {
-  /**
-   *
-   * @type {Array<CORSOrigin>}
-   * @memberof ListCorsOrigins200ResponseAllOf
    */
   result: Array<CORSOrigin>;
 }
@@ -3172,15 +2672,27 @@ export interface ListEventQueries200Response {
 /**
  *
  * @export
- * @interface ListEventQueries200ResponseAllOf
+ * @interface ListEvents200Response
  */
-export interface ListEventQueries200ResponseAllOf {
+export interface ListEvents200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListEvents200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListEvents200Response
+   */
+  message: string;
   /**
    *
-   * @type {Array<SavedEventQuery>}
-   * @memberof ListEventQueries200ResponseAllOf
+   * @type {Array<Event>}
+   * @memberof ListEvents200Response
    */
-  result: Array<SavedEventQuery>;
+  result: Array<Event>;
 }
 /**
  *
@@ -3204,19 +2716,6 @@ export interface ListGroups200Response {
    *
    * @type {Array<Group>}
    * @memberof ListGroups200Response
-   */
-  result: Array<Group>;
-}
-/**
- *
- * @export
- * @interface ListGroups200ResponseAllOf
- */
-export interface ListGroups200ResponseAllOf {
-  /**
-   *
-   * @type {Array<Group>}
-   * @memberof ListGroups200ResponseAllOf
    */
   result: Array<Group>;
 }
@@ -3248,19 +2747,6 @@ export interface ListHsm200Response {
 /**
  *
  * @export
- * @interface ListHsm200ResponseAllOf
- */
-export interface ListHsm200ResponseAllOf {
-  /**
-   *
-   * @type {Array<HSMData>}
-   * @memberof ListHsm200ResponseAllOf
-   */
-  result: Array<HSMData>;
-}
-/**
- *
- * @export
  * @interface ListHsmWallets200Response
  */
 export interface ListHsmWallets200Response {
@@ -3280,19 +2766,6 @@ export interface ListHsmWallets200Response {
    *
    * @type {Array<StandaloneWallet>}
    * @memberof ListHsmWallets200Response
-   */
-  result: Array<StandaloneWallet>;
-}
-/**
- *
- * @export
- * @interface ListHsmWallets200ResponseAllOf
- */
-export interface ListHsmWallets200ResponseAllOf {
-  /**
-   *
-   * @type {Array<StandaloneWallet>}
-   * @memberof ListHsmWallets200ResponseAllOf
    */
   result: Array<StandaloneWallet>;
 }
@@ -3324,19 +2797,6 @@ export interface ListUsers200Response {
 /**
  *
  * @export
- * @interface ListUsers200ResponseAllOf
- */
-export interface ListUsers200ResponseAllOf {
-  /**
-   *
-   * @type {Array<User>}
-   * @memberof ListUsers200ResponseAllOf
-   */
-  result: Array<User>;
-}
-/**
- *
- * @export
  * @interface ListWalletTransactions200Response
  */
 export interface ListWalletTransactions200Response {
@@ -3356,19 +2816,6 @@ export interface ListWalletTransactions200Response {
    *
    * @type {Array<WalletTransaction>}
    * @memberof ListWalletTransactions200Response
-   */
-  result: Array<WalletTransaction>;
-}
-/**
- *
- * @export
- * @interface ListWalletTransactions200ResponseAllOf
- */
-export interface ListWalletTransactions200ResponseAllOf {
-  /**
-   *
-   * @type {Array<WalletTransaction>}
-   * @memberof ListWalletTransactions200ResponseAllOf
    */
   result: Array<WalletTransaction>;
 }
@@ -3478,25 +2925,6 @@ export interface MethodCallPreviewResponse extends PostMethodResponse {
   output: any;
 }
 /**
- *
- * @export
- * @interface MethodCallPreviewResponseAllOf
- */
-export interface MethodCallPreviewResponseAllOf {
-  /**
-   * The function call inputs.
-   * @type {Array<any>}
-   * @memberof MethodCallPreviewResponseAllOf
-   */
-  input: Array<any>;
-  /**
-   * The function call output.
-   * @type {any}
-   * @memberof MethodCallPreviewResponseAllOf
-   */
-  output: any;
-}
-/**
  * The result of a function call.
  * @export
  * @interface MethodCallResponse
@@ -3506,19 +2934,6 @@ export interface MethodCallResponse extends PostMethodResponse {
    * The function call output.
    * @type {any}
    * @memberof MethodCallResponse
-   */
-  output: any;
-}
-/**
- *
- * @export
- * @interface MethodCallResponseAllOf
- */
-export interface MethodCallResponseAllOf {
-  /**
-   * The function call output.
-   * @type {any}
-   * @memberof MethodCallResponseAllOf
    */
   output: any;
 }
@@ -3807,19 +3222,6 @@ export interface SetAddress201Response {
   result: Address;
 }
 /**
- *
- * @export
- * @interface SetAddress201ResponseAllOf
- */
-export interface SetAddress201ResponseAllOf {
-  /**
-   *
-   * @type {Address}
-   * @memberof SetAddress201ResponseAllOf
-   */
-  result: Address;
-}
-/**
  * Request body representing a set local nonce request.
  * @export
  * @interface SetNonceRequest
@@ -3854,19 +3256,6 @@ export interface SignData200Response {
    *
    * @type {HSMSignResponse}
    * @memberof SignData200Response
-   */
-  result: HSMSignResponse;
-}
-/**
- *
- * @export
- * @interface SignData200ResponseAllOf
- */
-export interface SignData200ResponseAllOf {
-  /**
-   *
-   * @type {HSMSignResponse}
-   * @memberof SignData200ResponseAllOf
    */
   result: HSMSignResponse;
 }
@@ -3925,25 +3314,6 @@ export interface StandaloneWallet {
    * @memberof StandaloneWallet
    */
   publicAddress: string;
-}
-/**
- *
- * @export
- * @interface SubmitSignedTransaction200Response
- */
-export interface SubmitSignedTransaction200Response {
-  /**
-   * The status code.
-   * @type {number}
-   * @memberof SubmitSignedTransaction200Response
-   */
-  status: number;
-  /**
-   * The human-readable status message.
-   * @type {string}
-   * @memberof SubmitSignedTransaction200Response
-   */
-  message: string;
 }
 /**
  * A transaction from the Ethereum Blockchain.
@@ -4283,19 +3653,6 @@ export interface TransactionToSign {
 /**
  *
  * @export
- * @interface TransactionToSignAllOf
- */
-export interface TransactionToSignAllOf {
-  /**
-   *
-   * @type {boolean}
-   * @memberof TransactionToSignAllOf
-   */
-  submitted: boolean;
-}
-/**
- *
- * @export
  * @interface TransactionToSignResponse
  */
 export interface TransactionToSignResponse extends PostMethodResponse {
@@ -4338,19 +3695,6 @@ export interface TransferEth200Response {
   result: TransactionToSign;
 }
 /**
- *
- * @export
- * @interface TransferEth200ResponseAllOf
- */
-export interface TransferEth200ResponseAllOf {
-  /**
-   *
-   * @type {TransactionToSign}
-   * @memberof TransferEth200ResponseAllOf
-   */
-  result: TransactionToSign;
-}
-/**
  * Represents the set of type conversions allowed for a particular input or output of a function (how it may be \"cast\").
  * @export
  * @interface TypeConversionOptions
@@ -4385,19 +3729,6 @@ export interface User {
    * The user ID.
    * @type {number}
    * @memberof User
-   */
-  id: number;
-}
-/**
- *
- * @export
- * @interface UserAllOf
- */
-export interface UserAllOf {
-  /**
-   * The user ID.
-   * @type {number}
-   * @memberof UserAllOf
    */
   id: number;
 }
@@ -4526,14 +3857,14 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
      * @summary Get address
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {Array<'balance' | 'code' | 'nonce'>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getAddress: async (
       chain: ChainName,
       addressOrLabel: string,
-      include?: Array<'balance' | 'code' | 'nonce'>,
+      include?: Array<GetAddressIncludeEnum>,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
@@ -4677,7 +4008,7 @@ export const AddressesApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       addressOrLabel: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAddress(chain, addressOrLabel, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -4686,14 +4017,14 @@ export const AddressesApiFp = function (configuration?: Configuration) {
      * @summary Get address
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {Array<'balance' | 'code' | 'nonce'>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getAddress(
       chain: ChainName,
       addressOrLabel: string,
-      include?: Array<'balance' | 'code' | 'nonce'>,
+      include?: Array<GetAddressIncludeEnum>,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetAddress201Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getAddress(chain, addressOrLabel, include, options);
@@ -4747,11 +4078,7 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteAddress(
-      chain: ChainName,
-      addressOrLabel: string,
-      options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    deleteAddress(chain: ChainName, addressOrLabel: string, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.deleteAddress(chain, addressOrLabel, options).then((request) => request(axios, basePath));
     },
     /**
@@ -4759,14 +4086,14 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @summary Get address
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {Array<'balance' | 'code' | 'nonce'>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getAddress(
       chain: ChainName,
       addressOrLabel: string,
-      include?: Array<'balance' | 'code' | 'nonce'>,
+      include?: Array<GetAddressIncludeEnum>,
       options?: any
     ): AxiosPromise<SetAddress201Response> {
       return localVarFp.getAddress(chain, addressOrLabel, include, options).then((request) => request(axios, basePath));
@@ -4810,18 +4137,14 @@ export interface AddressesApiInterface {
    * @throws {RequiredError}
    * @memberof AddressesApiInterface
    */
-  deleteAddress(
-    chain: ChainName,
-    addressOrLabel: string,
-    options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  deleteAddress(chain: ChainName, addressOrLabel: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns details about an address.
    * @summary Get address
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} addressOrLabel An address or the label of an address.
-   * @param {Array<'balance' | 'code' | 'nonce'>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+   * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AddressesApiInterface
@@ -4829,7 +4152,7 @@ export interface AddressesApiInterface {
   getAddress(
     chain: ChainName,
     addressOrLabel: string,
-    include?: Array<'balance' | 'code' | 'nonce'>,
+    include?: Array<GetAddressIncludeEnum>,
     options?: AxiosRequestConfig
   ): AxiosPromise<SetAddress201Response>;
 
@@ -4886,7 +4209,7 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @summary Get address
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} addressOrLabel An address or the label of an address.
-   * @param {Array<'balance' | 'code' | 'nonce'>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+   * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AddressesApi
@@ -4894,7 +4217,7 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
   public getAddress(
     chain: ChainName,
     addressOrLabel: string,
-    include?: Array<'balance' | 'code' | 'nonce'>,
+    include?: Array<GetAddressIncludeEnum>,
     options?: AxiosRequestConfig
   ) {
     return AddressesApiFp(this.configuration)
@@ -4931,6 +4254,16 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
       .then((request) => request(this.axios, this.basePath));
   }
 }
+
+/**
+ * @export
+ */
+export const GetAddressIncludeEnum = {
+  Balance: 'balance',
+  Code: 'code',
+  Nonce: 'nonce'
+} as const;
+export type GetAddressIncludeEnum = typeof GetAddressIncludeEnum[keyof typeof GetAddressIncludeEnum];
 
 /**
  * AdminApi - axios parameter creator
@@ -4984,15 +4317,15 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addGroupApikey: async (
+    addGroupApiKey: async (
       groupID: number,
       apiKeyID: number,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
-      assertParamExists('addGroupApikey', 'groupID', groupID);
+      assertParamExists('addGroupApiKey', 'groupID', groupID);
       // verify required parameter 'apiKeyID' is not null or undefined
-      assertParamExists('addGroupApikey', 'apiKeyID', apiKeyID);
+      assertParamExists('addGroupApiKey', 'apiKeyID', apiKeyID);
       const localVarPath = `/groups/{groupID}/api_keys/{apiKeyID}`
         .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
         .replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
@@ -5507,15 +4840,15 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeGroupApikey: async (
+    removeGroupApiKey: async (
       groupID: number,
       apiKeyID: number,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
-      assertParamExists('removeGroupApikey', 'groupID', groupID);
+      assertParamExists('removeGroupApiKey', 'groupID', groupID);
       // verify required parameter 'apiKeyID' is not null or undefined
-      assertParamExists('removeGroupApikey', 'apiKeyID', apiKeyID);
+      assertParamExists('removeGroupApiKey', 'apiKeyID', apiKeyID);
       const localVarPath = `/groups/{groupID}/api_keys/{apiKeyID}`
         .replace(`{${'groupID'}}`, encodeURIComponent(String(groupID)))
         .replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
@@ -5702,7 +5035,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async addCorsOrigin(
       cORSOrigin?: CORSOrigin,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addCorsOrigin(cORSOrigin, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -5714,12 +5047,12 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async addGroupApikey(
+    async addGroupApiKey(
       groupID: number,
       apiKeyID: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupApikey(groupID, apiKeyID, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupApiKey(groupID, apiKeyID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5890,7 +5223,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async removeCorsOrigin(
       originID: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeCorsOrigin(originID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -5902,12 +5235,12 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async removeGroupApikey(
+    async removeGroupApiKey(
       groupID: number,
       apiKeyID: number,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupApikey(groupID, apiKeyID, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupApiKey(groupID, apiKeyID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5975,7 +5308,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.addCorsOrigin(cORSOrigin, options).then((request) => request(axios, basePath));
     },
     /**
@@ -5986,8 +5319,8 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addGroupApikey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
-      return localVarFp.addGroupApikey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
+    addGroupApiKey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.addGroupApiKey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
      * Adds a role to a group.
@@ -6113,7 +5446,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeCorsOrigin(originID: number, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    removeCorsOrigin(originID: number, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.removeCorsOrigin(originID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6124,8 +5457,8 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeGroupApikey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
-      return localVarFp.removeGroupApikey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
+    removeGroupApiKey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.removeGroupApiKey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
      * Removes a role from a group.
@@ -6177,10 +5510,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addCorsOrigin(
-    cORSOrigin?: CORSOrigin,
-    options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  addCorsOrigin(cORSOrigin?: CORSOrigin, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds an API key to a group.
@@ -6191,7 +5521,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds a role to a group.
@@ -6321,7 +5651,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  removeCorsOrigin(originID: number, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
+  removeCorsOrigin(originID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Removes an API key from a group.
@@ -6332,7 +5662,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  removeGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  removeGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Removes a role from a group.
@@ -6398,9 +5728,9 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public addGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
+  public addGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
-      .addGroupApikey(groupID, apiKeyID, options)
+      .addGroupApiKey(groupID, apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -6583,9 +5913,9 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public removeGroupApikey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
+  public removeGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
-      .removeGroupApikey(groupID, apiKeyID, options)
+      .removeGroupApiKey(groupID, apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -6725,14 +6055,14 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * @summary Get transaction
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} hash Transaction hash.
-     * @param {'contract'} [include] Include contract and method call details, if available.
+     * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getTransaction: async (
       chain: ChainName,
       hash: string,
-      include?: 'contract',
+      include?: GetTransactionIncludeEnum,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
@@ -6777,14 +6107,14 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * @summary Get transaction receipt
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} hash Transaction hash.
-     * @param {'contract'} [include] Include contract and event details, if available.
+     * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getTransactionReceipt: async (
       chain: ChainName,
       hash: string,
-      include?: 'contract',
+      include?: GetTransactionReceiptIncludeEnum,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
@@ -6966,14 +6296,14 @@ export const ChainsApiFp = function (configuration?: Configuration) {
      * @summary Get transaction
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} hash Transaction hash.
-     * @param {'contract'} [include] Include contract and method call details, if available.
+     * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getTransaction(
       chain: ChainName,
       hash: string,
-      include?: 'contract',
+      include?: GetTransactionIncludeEnum,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(chain, hash, include, options);
@@ -6984,14 +6314,14 @@ export const ChainsApiFp = function (configuration?: Configuration) {
      * @summary Get transaction receipt
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} hash Transaction hash.
-     * @param {'contract'} [include] Include contract and event details, if available.
+     * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getTransactionReceipt(
       chain: ChainName,
       hash: string,
-      include?: 'contract',
+      include?: GetTransactionReceiptIncludeEnum,
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransactionReceipt200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTransactionReceipt(chain, hash, include, options);
@@ -7009,7 +6339,7 @@ export const ChainsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.submitSignedTransaction(
         chain,
         signedTransactionSubmission,
@@ -7069,14 +6399,14 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * @summary Get transaction
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} hash Transaction hash.
-     * @param {'contract'} [include] Include contract and method call details, if available.
+     * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getTransaction(
       chain: ChainName,
       hash: string,
-      include?: 'contract',
+      include?: GetTransactionIncludeEnum,
       options?: any
     ): AxiosPromise<GetTransaction200Response> {
       return localVarFp.getTransaction(chain, hash, include, options).then((request) => request(axios, basePath));
@@ -7086,14 +6416,14 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * @summary Get transaction receipt
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} hash Transaction hash.
-     * @param {'contract'} [include] Include contract and event details, if available.
+     * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getTransactionReceipt(
       chain: ChainName,
       hash: string,
-      include?: 'contract',
+      include?: GetTransactionReceiptIncludeEnum,
       options?: any
     ): AxiosPromise<GetTransactionReceipt200Response> {
       return localVarFp
@@ -7112,7 +6442,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
       options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    ): AxiosPromise<BaseResponse> {
       return localVarFp
         .submitSignedTransaction(chain, signedTransactionSubmission, options)
         .then((request) => request(axios, basePath));
@@ -7167,7 +6497,7 @@ export interface ChainsApiInterface {
    * @summary Get transaction
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} hash Transaction hash.
-   * @param {'contract'} [include] Include contract and method call details, if available.
+   * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApiInterface
@@ -7175,7 +6505,7 @@ export interface ChainsApiInterface {
   getTransaction(
     chain: ChainName,
     hash: string,
-    include?: 'contract',
+    include?: GetTransactionIncludeEnum,
     options?: AxiosRequestConfig
   ): AxiosPromise<GetTransaction200Response>;
 
@@ -7184,7 +6514,7 @@ export interface ChainsApiInterface {
    * @summary Get transaction receipt
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} hash Transaction hash.
-   * @param {'contract'} [include] Include contract and event details, if available.
+   * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApiInterface
@@ -7192,7 +6522,7 @@ export interface ChainsApiInterface {
   getTransactionReceipt(
     chain: ChainName,
     hash: string,
-    include?: 'contract',
+    include?: GetTransactionReceiptIncludeEnum,
     options?: AxiosRequestConfig
   ): AxiosPromise<GetTransactionReceipt200Response>;
 
@@ -7209,7 +6539,7 @@ export interface ChainsApiInterface {
     chain: ChainName,
     signedTransactionSubmission?: SignedTransactionSubmission,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<BaseResponse>;
 
   /**
    * Returns a transaction for sending the native token between addresses.
@@ -7268,12 +6598,17 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @summary Get transaction
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} hash Transaction hash.
-   * @param {'contract'} [include] Include contract and method call details, if available.
+   * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApi
    */
-  public getTransaction(chain: ChainName, hash: string, include?: 'contract', options?: AxiosRequestConfig) {
+  public getTransaction(
+    chain: ChainName,
+    hash: string,
+    include?: GetTransactionIncludeEnum,
+    options?: AxiosRequestConfig
+  ) {
     return ChainsApiFp(this.configuration)
       .getTransaction(chain, hash, include, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7284,12 +6619,17 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @summary Get transaction receipt
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} hash Transaction hash.
-   * @param {'contract'} [include] Include contract and event details, if available.
+   * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApi
    */
-  public getTransactionReceipt(chain: ChainName, hash: string, include?: 'contract', options?: AxiosRequestConfig) {
+  public getTransactionReceipt(
+    chain: ChainName,
+    hash: string,
+    include?: GetTransactionReceiptIncludeEnum,
+    options?: AxiosRequestConfig
+  ) {
     return ChainsApiFp(this.configuration)
       .getTransactionReceipt(chain, hash, include, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7329,6 +6669,22 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
       .then((request) => request(this.axios, this.basePath));
   }
 }
+
+/**
+ * @export
+ */
+export const GetTransactionIncludeEnum = {
+  Contract: 'contract'
+} as const;
+export type GetTransactionIncludeEnum = typeof GetTransactionIncludeEnum[keyof typeof GetTransactionIncludeEnum];
+/**
+ * @export
+ */
+export const GetTransactionReceiptIncludeEnum = {
+  Contract: 'contract'
+} as const;
+export type GetTransactionReceiptIncludeEnum =
+  typeof GetTransactionReceiptIncludeEnum[keyof typeof GetTransactionReceiptIncludeEnum];
 
 /**
  * ContractsApi - axios parameter creator
@@ -8295,7 +7651,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     async createContracts(
       baseContract?: Array<BaseContract>,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createContracts(baseContract, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -8656,10 +8012,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createContracts(
-      baseContract?: Array<BaseContract>,
-      options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    createContracts(baseContract?: Array<BaseContract>, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.createContracts(baseContract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -8957,10 +8310,7 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  createContracts(
-    baseContract?: Array<BaseContract>,
-    options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  createContracts(baseContract?: Array<BaseContract>, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Deletes a contract and all its versions.
@@ -9881,7 +9231,7 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
     async deleteEventQuery(
       eventQuery: string,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEventQuery(eventQuery, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -9964,7 +9314,7 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
       eventQuery: string,
       eventQuery2?: EventQuery,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setEventQuery(eventQuery, eventQuery2, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     }
@@ -9999,7 +9349,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteEventQuery(eventQuery: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    deleteEventQuery(eventQuery: string, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.deleteEventQuery(eventQuery, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10067,11 +9417,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    setEventQuery(
-      eventQuery: string,
-      eventQuery2?: EventQuery,
-      options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.setEventQuery(eventQuery, eventQuery2, options).then((request) => request(axios, basePath));
     }
   };
@@ -10104,7 +9450,7 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
+  deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Executes an arbitrary event query.
@@ -10168,11 +9514,7 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  setEventQuery(
-    eventQuery: string,
-    eventQuery2?: EventQuery,
-    options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 }
 
 /**
@@ -10297,114 +9639,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
 export const EventsApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
     /**
-     * Gets all events stored in the database.
-     * @summary Get all events
-     * @param {string} [blockHash] Filter events by a block hash.
-     * @param {number} [blockNumber] Filter events by a block number.
-     * @param {number} [txIndexInBlock] Filter events by a transaction\&#39;s index in the block.
-     * @param {number} [eventIndexInLog] Filter events by index in the log.
-     * @param {string} [txHash] Filter events by a transaction hash.
-     * @param {boolean} [fromConstructor] Filter events by whether they were emitted from the constructor function.
-     * @param {ChainName} [chain] Filter events by a chain name.
-     * @param {string} [contractAddress] Filter events by a contract address.
-     * @param {string} [contractLabel] Filter events by a contract label.
-     * @param {string} [eventSignature] Filter events by the signature.
-     * @param {number} [limit]
-     * @param {number} [offset]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getAllEvents: async (
-      blockHash?: string,
-      blockNumber?: number,
-      txIndexInBlock?: number,
-      eventIndexInLog?: number,
-      txHash?: string,
-      fromConstructor?: boolean,
-      chain?: ChainName,
-      contractAddress?: string,
-      contractLabel?: string,
-      eventSignature?: string,
-      limit?: number,
-      offset?: number,
-      options: AxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/events`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication cookie required
-
-      // authentication bearer required
-      // http bearer authentication required
-      await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-      if (blockHash !== undefined) {
-        localVarQueryParameter['block_hash'] = blockHash;
-      }
-
-      if (blockNumber !== undefined) {
-        localVarQueryParameter['block_number'] = blockNumber;
-      }
-
-      if (txIndexInBlock !== undefined) {
-        localVarQueryParameter['tx_index_in_block'] = txIndexInBlock;
-      }
-
-      if (eventIndexInLog !== undefined) {
-        localVarQueryParameter['event_index_in_log'] = eventIndexInLog;
-      }
-
-      if (txHash !== undefined) {
-        localVarQueryParameter['tx_hash'] = txHash;
-      }
-
-      if (fromConstructor !== undefined) {
-        localVarQueryParameter['from_constructor'] = fromConstructor;
-      }
-
-      if (chain !== undefined) {
-        localVarQueryParameter['chain'] = chain;
-      }
-
-      if (contractAddress !== undefined) {
-        localVarQueryParameter['contract_address'] = contractAddress;
-      }
-
-      if (contractLabel !== undefined) {
-        localVarQueryParameter['contract_label'] = contractLabel;
-      }
-
-      if (eventSignature !== undefined) {
-        localVarQueryParameter['event_signature'] = eventSignature;
-      }
-
-      if (limit !== undefined) {
-        localVarQueryParameter['limit'] = limit;
-      }
-
-      if (offset !== undefined) {
-        localVarQueryParameter['offset'] = offset;
-      }
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
-      };
-    },
-    /**
      * Gets the number of events stored in the database.
      * @summary Get event count
      * @param {string} [blockHash] Filter events by a block hash.
@@ -10511,20 +9745,10 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
         url: toPathString(localVarUrlObj),
         options: localVarRequestOptions
       };
-    }
-  };
-};
-
-/**
- * EventsApi - functional programming interface
- * @export
- */
-export const EventsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = EventsApiAxiosParamCreator(configuration);
-  return {
+    },
     /**
-     * Gets all events stored in the database.
-     * @summary Get all events
+     * Returns all events stored in the database.
+     * @summary List events
      * @param {string} [blockHash] Filter events by a block hash.
      * @param {number} [blockNumber] Filter events by a block number.
      * @param {number} [txIndexInBlock] Filter events by a transaction\&#39;s index in the block.
@@ -10540,7 +9764,7 @@ export const EventsApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async getAllEvents(
+    listEvents: async (
       blockHash?: string,
       blockNumber?: number,
       txIndexInBlock?: number,
@@ -10553,25 +9777,93 @@ export const EventsApiFp = function (configuration?: Configuration) {
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAllEvents200Response>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getAllEvents(
-        blockHash,
-        blockNumber,
-        txIndexInBlock,
-        eventIndexInLog,
-        txHash,
-        fromConstructor,
-        chain,
-        contractAddress,
-        contractLabel,
-        eventSignature,
-        limit,
-        offset,
-        options
-      );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/events`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (blockHash !== undefined) {
+        localVarQueryParameter['block_hash'] = blockHash;
+      }
+
+      if (blockNumber !== undefined) {
+        localVarQueryParameter['block_number'] = blockNumber;
+      }
+
+      if (txIndexInBlock !== undefined) {
+        localVarQueryParameter['tx_index_in_block'] = txIndexInBlock;
+      }
+
+      if (eventIndexInLog !== undefined) {
+        localVarQueryParameter['event_index_in_log'] = eventIndexInLog;
+      }
+
+      if (txHash !== undefined) {
+        localVarQueryParameter['tx_hash'] = txHash;
+      }
+
+      if (fromConstructor !== undefined) {
+        localVarQueryParameter['from_constructor'] = fromConstructor;
+      }
+
+      if (chain !== undefined) {
+        localVarQueryParameter['chain'] = chain;
+      }
+
+      if (contractAddress !== undefined) {
+        localVarQueryParameter['contract_address'] = contractAddress;
+      }
+
+      if (contractLabel !== undefined) {
+        localVarQueryParameter['contract_label'] = contractLabel;
+      }
+
+      if (eventSignature !== undefined) {
+        localVarQueryParameter['event_signature'] = eventSignature;
+      }
+
+      if (limit !== undefined) {
+        localVarQueryParameter['limit'] = limit;
+      }
+
+      if (offset !== undefined) {
+        localVarQueryParameter['offset'] = offset;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    }
+  };
+};
+
+/**
+ * EventsApi - functional programming interface
+ * @export
+ */
+export const EventsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = EventsApiAxiosParamCreator(configuration);
+  return {
     /**
      * Gets the number of events stored in the database.
      * @summary Get event count
@@ -10621,20 +9913,10 @@ export const EventsApiFp = function (configuration?: Configuration) {
         options
       );
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    }
-  };
-};
-
-/**
- * EventsApi - factory interface
- * @export
- */
-export const EventsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-  const localVarFp = EventsApiFp(configuration);
-  return {
+    },
     /**
-     * Gets all events stored in the database.
-     * @summary Get all events
+     * Returns all events stored in the database.
+     * @summary List events
      * @param {string} [blockHash] Filter events by a block hash.
      * @param {number} [blockNumber] Filter events by a block number.
      * @param {number} [txIndexInBlock] Filter events by a transaction\&#39;s index in the block.
@@ -10650,7 +9932,7 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAllEvents(
+    async listEvents(
       blockHash?: string,
       blockNumber?: number,
       txIndexInBlock?: number,
@@ -10663,26 +9945,35 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options?: any
-    ): AxiosPromise<GetAllEvents200Response> {
-      return localVarFp
-        .getAllEvents(
-          blockHash,
-          blockNumber,
-          txIndexInBlock,
-          eventIndexInLog,
-          txHash,
-          fromConstructor,
-          chain,
-          contractAddress,
-          contractLabel,
-          eventSignature,
-          limit,
-          offset,
-          options
-        )
-        .then((request) => request(axios, basePath));
-    },
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEvents200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listEvents(
+        blockHash,
+        blockNumber,
+        txIndexInBlock,
+        eventIndexInLog,
+        txHash,
+        fromConstructor,
+        chain,
+        contractAddress,
+        contractLabel,
+        eventSignature,
+        limit,
+        offset,
+        options
+      );
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    }
+  };
+};
+
+/**
+ * EventsApi - factory interface
+ * @export
+ */
+export const EventsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+  const localVarFp = EventsApiFp(configuration);
+  return {
     /**
      * Gets the number of events stored in the database.
      * @summary Get event count
@@ -10733,6 +10024,57 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
           options
         )
         .then((request) => request(axios, basePath));
+    },
+    /**
+     * Returns all events stored in the database.
+     * @summary List events
+     * @param {string} [blockHash] Filter events by a block hash.
+     * @param {number} [blockNumber] Filter events by a block number.
+     * @param {number} [txIndexInBlock] Filter events by a transaction\&#39;s index in the block.
+     * @param {number} [eventIndexInLog] Filter events by index in the log.
+     * @param {string} [txHash] Filter events by a transaction hash.
+     * @param {boolean} [fromConstructor] Filter events by whether they were emitted from the constructor function.
+     * @param {ChainName} [chain] Filter events by a chain name.
+     * @param {string} [contractAddress] Filter events by a contract address.
+     * @param {string} [contractLabel] Filter events by a contract label.
+     * @param {string} [eventSignature] Filter events by the signature.
+     * @param {number} [limit]
+     * @param {number} [offset]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listEvents(
+      blockHash?: string,
+      blockNumber?: number,
+      txIndexInBlock?: number,
+      eventIndexInLog?: number,
+      txHash?: string,
+      fromConstructor?: boolean,
+      chain?: ChainName,
+      contractAddress?: string,
+      contractLabel?: string,
+      eventSignature?: string,
+      limit?: number,
+      offset?: number,
+      options?: any
+    ): AxiosPromise<ListEvents200Response> {
+      return localVarFp
+        .listEvents(
+          blockHash,
+          blockNumber,
+          txIndexInBlock,
+          eventIndexInLog,
+          txHash,
+          fromConstructor,
+          chain,
+          contractAddress,
+          contractLabel,
+          eventSignature,
+          limit,
+          offset,
+          options
+        )
+        .then((request) => request(axios, basePath));
     }
   };
 };
@@ -10743,41 +10085,6 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
  * @interface EventsApi
  */
 export interface EventsApiInterface {
-  /**
-   * Gets all events stored in the database.
-   * @summary Get all events
-   * @param {string} [blockHash] Filter events by a block hash.
-   * @param {number} [blockNumber] Filter events by a block number.
-   * @param {number} [txIndexInBlock] Filter events by a transaction\&#39;s index in the block.
-   * @param {number} [eventIndexInLog] Filter events by index in the log.
-   * @param {string} [txHash] Filter events by a transaction hash.
-   * @param {boolean} [fromConstructor] Filter events by whether they were emitted from the constructor function.
-   * @param {ChainName} [chain] Filter events by a chain name.
-   * @param {string} [contractAddress] Filter events by a contract address.
-   * @param {string} [contractLabel] Filter events by a contract label.
-   * @param {string} [eventSignature] Filter events by the signature.
-   * @param {number} [limit]
-   * @param {number} [offset]
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof EventsApiInterface
-   */
-  getAllEvents(
-    blockHash?: string,
-    blockNumber?: number,
-    txIndexInBlock?: number,
-    eventIndexInLog?: number,
-    txHash?: string,
-    fromConstructor?: boolean,
-    chain?: ChainName,
-    contractAddress?: string,
-    contractLabel?: string,
-    eventSignature?: string,
-    limit?: number,
-    offset?: number,
-    options?: AxiosRequestConfig
-  ): AxiosPromise<GetAllEvents200Response>;
-
   /**
    * Gets the number of events stored in the database.
    * @summary Get event count
@@ -10812,18 +10119,10 @@ export interface EventsApiInterface {
     offset?: number,
     options?: AxiosRequestConfig
   ): AxiosPromise<GetEventCount200Response>;
-}
 
-/**
- * EventsApi - object-oriented interface
- * @export
- * @class EventsApi
- * @extends {BaseAPI}
- */
-export class EventsApi extends BaseAPI implements EventsApiInterface {
   /**
-   * Gets all events stored in the database.
-   * @summary Get all events
+   * Returns all events stored in the database.
+   * @summary List events
    * @param {string} [blockHash] Filter events by a block hash.
    * @param {number} [blockNumber] Filter events by a block number.
    * @param {number} [txIndexInBlock] Filter events by a transaction\&#39;s index in the block.
@@ -10838,9 +10137,9 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventsApi
+   * @memberof EventsApiInterface
    */
-  public getAllEvents(
+  listEvents(
     blockHash?: string,
     blockNumber?: number,
     txIndexInBlock?: number,
@@ -10854,26 +10153,16 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
     limit?: number,
     offset?: number,
     options?: AxiosRequestConfig
-  ) {
-    return EventsApiFp(this.configuration)
-      .getAllEvents(
-        blockHash,
-        blockNumber,
-        txIndexInBlock,
-        eventIndexInLog,
-        txHash,
-        fromConstructor,
-        chain,
-        contractAddress,
-        contractLabel,
-        eventSignature,
-        limit,
-        offset,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+  ): AxiosPromise<ListEvents200Response>;
+}
 
+/**
+ * EventsApi - object-oriented interface
+ * @export
+ * @class EventsApi
+ * @extends {BaseAPI}
+ */
+export class EventsApi extends BaseAPI implements EventsApiInterface {
   /**
    * Gets the number of events stored in the database.
    * @summary Get event count
@@ -10910,6 +10199,59 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
   ) {
     return EventsApiFp(this.configuration)
       .getEventCount(
+        blockHash,
+        blockNumber,
+        txIndexInBlock,
+        eventIndexInLog,
+        txHash,
+        fromConstructor,
+        chain,
+        contractAddress,
+        contractLabel,
+        eventSignature,
+        limit,
+        offset,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Returns all events stored in the database.
+   * @summary List events
+   * @param {string} [blockHash] Filter events by a block hash.
+   * @param {number} [blockNumber] Filter events by a block number.
+   * @param {number} [txIndexInBlock] Filter events by a transaction\&#39;s index in the block.
+   * @param {number} [eventIndexInLog] Filter events by index in the log.
+   * @param {string} [txHash] Filter events by a transaction hash.
+   * @param {boolean} [fromConstructor] Filter events by whether they were emitted from the constructor function.
+   * @param {ChainName} [chain] Filter events by a chain name.
+   * @param {string} [contractAddress] Filter events by a contract address.
+   * @param {string} [contractLabel] Filter events by a contract label.
+   * @param {string} [eventSignature] Filter events by the signature.
+   * @param {number} [limit]
+   * @param {number} [offset]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof EventsApi
+   */
+  public listEvents(
+    blockHash?: string,
+    blockNumber?: number,
+    txIndexInBlock?: number,
+    eventIndexInLog?: number,
+    txHash?: string,
+    fromConstructor?: boolean,
+    chain?: ChainName,
+    contractAddress?: string,
+    contractLabel?: string,
+    eventSignature?: string,
+    limit?: number,
+    offset?: number,
+    options?: AxiosRequestConfig
+  ) {
+    return EventsApiFp(this.configuration)
+      .listEvents(
         blockHash,
         blockNumber,
         txIndexInBlock,
@@ -11052,83 +10394,6 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       };
     },
     /**
-     * Deletes the specified Azure account configuration and its associated keys.
-     * @summary Delete HSM config
-     * @param {string} clientId The HSM client ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteHsmConfig: async (clientId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'clientId' is not null or undefined
-      assertParamExists('deleteHsmConfig', 'clientId', clientId);
-      const localVarPath = `/hsm/config/{client_id}`.replace(`{${'client_id'}}`, encodeURIComponent(String(clientId)));
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication cookie required
-
-      // authentication bearer required
-      // http bearer authentication required
-      await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
-      };
-    },
-    /**
-     * Deletes the specified key configuration.
-     * @summary Delete HSM key
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteHsmKey: async (walletAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'walletAddress' is not null or undefined
-      assertParamExists('deleteHsmKey', 'walletAddress', walletAddress);
-      const localVarPath = `/hsm/key/{wallet_address}`.replace(
-        `{${'wallet_address'}}`,
-        encodeURIComponent(String(walletAddress))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication cookie required
-
-      // authentication bearer required
-      // http bearer authentication required
-      await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
-      };
-    },
-    /**
      * Returns a list of HSM configs and their associated wallets.
      * @summary List HSM configs and wallets
      * @param {*} [options] Override http request option.
@@ -11236,6 +10501,83 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       if (offset !== undefined) {
         localVarQueryParameter['offset'] = offset;
       }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Removes the specified Azure account configuration and its associated keys.
+     * @summary Remove HSM config
+     * @param {string} clientId The HSM client ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeHsmConfig: async (clientId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'clientId' is not null or undefined
+      assertParamExists('removeHsmConfig', 'clientId', clientId);
+      const localVarPath = `/hsm/config/{client_id}`.replace(`{${'client_id'}}`, encodeURIComponent(String(clientId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Removes the specified key configuration.
+     * @summary Remove HSM key
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeHsmKey: async (walletAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'walletAddress' is not null or undefined
+      assertParamExists('removeHsmKey', 'walletAddress', walletAddress);
+      const localVarPath = `/hsm/key/{wallet_address}`.replace(
+        `{${'wallet_address'}}`,
+        encodeURIComponent(String(walletAddress))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11407,7 +10749,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async addHsmConfig(
       baseAzureAccount?: BaseAzureAccount,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmConfig(baseAzureAccount, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -11421,7 +10763,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async addHsmKey(
       addKey?: AddKey,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmKey(addKey, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -11437,34 +10779,6 @@ export const HsmApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateHsmKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createHsmKey(createKey, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     * Deletes the specified Azure account configuration and its associated keys.
-     * @summary Delete HSM config
-     * @param {string} clientId The HSM client ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteHsmConfig(
-      clientId: string,
-      options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteHsmConfig(clientId, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     * Deletes the specified key configuration.
-     * @summary Delete HSM key
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteHsmKey(
-      walletAddress: string,
-      options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteHsmKey(walletAddress, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -11518,6 +10832,34 @@ export const HsmApiFp = function (configuration?: Configuration) {
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
+     * Removes the specified Azure account configuration and its associated keys.
+     * @summary Remove HSM config
+     * @param {string} clientId The HSM client ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeHsmConfig(
+      clientId: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeHsmConfig(clientId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Removes the specified key configuration.
+     * @summary Remove HSM key
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeHsmKey(
+      walletAddress: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeHsmKey(walletAddress, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
      * @summary Set local nonce
      * @param {ChainName} chain The blockchain chain label.
@@ -11531,7 +10873,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setLocalNonce(
         chain,
         walletAddress,
@@ -11593,7 +10935,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.addHsmConfig(baseAzureAccount, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11603,7 +10945,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmKey(addKey?: AddKey, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
+    addHsmKey(addKey?: AddKey, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.addHsmKey(addKey, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11615,26 +10957,6 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      */
     createHsmKey(createKey?: CreateKey, options?: any): AxiosPromise<CreateHsmKey200Response> {
       return localVarFp.createHsmKey(createKey, options).then((request) => request(axios, basePath));
-    },
-    /**
-     * Deletes the specified Azure account configuration and its associated keys.
-     * @summary Delete HSM config
-     * @param {string} clientId The HSM client ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteHsmConfig(clientId: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
-      return localVarFp.deleteHsmConfig(clientId, options).then((request) => request(axios, basePath));
-    },
-    /**
-     * Deletes the specified key configuration.
-     * @summary Delete HSM key
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteHsmKey(walletAddress: string, options?: any): AxiosPromise<SubmitSignedTransaction200Response> {
-      return localVarFp.deleteHsmKey(walletAddress, options).then((request) => request(axios, basePath));
     },
     /**
      * Returns a list of HSM configs and their associated wallets.
@@ -11675,6 +10997,26 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
         .then((request) => request(axios, basePath));
     },
     /**
+     * Removes the specified Azure account configuration and its associated keys.
+     * @summary Remove HSM config
+     * @param {string} clientId The HSM client ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeHsmConfig(clientId: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.removeHsmConfig(clientId, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Removes the specified key configuration.
+     * @summary Remove HSM key
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeHsmKey(walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.removeHsmKey(walletAddress, options).then((request) => request(axios, basePath));
+    },
+    /**
      * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
      * @summary Set local nonce
      * @param {ChainName} chain The blockchain chain label.
@@ -11688,7 +11030,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
       options?: any
-    ): AxiosPromise<SubmitSignedTransaction200Response> {
+    ): AxiosPromise<BaseResponse> {
       return localVarFp
         .setLocalNonce(chain, walletAddress, setNonceRequest, options)
         .then((request) => request(axios, basePath));
@@ -11738,10 +11080,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmConfig(
-    baseAzureAccount?: BaseAzureAccount,
-    options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds an existing key configuration.
@@ -11751,7 +11090,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
+  addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Creates a new key in the Azure KeyVault.
@@ -11762,26 +11101,6 @@ export interface HsmApiInterface {
    * @memberof HsmApiInterface
    */
   createHsmKey(createKey?: CreateKey, options?: AxiosRequestConfig): AxiosPromise<CreateHsmKey200Response>;
-
-  /**
-   * Deletes the specified Azure account configuration and its associated keys.
-   * @summary Delete HSM config
-   * @param {string} clientId The HSM client ID.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof HsmApiInterface
-   */
-  deleteHsmConfig(clientId: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
-
-  /**
-   * Deletes the specified key configuration.
-   * @summary Delete HSM key
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof HsmApiInterface
-   */
-  deleteHsmKey(walletAddress: string, options?: AxiosRequestConfig): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Returns a list of HSM configs and their associated wallets.
@@ -11820,6 +11139,26 @@ export interface HsmApiInterface {
   ): AxiosPromise<ListHsmWallets200Response>;
 
   /**
+   * Removes the specified Azure account configuration and its associated keys.
+   * @summary Remove HSM config
+   * @param {string} clientId The HSM client ID.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof HsmApiInterface
+   */
+  removeHsmConfig(clientId: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Removes the specified key configuration.
+   * @summary Remove HSM key
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof HsmApiInterface
+   */
+  removeHsmKey(walletAddress: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
    * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
    * @summary Set local nonce
    * @param {ChainName} chain The blockchain chain label.
@@ -11834,7 +11173,7 @@ export interface HsmApiInterface {
     walletAddress: string,
     setNonceRequest?: SetNonceRequest,
     options?: AxiosRequestConfig
-  ): AxiosPromise<SubmitSignedTransaction200Response>;
+  ): AxiosPromise<BaseResponse>;
 
   /**
    * Signs and submits the given transaction using an HSM address.
@@ -11917,34 +11256,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   }
 
   /**
-   * Deletes the specified Azure account configuration and its associated keys.
-   * @summary Delete HSM config
-   * @param {string} clientId The HSM client ID.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof HsmApi
-   */
-  public deleteHsmConfig(clientId: string, options?: AxiosRequestConfig) {
-    return HsmApiFp(this.configuration)
-      .deleteHsmConfig(clientId, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   * Deletes the specified key configuration.
-   * @summary Delete HSM key
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof HsmApi
-   */
-  public deleteHsmKey(walletAddress: string, options?: AxiosRequestConfig) {
-    return HsmApiFp(this.configuration)
-      .deleteHsmKey(walletAddress, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
    * Returns a list of HSM configs and their associated wallets.
    * @summary List HSM configs and wallets
    * @param {*} [options] Override http request option.
@@ -11985,6 +11296,34 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   ) {
     return HsmApiFp(this.configuration)
       .listHsmWallets(keyName, keyVersion, vaultName, baseGroupName, clientId, publicAddress, limit, offset, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes the specified Azure account configuration and its associated keys.
+   * @summary Remove HSM config
+   * @param {string} clientId The HSM client ID.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof HsmApi
+   */
+  public removeHsmConfig(clientId: string, options?: AxiosRequestConfig) {
+    return HsmApiFp(this.configuration)
+      .removeHsmConfig(clientId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes the specified key configuration.
+   * @summary Remove HSM key
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof HsmApi
+   */
+  public removeHsmKey(walletAddress: string, options?: AxiosRequestConfig) {
+    return HsmApiFp(this.configuration)
+      .removeHsmKey(walletAddress, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
