@@ -3273,6 +3273,59 @@ export interface SignedTransactionSubmission {
   signedTx: string;
 }
 /**
+ * A signer label.
+ * @export
+ * @interface SignerLabel
+ */
+export interface SignerLabel {
+  /**
+   * The label of the signer.
+   * @type {string}
+   * @memberof SignerLabel
+   */
+  label?: string;
+}
+/**
+ * A signer wallet.
+ * @export
+ * @interface SignerWallet
+ */
+export interface SignerWallet {
+  /**
+   * The type of the signer.
+   * @type {string}
+   * @memberof SignerWallet
+   */
+  type?: SignerWalletTypeEnum;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof SignerWallet
+   */
+  wallet?: string;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof SignerWallet
+   */
+  signer?: string;
+  /**
+   * The label of the signer.
+   * @type {string}
+   * @memberof SignerWallet
+   */
+  label?: string;
+}
+
+export const SignerWalletTypeEnum = {
+  Web3: 'web3',
+  Cloud: 'cloud',
+  Multisig: 'multisig'
+} as const;
+
+export type SignerWalletTypeEnum = typeof SignerWalletTypeEnum[keyof typeof SignerWalletTypeEnum];
+
+/**
  * An object containing an HSM wallet\'s details.
  * @export
  * @interface StandaloneWallet
@@ -4757,6 +4810,43 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       };
     },
     /**
+     * Returns all the signers for a user.
+     * @summary List user signers
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listUserSigners: async (userID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('listUserSigners', 'userID', userID);
+      const localVarPath = `/users/{userID}/signers`.replace(`{${'userID'}}`, encodeURIComponent(String(userID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Returns all the users.
      * @summary List users
      * @param {number} [groupID]
@@ -4964,6 +5054,195 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Removes a cloud wallet signer from a user.
+     * @summary Remove user cloud wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeUserSignerCloudWallet: async (
+      userID: number,
+      walletAddress: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('removeUserSignerCloudWallet', 'userID', userID);
+      // verify required parameter 'walletAddress' is not null or undefined
+      assertParamExists('removeUserSignerCloudWallet', 'walletAddress', walletAddress);
+      const localVarPath = `/users/{userID}/cloudwallets/{wallet_address}`
+        .replace(`{${'userID'}}`, encodeURIComponent(String(userID)))
+        .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Removes a web3 wallet signer from a user.
+     * @summary Remove user web3 wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeUserSignerWeb3Wallet: async (
+      userID: number,
+      walletAddress: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('removeUserSignerWeb3Wallet', 'userID', userID);
+      // verify required parameter 'walletAddress' is not null or undefined
+      assertParamExists('removeUserSignerWeb3Wallet', 'walletAddress', walletAddress);
+      const localVarPath = `/users/{userID}/web3wallets/{wallet_address}`
+        .replace(`{${'userID'}}`, encodeURIComponent(String(userID)))
+        .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Adds or updates a user\'s cloud wallet signer.
+     * @summary Add or update user cloud wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setUserSignerCloudWallet: async (
+      userID: number,
+      walletAddress: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('setUserSignerCloudWallet', 'userID', userID);
+      // verify required parameter 'walletAddress' is not null or undefined
+      assertParamExists('setUserSignerCloudWallet', 'walletAddress', walletAddress);
+      const localVarPath = `/users/{userID}/cloudwallets/{wallet_address}`
+        .replace(`{${'userID'}}`, encodeURIComponent(String(userID)))
+        .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Adds or updates a user\'s web3 wallet signer.
+     * @summary Add or update user web3 wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {SignerLabel} [signerLabel]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setUserSignerWeb3Wallet: async (
+      userID: number,
+      walletAddress: string,
+      signerLabel?: SignerLabel,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'userID' is not null or undefined
+      assertParamExists('setUserSignerWeb3Wallet', 'userID', userID);
+      // verify required parameter 'walletAddress' is not null or undefined
+      assertParamExists('setUserSignerWeb3Wallet', 'walletAddress', walletAddress);
+      const localVarPath = `/users/{userID}/web3wallets/{wallet_address}`
+        .replace(`{${'userID'}}`, encodeURIComponent(String(userID)))
+        .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(signerLabel, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -5200,6 +5479,20 @@ export const AdminApiFp = function (configuration?: Configuration) {
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
+     * Returns all the signers for a user.
+     * @summary List user signers
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listUserSigners(
+      userID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SignerWallet>>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listUserSigners(userID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Returns all the users.
      * @summary List users
      * @param {number} [groupID]
@@ -5273,6 +5566,89 @@ export const AdminApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupUser(groupID, userID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Removes a cloud wallet signer from a user.
+     * @summary Remove user cloud wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeUserSignerCloudWallet(
+      userID: number,
+      walletAddress: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeUserSignerCloudWallet(
+        userID,
+        walletAddress,
+        options
+      );
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Removes a web3 wallet signer from a user.
+     * @summary Remove user web3 wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeUserSignerWeb3Wallet(
+      userID: number,
+      walletAddress: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.removeUserSignerWeb3Wallet(
+        userID,
+        walletAddress,
+        options
+      );
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Adds or updates a user\'s cloud wallet signer.
+     * @summary Add or update user cloud wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async setUserSignerCloudWallet(
+      userID: number,
+      walletAddress: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.setUserSignerCloudWallet(
+        userID,
+        walletAddress,
+        options
+      );
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Adds or updates a user\'s web3 wallet signer.
+     * @summary Add or update user web3 wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {SignerLabel} [signerLabel]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async setUserSignerWeb3Wallet(
+      userID: number,
+      walletAddress: string,
+      signerLabel?: SignerLabel,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.setUserSignerWeb3Wallet(
+        userID,
+        walletAddress,
+        signerLabel,
+        options
+      );
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5430,6 +5806,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       return localVarFp.listGroups(userID, apiKeyID, assignable, options).then((request) => request(axios, basePath));
     },
     /**
+     * Returns all the signers for a user.
+     * @summary List user signers
+     * @param {number} userID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listUserSigners(userID: number, options?: any): AxiosPromise<Array<SignerWallet>> {
+      return localVarFp.listUserSigners(userID, options).then((request) => request(axios, basePath));
+    },
+    /**
      * Returns all the users.
      * @summary List users
      * @param {number} [groupID]
@@ -5481,6 +5867,64 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      */
     removeGroupUser(groupID: number, userID: number, options?: any): AxiosPromise<BaseResponse> {
       return localVarFp.removeGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Removes a cloud wallet signer from a user.
+     * @summary Remove user cloud wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeUserSignerCloudWallet(userID: number, walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp
+        .removeUserSignerCloudWallet(userID, walletAddress, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Removes a web3 wallet signer from a user.
+     * @summary Remove user web3 wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeUserSignerWeb3Wallet(userID: number, walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp
+        .removeUserSignerWeb3Wallet(userID, walletAddress, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Adds or updates a user\'s cloud wallet signer.
+     * @summary Add or update user cloud wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setUserSignerCloudWallet(userID: number, walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp
+        .setUserSignerCloudWallet(userID, walletAddress, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Adds or updates a user\'s web3 wallet signer.
+     * @summary Add or update user web3 wallet signer
+     * @param {number} userID
+     * @param {string} walletAddress An HSM ethereum address.
+     * @param {SignerLabel} [signerLabel]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setUserSignerWeb3Wallet(
+      userID: number,
+      walletAddress: string,
+      signerLabel?: SignerLabel,
+      options?: any
+    ): AxiosPromise<BaseResponse> {
+      return localVarFp
+        .setUserSignerWeb3Wallet(userID, walletAddress, signerLabel, options)
+        .then((request) => request(axios, basePath));
     },
     /**
      * Updates an API key.
@@ -5634,6 +6078,16 @@ export interface AdminApiInterface {
   ): AxiosPromise<ListGroups200Response>;
 
   /**
+   * Returns all the signers for a user.
+   * @summary List user signers
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  listUserSigners(userID: number, options?: AxiosRequestConfig): AxiosPromise<Array<SignerWallet>>;
+
+  /**
    * Returns all the users.
    * @summary List users
    * @param {number} [groupID]
@@ -5685,6 +6139,68 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Removes a cloud wallet signer from a user.
+   * @summary Remove user cloud wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  removeUserSignerCloudWallet(
+    userID: number,
+    walletAddress: string,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<BaseResponse>;
+
+  /**
+   * Removes a web3 wallet signer from a user.
+   * @summary Remove user web3 wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  removeUserSignerWeb3Wallet(
+    userID: number,
+    walletAddress: string,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<BaseResponse>;
+
+  /**
+   * Adds or updates a user\'s cloud wallet signer.
+   * @summary Add or update user cloud wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  setUserSignerCloudWallet(
+    userID: number,
+    walletAddress: string,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<BaseResponse>;
+
+  /**
+   * Adds or updates a user\'s web3 wallet signer.
+   * @summary Add or update user web3 wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {SignerLabel} [signerLabel]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  setUserSignerWeb3Wallet(
+    userID: number,
+    walletAddress: string,
+    signerLabel?: SignerLabel,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<BaseResponse>;
 
   /**
    * Updates an API key.
@@ -5877,6 +6393,20 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   }
 
   /**
+   * Returns all the signers for a user.
+   * @summary List user signers
+   * @param {number} userID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public listUserSigners(userID: number, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .listUserSigners(userID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
    * Returns all the users.
    * @summary List users
    * @param {number} [groupID]
@@ -5946,6 +6476,72 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeGroupUser(groupID, userID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes a cloud wallet signer from a user.
+   * @summary Remove user cloud wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public removeUserSignerCloudWallet(userID: number, walletAddress: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .removeUserSignerCloudWallet(userID, walletAddress, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Removes a web3 wallet signer from a user.
+   * @summary Remove user web3 wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public removeUserSignerWeb3Wallet(userID: number, walletAddress: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .removeUserSignerWeb3Wallet(userID, walletAddress, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Adds or updates a user\'s cloud wallet signer.
+   * @summary Add or update user cloud wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public setUserSignerCloudWallet(userID: number, walletAddress: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .setUserSignerCloudWallet(userID, walletAddress, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Adds or updates a user\'s web3 wallet signer.
+   * @summary Add or update user web3 wallet signer
+   * @param {number} userID
+   * @param {string} walletAddress An HSM ethereum address.
+   * @param {SignerLabel} [signerLabel]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public setUserSignerWeb3Wallet(
+    userID: number,
+    walletAddress: string,
+    signerLabel?: SignerLabel,
+    options?: AxiosRequestConfig
+  ) {
+    return AdminApiFp(this.configuration)
+      .setUserSignerWeb3Wallet(userID, walletAddress, signerLabel, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
