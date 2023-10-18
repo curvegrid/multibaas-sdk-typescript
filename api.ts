@@ -2772,6 +2772,31 @@ export interface ListHsmWallets200Response {
 /**
  *
  * @export
+ * @interface ListUserSigners200Response
+ */
+export interface ListUserSigners200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListUserSigners200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListUserSigners200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<SignerWallet>}
+   * @memberof ListUserSigners200Response
+   */
+  result: Array<SignerWallet>;
+}
+/**
+ *
+ * @export
  * @interface ListUsers200Response
  */
 export interface ListUsers200Response {
@@ -3283,7 +3308,7 @@ export interface SignerLabel {
    * @type {string}
    * @memberof SignerLabel
    */
-  label?: string;
+  label: string;
 }
 /**
  * A signer wallet.
@@ -3296,25 +3321,25 @@ export interface SignerWallet {
    * @type {string}
    * @memberof SignerWallet
    */
-  type?: SignerWalletTypeEnum;
+  type: SignerWalletTypeEnum;
   /**
    * An ethereum address.
    * @type {string}
    * @memberof SignerWallet
    */
-  wallet?: string;
+  wallet: string;
   /**
    * An ethereum address.
    * @type {string}
    * @memberof SignerWallet
    */
-  signer?: string;
+  signer: string;
   /**
    * The label of the signer.
    * @type {string}
    * @memberof SignerWallet
    */
-  label?: string;
+  label: string;
 }
 
 export const SignerWalletTypeEnum = {
@@ -5488,7 +5513,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async listUserSigners(
       userID: number,
       options?: AxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SignerWallet>>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUserSigners200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listUserSigners(userID, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -5812,7 +5837,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listUserSigners(userID: number, options?: any): AxiosPromise<Array<SignerWallet>> {
+    listUserSigners(userID: number, options?: any): AxiosPromise<ListUserSigners200Response> {
       return localVarFp.listUserSigners(userID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6085,7 +6110,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  listUserSigners(userID: number, options?: AxiosRequestConfig): AxiosPromise<Array<SignerWallet>>;
+  listUserSigners(userID: number, options?: AxiosRequestConfig): AxiosPromise<ListUserSigners200Response>;
 
   /**
    * Returns all the users.
