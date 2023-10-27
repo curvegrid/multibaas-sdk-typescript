@@ -77,6 +77,44 @@ export interface APIKey {
   signature: string;
 }
 /**
+ *
+ * @export
+ * @interface AcceptInvite200Response
+ */
+export interface AcceptInvite200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof AcceptInvite200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof AcceptInvite200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {User}
+   * @memberof AcceptInvite200Response
+   */
+  result: User;
+}
+/**
+ *
+ * @export
+ * @interface AcceptInviteRequest
+ */
+export interface AcceptInviteRequest {
+  /**
+   * The user ID Token
+   * @type {string}
+   * @memberof AcceptInviteRequest
+   */
+  idToken?: string;
+}
+/**
  * Add key request data.
  * @export
  * @interface AddKey
@@ -2451,6 +2489,25 @@ export interface HSMSignResponse {
   signature: string;
 }
 /**
+ * An invite with groups.
+ * @export
+ * @interface Invite
+ */
+export interface Invite {
+  /**
+   * The invitee\'s email address.
+   * @type {string}
+   * @memberof Invite
+   */
+  email: string;
+  /**
+   *
+   * @type {Array<number>}
+   * @memberof Invite
+   */
+  groupIDs?: Array<number>;
+}
+/**
  *
  * @export
  * @interface LinkAddressContractRequest
@@ -4350,6 +4407,49 @@ export type GetAddressIncludeEnum = typeof GetAddressIncludeEnum[keyof typeof Ge
 export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
     /**
+     * Accepts a user invite.
+     * @summary Accept invite
+     * @param {string} inviteID
+     * @param {AcceptInviteRequest} [acceptInviteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    acceptInvite: async (
+      inviteID: string,
+      acceptInviteRequest?: AcceptInviteRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'inviteID' is not null or undefined
+      assertParamExists('acceptInvite', 'inviteID', inviteID);
+      const localVarPath = `/invites/{inviteID}`.replace(`{${'inviteID'}}`, encodeURIComponent(String(inviteID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(acceptInviteRequest, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Adds a CORS origin.
      * @summary Add CORS origin
      * @param {CORSOrigin} [cORSOrigin]
@@ -4522,6 +4622,37 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       };
     },
     /**
+     * Checks if a user invite is valid.
+     * @summary Check invite
+     * @param {string} inviteID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    checkInvite: async (inviteID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'inviteID' is not null or undefined
+      assertParamExists('checkInvite', 'inviteID', inviteID);
+      const localVarPath = `/invites/{inviteID}`.replace(`{${'inviteID'}}`, encodeURIComponent(String(inviteID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Creates an API key and adds it to group IDs.
      * @summary Create API key
      * @param {CreateApiKeyRequest} [createApiKeyRequest]
@@ -4667,6 +4798,44 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Invites a new user.
+     * @summary Invite user
+     * @param {Invite} [invite]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    inviteUser: async (invite?: Invite, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/invites`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(invite, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -5330,6 +5499,22 @@ export const AdminApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration);
   return {
     /**
+     * Accepts a user invite.
+     * @summary Accept invite
+     * @param {string} inviteID
+     * @param {AcceptInviteRequest} [acceptInviteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async acceptInvite(
+      inviteID: string,
+      acceptInviteRequest?: AcceptInviteRequest,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcceptInvite200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.acceptInvite(inviteID, acceptInviteRequest, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Adds a CORS origin.
      * @summary Add CORS origin
      * @param {CORSOrigin} [cORSOrigin]
@@ -5392,6 +5577,20 @@ export const AdminApiFp = function (configuration?: Configuration) {
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
+     * Checks if a user invite is valid.
+     * @summary Check invite
+     * @param {string} inviteID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async checkInvite(
+      inviteID: string,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.checkInvite(inviteID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
      * Creates an API key and adds it to group IDs.
      * @summary Create API key
      * @param {CreateApiKeyRequest} [createApiKeyRequest]
@@ -5445,6 +5644,20 @@ export const AdminApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getApiKey(apiKeyID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Invites a new user.
+     * @summary Invite user
+     * @param {Invite} [invite]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async inviteUser(
+      invite?: Invite,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.inviteUser(invite, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -5703,6 +5916,23 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
   const localVarFp = AdminApiFp(configuration);
   return {
     /**
+     * Accepts a user invite.
+     * @summary Accept invite
+     * @param {string} inviteID
+     * @param {AcceptInviteRequest} [acceptInviteRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    acceptInvite(
+      inviteID: string,
+      acceptInviteRequest?: AcceptInviteRequest,
+      options?: any
+    ): AxiosPromise<AcceptInvite200Response> {
+      return localVarFp
+        .acceptInvite(inviteID, acceptInviteRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Adds a CORS origin.
      * @summary Add CORS origin
      * @param {CORSOrigin} [cORSOrigin]
@@ -5746,6 +5976,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       return localVarFp.addGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
     },
     /**
+     * Checks if a user invite is valid.
+     * @summary Check invite
+     * @param {string} inviteID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    checkInvite(inviteID: string, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.checkInvite(inviteID, options).then((request) => request(axios, basePath));
+    },
+    /**
      * Creates an API key and adds it to group IDs.
      * @summary Create API key
      * @param {CreateApiKeyRequest} [createApiKeyRequest]
@@ -5784,6 +6024,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      */
     getApiKey(apiKeyID: number, options?: any): AxiosPromise<CreateApiKey200Response> {
       return localVarFp.getApiKey(apiKeyID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Invites a new user.
+     * @summary Invite user
+     * @param {Invite} [invite]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    inviteUser(invite?: Invite, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.inviteUser(invite, options).then((request) => request(axios, basePath));
     },
     /**
      * Returns all the API keys.
@@ -5972,6 +6222,21 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
  */
 export interface AdminApiInterface {
   /**
+   * Accepts a user invite.
+   * @summary Accept invite
+   * @param {string} inviteID
+   * @param {AcceptInviteRequest} [acceptInviteRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  acceptInvite(
+    inviteID: string,
+    acceptInviteRequest?: AcceptInviteRequest,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<AcceptInvite200Response>;
+
+  /**
    * Adds a CORS origin.
    * @summary Add CORS origin
    * @param {CORSOrigin} [cORSOrigin]
@@ -6015,6 +6280,16 @@ export interface AdminApiInterface {
   addGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
+   * Checks if a user invite is valid.
+   * @summary Check invite
+   * @param {string} inviteID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  checkInvite(inviteID: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
    * Creates an API key and adds it to group IDs.
    * @summary Create API key
    * @param {CreateApiKeyRequest} [createApiKeyRequest]
@@ -6056,6 +6331,16 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   getApiKey(apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<CreateApiKey200Response>;
+
+  /**
+   * Invites a new user.
+   * @summary Invite user
+   * @param {Invite} [invite]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  inviteUser(invite?: Invite, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns all the API keys.
@@ -6247,6 +6532,21 @@ export interface AdminApiInterface {
  */
 export class AdminApi extends BaseAPI implements AdminApiInterface {
   /**
+   * Accepts a user invite.
+   * @summary Accept invite
+   * @param {string} inviteID
+   * @param {AcceptInviteRequest} [acceptInviteRequest]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public acceptInvite(inviteID: string, acceptInviteRequest?: AcceptInviteRequest, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .acceptInvite(inviteID, acceptInviteRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
    * Adds a CORS origin.
    * @summary Add CORS origin
    * @param {CORSOrigin} [cORSOrigin]
@@ -6306,6 +6606,20 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   }
 
   /**
+   * Checks if a user invite is valid.
+   * @summary Check invite
+   * @param {string} inviteID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public checkInvite(inviteID: string, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .checkInvite(inviteID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
    * Creates an API key and adds it to group IDs.
    * @summary Create API key
    * @param {CreateApiKeyRequest} [createApiKeyRequest]
@@ -6358,6 +6672,20 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public getApiKey(apiKeyID: number, options?: AxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .getApiKey(apiKeyID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Invites a new user.
+   * @summary Invite user
+   * @param {Invite} [invite]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public inviteUser(invite?: Invite, options?: AxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .inviteUser(invite, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
