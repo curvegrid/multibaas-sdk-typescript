@@ -633,6 +633,25 @@ export interface BaseUser {
   name: string;
 }
 /**
+ *
+ * @export
+ * @interface BaseWebhookEndpoint
+ */
+export interface BaseWebhookEndpoint {
+  /**
+   * The URL to send the webhook to.
+   * @type {string}
+   * @memberof BaseWebhookEndpoint
+   */
+  url: string;
+  /**
+   * The events to subscribe to.
+   * @type {Array<WebhookEventsType>}
+   * @memberof BaseWebhookEndpoint
+   */
+  subscriptions: Array<WebhookEventsType>;
+}
+/**
  * A block in the Ethereum blockchain.
  * @export
  * @interface Block
@@ -1507,6 +1526,56 @@ export interface CountWalletTransactions200Response {
 /**
  *
  * @export
+ * @interface CountWebhookEvents200Response
+ */
+export interface CountWebhookEvents200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof CountWebhookEvents200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof CountWebhookEvents200Response
+   */
+  message: string;
+  /**
+   * The number of webhook events.
+   * @type {number}
+   * @memberof CountWebhookEvents200Response
+   */
+  result: number;
+}
+/**
+ *
+ * @export
+ * @interface CountWebhooks200Response
+ */
+export interface CountWebhooks200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof CountWebhooks200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof CountWebhooks200Response
+   */
+  message: string;
+  /**
+   * The webhook count.
+   * @type {number}
+   * @memberof CountWebhooks200Response
+   */
+  result: number;
+}
+/**
+ *
+ * @export
  * @interface CreateApiKey200Response
  */
 export interface CreateApiKey200Response {
@@ -1603,6 +1672,31 @@ export interface CreateKey {
    * @memberof CreateKey
    */
   useHardwareModule: boolean;
+}
+/**
+ *
+ * @export
+ * @interface CreateWebhook200Response
+ */
+export interface CreateWebhook200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof CreateWebhook200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof CreateWebhook200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {WebhookEndpoint}
+   * @memberof CreateWebhook200Response
+   */
+  result: WebhookEndpoint;
 }
 /**
  *
@@ -2902,6 +2996,56 @@ export interface ListWalletTransactions200Response {
   result: Array<WalletTransaction>;
 }
 /**
+ *
+ * @export
+ * @interface ListWebhookEvents200Response
+ */
+export interface ListWebhookEvents200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListWebhookEvents200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListWebhookEvents200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<WebhookEvent>}
+   * @memberof ListWebhookEvents200Response
+   */
+  result?: Array<WebhookEvent>;
+}
+/**
+ *
+ * @export
+ * @interface ListWebhooks200Response
+ */
+export interface ListWebhooks200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListWebhooks200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListWebhooks200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<WebhookEndpoint>}
+   * @memberof ListWebhooks200Response
+   */
+  result: Array<WebhookEndpoint>;
+}
+/**
  * A contract log event.
  * @export
  * @interface Log
@@ -3554,7 +3698,7 @@ export interface TransactionData {
    */
   data: Transaction;
   /**
-   * Whether the transaction has been mined yet.
+   * Whether the transaction has been included yet.
    * @type {boolean}
    * @memberof TransactionData
    */
@@ -3934,6 +4078,124 @@ export interface WalletTransaction {
    */
   blockHash?: string;
 }
+
+/**
+ *
+ * @export
+ * @interface WebhookEndpoint
+ */
+export interface WebhookEndpoint {
+  /**
+   * The URL to send the webhook to.
+   * @type {string}
+   * @memberof WebhookEndpoint
+   */
+  url: string;
+  /**
+   * The events to subscribe to.
+   * @type {Array<WebhookEventsType>}
+   * @memberof WebhookEndpoint
+   */
+  subscriptions: Array<WebhookEventsType>;
+  /**
+   *
+   * @type {number}
+   * @memberof WebhookEndpoint
+   */
+  id: number;
+  /**
+   * The time the next attempt will be made.
+   * @type {string}
+   * @memberof WebhookEndpoint
+   */
+  nextAttempt?: string;
+  /**
+   * The time the last attempt was made.
+   * @type {string}
+   * @memberof WebhookEndpoint
+   */
+  lastAttempt?: string;
+  /**
+   * The number of failed webhook endpoint calls since the last successful call.
+   * @type {number}
+   * @memberof WebhookEndpoint
+   */
+  failedCalls: number;
+  /**
+   * The last HTTP response code from the webhook.
+   * @type {number}
+   * @memberof WebhookEndpoint
+   */
+  lastError?: number;
+  /**
+   * The time the webhook was created.
+   * @type {string}
+   * @memberof WebhookEndpoint
+   */
+  createdAt: string;
+  /**
+   * The time the webhook was last updated.
+   * @type {string}
+   * @memberof WebhookEndpoint
+   */
+  updatedAt: string;
+  /**
+   * The secret key used to sign the webhook.
+   * @type {string}
+   * @memberof WebhookEndpoint
+   */
+  secret: string;
+}
+/**
+ *
+ * @export
+ * @interface WebhookEvent
+ */
+export interface WebhookEvent {
+  /**
+   * The ID of the webhook event.
+   * @type {number}
+   * @memberof WebhookEvent
+   */
+  id: number;
+  /**
+   *
+   * @type {WebhookEventsType}
+   * @memberof WebhookEvent
+   */
+  eventType: WebhookEventsType;
+  /**
+   * The data associated with the event.
+   * @type {object}
+   * @memberof WebhookEvent
+   */
+  data: object;
+  /**
+   * The time the webhook event was created.
+   * @type {string}
+   * @memberof WebhookEvent
+   */
+  createdAt: string;
+  /**
+   * The time the webhook event was last updated.
+   * @type {string}
+   * @memberof WebhookEvent
+   */
+  deliveredAt?: string;
+}
+
+/**
+ * The type of the webhook event.
+ * @export
+ * @enum {string}
+ */
+
+export const WebhookEventsType = {
+  TransactionIncluded: 'transaction.included',
+  EventEmitted: 'event.emitted'
+} as const;
+
+export type WebhookEventsType = typeof WebhookEventsType[keyof typeof WebhookEventsType];
 
 /**
  * AddressesApi - axios parameter creator
@@ -12963,6 +13225,807 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
   ) {
     return TxmApiFp(this.configuration)
       .speedUpTransaction(chain, walletAddress, nonce, gasParams, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * WebhooksApi - axios parameter creator
+ * @export
+ */
+export const WebhooksApiAxiosParamCreator = function (configuration?: Configuration) {
+  return {
+    /**
+     * Count the events for the given webhook endpoint.
+     * @summary Count webhook events
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    countWebhookEvents: async (webhookID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'webhookID' is not null or undefined
+      assertParamExists('countWebhookEvents', 'webhookID', webhookID);
+      const localVarPath = `/webhooks/{webhookID}/events/count`.replace(
+        `{${'webhookID'}}`,
+        encodeURIComponent(String(webhookID))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Count all webhook endpoints.
+     * @summary Count webhooks
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    countWebhooks: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/webhooks/count`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Create a webhook.
+     * @summary Create webhook
+     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createWebhook: async (
+      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/webhooks`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(baseWebhookEndpoint, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Delete a webhook endpoint.
+     * @summary Delete webhook
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteWebhook: async (webhookID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'webhookID' is not null or undefined
+      assertParamExists('deleteWebhook', 'webhookID', webhookID);
+      const localVarPath = `/webhooks/{webhookID}`.replace(`{${'webhookID'}}`, encodeURIComponent(String(webhookID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Get a webhook endpoint.
+     * @summary Get webhook
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getWebhook: async (webhookID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'webhookID' is not null or undefined
+      assertParamExists('getWebhook', 'webhookID', webhookID);
+      const localVarPath = `/webhooks/{webhookID}`.replace(`{${'webhookID'}}`, encodeURIComponent(String(webhookID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * List events for the given webhook endpoint.
+     * @summary List webhook events
+     * @param {number} webhookID
+     * @param {number} [limit]
+     * @param {number} [offset]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listWebhookEvents: async (
+      webhookID: number,
+      limit?: number,
+      offset?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'webhookID' is not null or undefined
+      assertParamExists('listWebhookEvents', 'webhookID', webhookID);
+      const localVarPath = `/webhooks/{webhookID}/events`.replace(
+        `{${'webhookID'}}`,
+        encodeURIComponent(String(webhookID))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (limit !== undefined) {
+        localVarQueryParameter['limit'] = limit;
+      }
+
+      if (offset !== undefined) {
+        localVarQueryParameter['offset'] = offset;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * List all webhook endpoints.
+     * @summary List webhooks
+     * @param {number} [limit]
+     * @param {number} [offset]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listWebhooks: async (limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/webhooks`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (limit !== undefined) {
+        localVarQueryParameter['limit'] = limit;
+      }
+
+      if (offset !== undefined) {
+        localVarQueryParameter['offset'] = offset;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
+     * Update a webhook endpoint.
+     * @summary Update webhook
+     * @param {number} webhookID
+     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateWebhook: async (
+      webhookID: number,
+      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'webhookID' is not null or undefined
+      assertParamExists('updateWebhook', 'webhookID', webhookID);
+      const localVarPath = `/webhooks/{webhookID}`.replace(`{${'webhookID'}}`, encodeURIComponent(String(webhookID)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(baseWebhookEndpoint, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    }
+  };
+};
+
+/**
+ * WebhooksApi - functional programming interface
+ * @export
+ */
+export const WebhooksApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = WebhooksApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Count the events for the given webhook endpoint.
+     * @summary Count webhook events
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async countWebhookEvents(
+      webhookID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountWebhookEvents200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.countWebhookEvents(webhookID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Count all webhook endpoints.
+     * @summary Count webhooks
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async countWebhooks(
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountWebhooks200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.countWebhooks(options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Create a webhook.
+     * @summary Create webhook
+     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createWebhook(
+      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createWebhook(baseWebhookEndpoint, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Delete a webhook endpoint.
+     * @summary Delete webhook
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteWebhook(
+      webhookID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteWebhook(webhookID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Get a webhook endpoint.
+     * @summary Get webhook
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getWebhook(
+      webhookID: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getWebhook(webhookID, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * List events for the given webhook endpoint.
+     * @summary List webhook events
+     * @param {number} webhookID
+     * @param {number} [limit]
+     * @param {number} [offset]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listWebhookEvents(
+      webhookID: number,
+      limit?: number,
+      offset?: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListWebhookEvents200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listWebhookEvents(webhookID, limit, offset, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * List all webhook endpoints.
+     * @summary List webhooks
+     * @param {number} [limit]
+     * @param {number} [offset]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listWebhooks(
+      limit?: number,
+      offset?: number,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListWebhooks200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listWebhooks(limit, offset, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     * Update a webhook endpoint.
+     * @summary Update webhook
+     * @param {number} webhookID
+     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateWebhook(
+      webhookID: number,
+      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      options?: AxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updateWebhook(webhookID, baseWebhookEndpoint, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    }
+  };
+};
+
+/**
+ * WebhooksApi - factory interface
+ * @export
+ */
+export const WebhooksApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+  const localVarFp = WebhooksApiFp(configuration);
+  return {
+    /**
+     * Count the events for the given webhook endpoint.
+     * @summary Count webhook events
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    countWebhookEvents(webhookID: number, options?: any): AxiosPromise<CountWebhookEvents200Response> {
+      return localVarFp.countWebhookEvents(webhookID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Count all webhook endpoints.
+     * @summary Count webhooks
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    countWebhooks(options?: any): AxiosPromise<CountWebhooks200Response> {
+      return localVarFp.countWebhooks(options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Create a webhook.
+     * @summary Create webhook
+     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createWebhook(baseWebhookEndpoint?: BaseWebhookEndpoint, options?: any): AxiosPromise<CreateWebhook200Response> {
+      return localVarFp.createWebhook(baseWebhookEndpoint, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Delete a webhook endpoint.
+     * @summary Delete webhook
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteWebhook(webhookID: number, options?: any): AxiosPromise<BaseResponse> {
+      return localVarFp.deleteWebhook(webhookID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a webhook endpoint.
+     * @summary Get webhook
+     * @param {number} webhookID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getWebhook(webhookID: number, options?: any): AxiosPromise<CreateWebhook200Response> {
+      return localVarFp.getWebhook(webhookID, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * List events for the given webhook endpoint.
+     * @summary List webhook events
+     * @param {number} webhookID
+     * @param {number} [limit]
+     * @param {number} [offset]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listWebhookEvents(
+      webhookID: number,
+      limit?: number,
+      offset?: number,
+      options?: any
+    ): AxiosPromise<ListWebhookEvents200Response> {
+      return localVarFp
+        .listWebhookEvents(webhookID, limit, offset, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List all webhook endpoints.
+     * @summary List webhooks
+     * @param {number} [limit]
+     * @param {number} [offset]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listWebhooks(limit?: number, offset?: number, options?: any): AxiosPromise<ListWebhooks200Response> {
+      return localVarFp.listWebhooks(limit, offset, options).then((request) => request(axios, basePath));
+    },
+    /**
+     * Update a webhook endpoint.
+     * @summary Update webhook
+     * @param {number} webhookID
+     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateWebhook(
+      webhookID: number,
+      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      options?: any
+    ): AxiosPromise<CreateWebhook200Response> {
+      return localVarFp
+        .updateWebhook(webhookID, baseWebhookEndpoint, options)
+        .then((request) => request(axios, basePath));
+    }
+  };
+};
+
+/**
+ * WebhooksApi - interface
+ * @export
+ * @interface WebhooksApi
+ */
+export interface WebhooksApiInterface {
+  /**
+   * Count the events for the given webhook endpoint.
+   * @summary Count webhook events
+   * @param {number} webhookID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  countWebhookEvents(webhookID: number, options?: AxiosRequestConfig): AxiosPromise<CountWebhookEvents200Response>;
+
+  /**
+   * Count all webhook endpoints.
+   * @summary Count webhooks
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  countWebhooks(options?: AxiosRequestConfig): AxiosPromise<CountWebhooks200Response>;
+
+  /**
+   * Create a webhook.
+   * @summary Create webhook
+   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  createWebhook(
+    baseWebhookEndpoint?: BaseWebhookEndpoint,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<CreateWebhook200Response>;
+
+  /**
+   * Delete a webhook endpoint.
+   * @summary Delete webhook
+   * @param {number} webhookID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  deleteWebhook(webhookID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+
+  /**
+   * Get a webhook endpoint.
+   * @summary Get webhook
+   * @param {number} webhookID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  getWebhook(webhookID: number, options?: AxiosRequestConfig): AxiosPromise<CreateWebhook200Response>;
+
+  /**
+   * List events for the given webhook endpoint.
+   * @summary List webhook events
+   * @param {number} webhookID
+   * @param {number} [limit]
+   * @param {number} [offset]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  listWebhookEvents(
+    webhookID: number,
+    limit?: number,
+    offset?: number,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<ListWebhookEvents200Response>;
+
+  /**
+   * List all webhook endpoints.
+   * @summary List webhooks
+   * @param {number} [limit]
+   * @param {number} [offset]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  listWebhooks(limit?: number, offset?: number, options?: AxiosRequestConfig): AxiosPromise<ListWebhooks200Response>;
+
+  /**
+   * Update a webhook endpoint.
+   * @summary Update webhook
+   * @param {number} webhookID
+   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApiInterface
+   */
+  updateWebhook(
+    webhookID: number,
+    baseWebhookEndpoint?: BaseWebhookEndpoint,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<CreateWebhook200Response>;
+}
+
+/**
+ * WebhooksApi - object-oriented interface
+ * @export
+ * @class WebhooksApi
+ * @extends {BaseAPI}
+ */
+export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
+  /**
+   * Count the events for the given webhook endpoint.
+   * @summary Count webhook events
+   * @param {number} webhookID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public countWebhookEvents(webhookID: number, options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .countWebhookEvents(webhookID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Count all webhook endpoints.
+   * @summary Count webhooks
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public countWebhooks(options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .countWebhooks(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create a webhook.
+   * @summary Create webhook
+   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public createWebhook(baseWebhookEndpoint?: BaseWebhookEndpoint, options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .createWebhook(baseWebhookEndpoint, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete a webhook endpoint.
+   * @summary Delete webhook
+   * @param {number} webhookID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public deleteWebhook(webhookID: number, options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .deleteWebhook(webhookID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a webhook endpoint.
+   * @summary Get webhook
+   * @param {number} webhookID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public getWebhook(webhookID: number, options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .getWebhook(webhookID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List events for the given webhook endpoint.
+   * @summary List webhook events
+   * @param {number} webhookID
+   * @param {number} [limit]
+   * @param {number} [offset]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public listWebhookEvents(webhookID: number, limit?: number, offset?: number, options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .listWebhookEvents(webhookID, limit, offset, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List all webhook endpoints.
+   * @summary List webhooks
+   * @param {number} [limit]
+   * @param {number} [offset]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public listWebhooks(limit?: number, offset?: number, options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .listWebhooks(limit, offset, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a webhook endpoint.
+   * @summary Update webhook
+   * @param {number} webhookID
+   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhooksApi
+   */
+  public updateWebhook(webhookID: number, baseWebhookEndpoint?: BaseWebhookEndpoint, options?: AxiosRequestConfig) {
+    return WebhooksApiFp(this.configuration)
+      .updateWebhook(webhookID, baseWebhookEndpoint, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
