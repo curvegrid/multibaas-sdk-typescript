@@ -645,6 +645,12 @@ export interface BaseWebhookEndpoint {
    */
   url: string;
   /**
+   * A label.
+   * @type {string}
+   * @memberof BaseWebhookEndpoint
+   */
+  label: string;
+  /**
    * The events to subscribe to.
    * @type {Array<WebhookEventsType>}
    * @memberof BaseWebhookEndpoint
@@ -4091,6 +4097,12 @@ export interface WebhookEndpoint {
    * @memberof WebhookEndpoint
    */
   url: string;
+  /**
+   * A label.
+   * @type {string}
+   * @memberof WebhookEndpoint
+   */
+  label: string;
   /**
    * The events to subscribe to.
    * @type {Array<WebhookEventsType>}
