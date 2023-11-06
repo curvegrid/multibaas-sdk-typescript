@@ -4134,11 +4134,11 @@ export interface WebhookEndpoint {
    */
   failedCalls: number;
   /**
-   * The last HTTP response code from the webhook.
-   * @type {number}
+   * The last error received from the webhook endpoint.
+   * @type {string}
    * @memberof WebhookEndpoint
    */
-  lastError?: number;
+  lastError?: string;
   /**
    * The time the webhook was created.
    * @type {string}
