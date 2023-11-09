@@ -3024,7 +3024,7 @@ export interface ListWebhookEvents200Response {
    * @type {Array<WebhookEvent>}
    * @memberof ListWebhookEvents200Response
    */
-  result?: Array<WebhookEvent>;
+  result: Array<WebhookEvent>;
 }
 /**
  *
