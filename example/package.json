@@ -6,7 +6,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "start": "ts-node --esm index.ts"
+    "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm index.ts"
   },
   "author": "Curvegrid",
   "license": "MIT",

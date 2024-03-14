@@ -13,7 +13,7 @@
  */
 
 import type { Configuration } from './configuration';
-import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
@@ -31,7 +31,7 @@ import {
 } from './common';
 import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
  * An API key.
@@ -589,7 +589,7 @@ export interface BaseTransactionToSignTx {
    */
   to?: string | null;
   /**
-   * Ether amount of the transaction
+   * Amount (in wei) to send with the transaction.
    * @type {string}
    * @memberof BaseTransactionToSignTx
    */
@@ -2019,7 +2019,7 @@ export interface EventQueryField {
    * @type {string}
    * @memberof EventQueryField
    */
-  aggregator?: EventQueryFieldAggregatorEnum;
+  aggregator?: EventQueryFieldAggregatorEnum | null;
 }
 
 export const EventQueryFieldAggregatorEnum = {
@@ -3268,11 +3268,11 @@ export interface PostMethodArgs {
    */
   to?: string;
   /**
-   *
-   * @type {number}
+   * Amount (in wei) to send with the transaction.
+   * @type {string}
    * @memberof PostMethodArgs
    */
-  value?: number;
+  value?: string;
   /**
    * If the `from` address is an HSM address and this flag is set to `true`, the transaction will be automatically signed and submitted to the blockchain.
    * @type {boolean}
@@ -4226,7 +4226,7 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
     deleteAddress: async (
       chain: ChainName,
       addressOrLabel: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('deleteAddress', 'chain', chain);
@@ -4274,7 +4274,7 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
       chain: ChainName,
       addressOrLabel: string,
       include?: Array<GetAddressIncludeEnum>,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('getAddress', 'chain', chain);
@@ -4320,7 +4320,7 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listAddresses: async (chain: ChainName, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listAddresses: async (chain: ChainName, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('listAddresses', 'chain', chain);
       const localVarPath = `/chains/{chain}/addresses`.replace(`{${'chain'}}`, encodeURIComponent(String(chain)));
@@ -4361,7 +4361,7 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
     setAddress: async (
       chain: ChainName,
       addressLabel?: AddressLabel,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('setAddress', 'chain', chain);
@@ -4416,10 +4416,19 @@ export const AddressesApiFp = function (configuration?: Configuration) {
     async deleteAddress(
       chain: ChainName,
       addressOrLabel: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAddress(chain, addressOrLabel, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AddressesApi.deleteAddress']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns details about an address.
@@ -4434,10 +4443,19 @@ export const AddressesApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       addressOrLabel: string,
       include?: Array<GetAddressIncludeEnum>,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetAddress201Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getAddress(chain, addressOrLabel, include, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AddressesApi.getAddress']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns all the labeled addresses.
@@ -4448,10 +4466,19 @@ export const AddressesApiFp = function (configuration?: Configuration) {
      */
     async listAddresses(
       chain: ChainName,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAddresses200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listAddresses(chain, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AddressesApi.listAddresses']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Associates an address with a label.
@@ -4464,10 +4491,19 @@ export const AddressesApiFp = function (configuration?: Configuration) {
     async setAddress(
       chain: ChainName,
       addressLabel?: AddressLabel,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetAddress201Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setAddress(chain, addressLabel, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AddressesApi.setAddress']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -4546,7 +4582,7 @@ export interface AddressesApiInterface {
    * @throws {RequiredError}
    * @memberof AddressesApiInterface
    */
-  deleteAddress(chain: ChainName, addressOrLabel: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  deleteAddress(chain: ChainName, addressOrLabel: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns details about an address.
@@ -4562,7 +4598,7 @@ export interface AddressesApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     include?: Array<GetAddressIncludeEnum>,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<SetAddress201Response>;
 
   /**
@@ -4573,7 +4609,7 @@ export interface AddressesApiInterface {
    * @throws {RequiredError}
    * @memberof AddressesApiInterface
    */
-  listAddresses(chain: ChainName, options?: AxiosRequestConfig): AxiosPromise<ListAddresses200Response>;
+  listAddresses(chain: ChainName, options?: RawAxiosRequestConfig): AxiosPromise<ListAddresses200Response>;
 
   /**
    * Associates an address with a label.
@@ -4587,7 +4623,7 @@ export interface AddressesApiInterface {
   setAddress(
     chain: ChainName,
     addressLabel?: AddressLabel,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<SetAddress201Response>;
 }
 
@@ -4607,7 +4643,7 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @throws {RequiredError}
    * @memberof AddressesApi
    */
-  public deleteAddress(chain: ChainName, addressOrLabel: string, options?: AxiosRequestConfig) {
+  public deleteAddress(chain: ChainName, addressOrLabel: string, options?: RawAxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
       .deleteAddress(chain, addressOrLabel, options)
       .then((request) => request(this.axios, this.basePath));
@@ -4627,7 +4663,7 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     include?: Array<GetAddressIncludeEnum>,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return AddressesApiFp(this.configuration)
       .getAddress(chain, addressOrLabel, include, options)
@@ -4642,7 +4678,7 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @throws {RequiredError}
    * @memberof AddressesApi
    */
-  public listAddresses(chain: ChainName, options?: AxiosRequestConfig) {
+  public listAddresses(chain: ChainName, options?: RawAxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
       .listAddresses(chain, options)
       .then((request) => request(this.axios, this.basePath));
@@ -4657,7 +4693,7 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @throws {RequiredError}
    * @memberof AddressesApi
    */
-  public setAddress(chain: ChainName, addressLabel?: AddressLabel, options?: AxiosRequestConfig) {
+  public setAddress(chain: ChainName, addressLabel?: AddressLabel, options?: RawAxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
       .setAddress(chain, addressLabel, options)
       .then((request) => request(this.axios, this.basePath));
@@ -4691,7 +4727,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     acceptInvite: async (
       inviteID: string,
       acceptInviteRequest?: AcceptInviteRequest,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'inviteID' is not null or undefined
       assertParamExists('acceptInvite', 'inviteID', inviteID);
@@ -4730,7 +4766,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addCorsOrigin: async (cORSOrigin?: CORSOrigin, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    addCorsOrigin: async (cORSOrigin?: CORSOrigin, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/cors`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4772,7 +4808,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     addGroupApiKey: async (
       groupID: number,
       apiKeyID: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
       assertParamExists('addGroupApiKey', 'groupID', groupID);
@@ -4818,7 +4854,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     addGroupRole: async (
       groupID: number,
       roleShortName: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
       assertParamExists('addGroupRole', 'groupID', groupID);
@@ -4861,7 +4897,11 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addGroupUser: async (groupID: number, userID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    addGroupUser: async (
+      groupID: number,
+      userID: number,
+      options: RawAxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
       assertParamExists('addGroupUser', 'groupID', groupID);
       // verify required parameter 'userID' is not null or undefined
@@ -4902,7 +4942,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    checkInvite: async (inviteID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    checkInvite: async (inviteID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'inviteID' is not null or undefined
       assertParamExists('checkInvite', 'inviteID', inviteID);
       const localVarPath = `/invites/{inviteID}`.replace(`{${'inviteID'}}`, encodeURIComponent(String(inviteID)));
@@ -4935,7 +4975,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      */
     createApiKey: async (
       createApiKeyRequest?: CreateApiKeyRequest,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/api_keys`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -4974,7 +5014,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteApiKey: async (apiKeyID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    deleteApiKey: async (apiKeyID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'apiKeyID' is not null or undefined
       assertParamExists('deleteApiKey', 'apiKeyID', apiKeyID);
       const localVarPath = `/api_keys/{apiKeyID}`.replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
@@ -5011,7 +5051,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteUser: async (userID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    deleteUser: async (userID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('deleteUser', 'userID', userID);
       const localVarPath = `/users/{userID}`.replace(`{${'userID'}}`, encodeURIComponent(String(userID)));
@@ -5048,7 +5088,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getApiKey: async (apiKeyID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getApiKey: async (apiKeyID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'apiKeyID' is not null or undefined
       assertParamExists('getApiKey', 'apiKeyID', apiKeyID);
       const localVarPath = `/api_keys/{apiKeyID}`.replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
@@ -5085,7 +5125,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    inviteUser: async (invite?: Invite, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    inviteUser: async (invite?: Invite, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/invites`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5123,7 +5163,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listApiKeys: async (all?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listApiKeys: async (all?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/api_keys`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5161,7 +5201,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listAuditLogs: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listAuditLogs: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/systemactivities`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5195,7 +5235,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listCorsOrigins: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listCorsOrigins: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/cors`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5236,7 +5276,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       userID?: number,
       apiKeyID?: number,
       assignable?: boolean,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/groups`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5284,7 +5324,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listUserSigners: async (userID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listUserSigners: async (userID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('listUserSigners', 'userID', userID);
       const localVarPath = `/users/{userID}/signers`.replace(`{${'userID'}}`, encodeURIComponent(String(userID)));
@@ -5321,7 +5361,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listUsers: async (groupID?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listUsers: async (groupID?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/users`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5360,7 +5400,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeCorsOrigin: async (originID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    removeCorsOrigin: async (originID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'originID' is not null or undefined
       assertParamExists('removeCorsOrigin', 'originID', originID);
       const localVarPath = `/cors/{originID}`.replace(`{${'originID'}}`, encodeURIComponent(String(originID)));
@@ -5401,7 +5441,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     removeGroupApiKey: async (
       groupID: number,
       apiKeyID: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
       assertParamExists('removeGroupApiKey', 'groupID', groupID);
@@ -5447,7 +5487,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     removeGroupRole: async (
       groupID: number,
       roleShortName: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
       assertParamExists('removeGroupRole', 'groupID', groupID);
@@ -5493,7 +5533,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     removeGroupUser: async (
       groupID: number,
       userID: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupID' is not null or undefined
       assertParamExists('removeGroupUser', 'groupID', groupID);
@@ -5539,7 +5579,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     removeUserSignerCloudWallet: async (
       userID: number,
       walletAddress: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('removeUserSignerCloudWallet', 'userID', userID);
@@ -5585,7 +5625,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     removeUserSignerWeb3Wallet: async (
       userID: number,
       walletAddress: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('removeUserSignerWeb3Wallet', 'userID', userID);
@@ -5631,7 +5671,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     setUserSignerCloudWallet: async (
       userID: number,
       walletAddress: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('setUserSignerCloudWallet', 'userID', userID);
@@ -5679,7 +5719,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       userID: number,
       walletAddress: string,
       signerLabel?: SignerLabel,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('setUserSignerWeb3Wallet', 'userID', userID);
@@ -5728,7 +5768,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     updateApiKey: async (
       apiKeyID: number,
       baseAPIKey?: BaseAPIKey,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'apiKeyID' is not null or undefined
       assertParamExists('updateApiKey', 'apiKeyID', apiKeyID);
@@ -5783,10 +5823,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async acceptInvite(
       inviteID: string,
       acceptInviteRequest?: AcceptInviteRequest,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcceptInvite200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.acceptInvite(inviteID, acceptInviteRequest, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.acceptInvite']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds a CORS origin.
@@ -5797,10 +5846,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async addCorsOrigin(
       cORSOrigin?: CORSOrigin,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addCorsOrigin(cORSOrigin, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.addCorsOrigin']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds an API key to a group.
@@ -5813,10 +5871,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async addGroupApiKey(
       groupID: number,
       apiKeyID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupApiKey(groupID, apiKeyID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.addGroupApiKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds a role to a group.
@@ -5829,10 +5896,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async addGroupRole(
       groupID: number,
       roleShortName: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupRole(groupID, roleShortName, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.addGroupRole']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds a user to a group.
@@ -5845,10 +5921,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async addGroupUser(
       groupID: number,
       userID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addGroupUser(groupID, userID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.addGroupUser']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Checks if a user invite is valid.
@@ -5859,10 +5944,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async checkInvite(
       inviteID: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.checkInvite(inviteID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.checkInvite']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Creates an API key and adds it to group IDs.
@@ -5873,10 +5967,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async createApiKey(
       createApiKeyRequest?: CreateApiKeyRequest,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createApiKey(createApiKeyRequest, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.createApiKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Deletes an API key.
@@ -5887,10 +5990,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async deleteApiKey(
       apiKeyID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteApiKey(apiKeyID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.deleteApiKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Deletes a user.
@@ -5901,10 +6013,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async deleteUser(
       userID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(userID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.deleteUser']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns an API key.
@@ -5915,10 +6036,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async getApiKey(
       apiKeyID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getApiKey(apiKeyID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.getApiKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Invites a new user.
@@ -5929,10 +6059,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async inviteUser(
       invite?: Invite,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.inviteUser(invite, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.inviteUser']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns all the API keys.
@@ -5943,10 +6082,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async listApiKeys(
       all?: boolean,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListApiKeys200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listApiKeys(all, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.listApiKeys']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the audit logs.
@@ -5955,10 +6103,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async listAuditLogs(
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAuditLogs200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listAuditLogs(options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.listAuditLogs']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a list of CORS origins.
@@ -5967,10 +6124,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async listCorsOrigins(
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCorsOrigins200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listCorsOrigins(options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.listCorsOrigins']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns all the groups.
@@ -5985,10 +6151,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
       userID?: number,
       apiKeyID?: number,
       assignable?: boolean,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListGroups200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listGroups(userID, apiKeyID, assignable, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.listGroups']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns all the signers for a user.
@@ -5999,10 +6174,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async listUserSigners(
       userID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUserSigners200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listUserSigners(userID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.listUserSigners']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns all the users.
@@ -6013,10 +6197,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async listUsers(
       groupID?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListUsers200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(groupID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.listUsers']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes a CORS origin.
@@ -6027,10 +6220,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
      */
     async removeCorsOrigin(
       originID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeCorsOrigin(originID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.removeCorsOrigin']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes an API key from a group.
@@ -6043,10 +6245,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async removeGroupApiKey(
       groupID: number,
       apiKeyID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupApiKey(groupID, apiKeyID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.removeGroupApiKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes a role from a group.
@@ -6059,10 +6270,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async removeGroupRole(
       groupID: number,
       roleShortName: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupRole(groupID, roleShortName, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.removeGroupRole']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes a user from a group.
@@ -6075,10 +6295,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async removeGroupUser(
       groupID: number,
       userID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeGroupUser(groupID, userID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.removeGroupUser']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes a cloud wallet signer from a user.
@@ -6091,14 +6320,23 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async removeUserSignerCloudWallet(
       userID: number,
       walletAddress: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeUserSignerCloudWallet(
         userID,
         walletAddress,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.removeUserSignerCloudWallet']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes a web3 wallet signer from a user.
@@ -6111,14 +6349,23 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async removeUserSignerWeb3Wallet(
       userID: number,
       walletAddress: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeUserSignerWeb3Wallet(
         userID,
         walletAddress,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.removeUserSignerWeb3Wallet']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds or updates a user\'s cloud wallet signer.
@@ -6131,14 +6378,23 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async setUserSignerCloudWallet(
       userID: number,
       walletAddress: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setUserSignerCloudWallet(
         userID,
         walletAddress,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.setUserSignerCloudWallet']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds or updates a user\'s web3 wallet signer.
@@ -6153,7 +6409,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
       userID: number,
       walletAddress: string,
       signerLabel?: SignerLabel,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setUserSignerWeb3Wallet(
         userID,
@@ -6161,7 +6417,16 @@ export const AdminApiFp = function (configuration?: Configuration) {
         signerLabel,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.setUserSignerWeb3Wallet']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Updates an API key.
@@ -6174,10 +6439,19 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async updateApiKey(
       apiKeyID: number,
       baseAPIKey?: BaseAPIKey,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.updateApiKey(apiKeyID, baseAPIKey, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.updateApiKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -6507,7 +6781,7 @@ export interface AdminApiInterface {
   acceptInvite(
     inviteID: string,
     acceptInviteRequest?: AcceptInviteRequest,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<AcceptInvite200Response>;
 
   /**
@@ -6518,7 +6792,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addCorsOrigin(cORSOrigin?: CORSOrigin, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addCorsOrigin(cORSOrigin?: CORSOrigin, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds an API key to a group.
@@ -6529,7 +6803,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds a role to a group.
@@ -6540,7 +6814,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds a user to a group.
@@ -6551,7 +6825,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Checks if a user invite is valid.
@@ -6561,7 +6835,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  checkInvite(inviteID: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  checkInvite(inviteID: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Creates an API key and adds it to group IDs.
@@ -6573,7 +6847,7 @@ export interface AdminApiInterface {
    */
   createApiKey(
     createApiKeyRequest?: CreateApiKeyRequest,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<CreateApiKey200Response>;
 
   /**
@@ -6584,7 +6858,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  deleteApiKey(apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  deleteApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Deletes a user.
@@ -6594,7 +6868,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  deleteUser(userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  deleteUser(userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns an API key.
@@ -6604,7 +6878,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  getApiKey(apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<CreateApiKey200Response>;
+  getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<CreateApiKey200Response>;
 
   /**
    * Invites a new user.
@@ -6614,7 +6888,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  inviteUser(invite?: Invite, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  inviteUser(invite?: Invite, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns all the API keys.
@@ -6624,7 +6898,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  listApiKeys(all?: boolean, options?: AxiosRequestConfig): AxiosPromise<ListApiKeys200Response>;
+  listApiKeys(all?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ListApiKeys200Response>;
 
   /**
    * Returns the audit logs.
@@ -6633,7 +6907,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  listAuditLogs(options?: AxiosRequestConfig): AxiosPromise<ListAuditLogs200Response>;
+  listAuditLogs(options?: RawAxiosRequestConfig): AxiosPromise<ListAuditLogs200Response>;
 
   /**
    * Returns a list of CORS origins.
@@ -6642,7 +6916,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  listCorsOrigins(options?: AxiosRequestConfig): AxiosPromise<ListCorsOrigins200Response>;
+  listCorsOrigins(options?: RawAxiosRequestConfig): AxiosPromise<ListCorsOrigins200Response>;
 
   /**
    * Returns all the groups.
@@ -6658,7 +6932,7 @@ export interface AdminApiInterface {
     userID?: number,
     apiKeyID?: number,
     assignable?: boolean,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<ListGroups200Response>;
 
   /**
@@ -6669,7 +6943,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  listUserSigners(userID: number, options?: AxiosRequestConfig): AxiosPromise<ListUserSigners200Response>;
+  listUserSigners(userID: number, options?: RawAxiosRequestConfig): AxiosPromise<ListUserSigners200Response>;
 
   /**
    * Returns all the users.
@@ -6679,7 +6953,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  listUsers(groupID?: number, options?: AxiosRequestConfig): AxiosPromise<ListUsers200Response>;
+  listUsers(groupID?: number, options?: RawAxiosRequestConfig): AxiosPromise<ListUsers200Response>;
 
   /**
    * Removes a CORS origin.
@@ -6689,7 +6963,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  removeCorsOrigin(originID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  removeCorsOrigin(originID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Removes an API key from a group.
@@ -6700,7 +6974,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  removeGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  removeGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Removes a role from a group.
@@ -6711,7 +6985,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  removeGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  removeGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Removes a user from a group.
@@ -6722,7 +6996,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  removeGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Removes a cloud wallet signer from a user.
@@ -6736,7 +7010,7 @@ export interface AdminApiInterface {
   removeUserSignerCloudWallet(
     userID: number,
     walletAddress: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -6751,7 +7025,7 @@ export interface AdminApiInterface {
   removeUserSignerWeb3Wallet(
     userID: number,
     walletAddress: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -6766,7 +7040,7 @@ export interface AdminApiInterface {
   setUserSignerCloudWallet(
     userID: number,
     walletAddress: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -6783,7 +7057,7 @@ export interface AdminApiInterface {
     userID: number,
     walletAddress: string,
     signerLabel?: SignerLabel,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -6795,7 +7069,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 }
 
 /**
@@ -6814,7 +7088,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public acceptInvite(inviteID: string, acceptInviteRequest?: AcceptInviteRequest, options?: AxiosRequestConfig) {
+  public acceptInvite(inviteID: string, acceptInviteRequest?: AcceptInviteRequest, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .acceptInvite(inviteID, acceptInviteRequest, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6828,7 +7102,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public addCorsOrigin(cORSOrigin?: CORSOrigin, options?: AxiosRequestConfig) {
+  public addCorsOrigin(cORSOrigin?: CORSOrigin, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .addCorsOrigin(cORSOrigin, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6843,7 +7117,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public addGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
+  public addGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .addGroupApiKey(groupID, apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6858,7 +7132,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public addGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig) {
+  public addGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .addGroupRole(groupID, roleShortName, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6873,7 +7147,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public addGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig) {
+  public addGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .addGroupUser(groupID, userID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6887,7 +7161,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public checkInvite(inviteID: string, options?: AxiosRequestConfig) {
+  public checkInvite(inviteID: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .checkInvite(inviteID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6901,7 +7175,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public createApiKey(createApiKeyRequest?: CreateApiKeyRequest, options?: AxiosRequestConfig) {
+  public createApiKey(createApiKeyRequest?: CreateApiKeyRequest, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .createApiKey(createApiKeyRequest, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6915,7 +7189,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public deleteApiKey(apiKeyID: number, options?: AxiosRequestConfig) {
+  public deleteApiKey(apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .deleteApiKey(apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6929,7 +7203,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public deleteUser(userID: number, options?: AxiosRequestConfig) {
+  public deleteUser(userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .deleteUser(userID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6943,7 +7217,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public getApiKey(apiKeyID: number, options?: AxiosRequestConfig) {
+  public getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .getApiKey(apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6957,7 +7231,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public inviteUser(invite?: Invite, options?: AxiosRequestConfig) {
+  public inviteUser(invite?: Invite, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .inviteUser(invite, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6971,7 +7245,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public listApiKeys(all?: boolean, options?: AxiosRequestConfig) {
+  public listApiKeys(all?: boolean, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listApiKeys(all, options)
       .then((request) => request(this.axios, this.basePath));
@@ -6984,7 +7258,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public listAuditLogs(options?: AxiosRequestConfig) {
+  public listAuditLogs(options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listAuditLogs(options)
       .then((request) => request(this.axios, this.basePath));
@@ -6997,7 +7271,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public listCorsOrigins(options?: AxiosRequestConfig) {
+  public listCorsOrigins(options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listCorsOrigins(options)
       .then((request) => request(this.axios, this.basePath));
@@ -7013,7 +7287,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public listGroups(userID?: number, apiKeyID?: number, assignable?: boolean, options?: AxiosRequestConfig) {
+  public listGroups(userID?: number, apiKeyID?: number, assignable?: boolean, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listGroups(userID, apiKeyID, assignable, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7027,7 +7301,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public listUserSigners(userID: number, options?: AxiosRequestConfig) {
+  public listUserSigners(userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listUserSigners(userID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7041,7 +7315,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public listUsers(groupID?: number, options?: AxiosRequestConfig) {
+  public listUsers(groupID?: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listUsers(groupID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7055,7 +7329,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public removeCorsOrigin(originID: number, options?: AxiosRequestConfig) {
+  public removeCorsOrigin(originID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeCorsOrigin(originID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7070,7 +7344,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public removeGroupApiKey(groupID: number, apiKeyID: number, options?: AxiosRequestConfig) {
+  public removeGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeGroupApiKey(groupID, apiKeyID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7085,7 +7359,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public removeGroupRole(groupID: number, roleShortName: string, options?: AxiosRequestConfig) {
+  public removeGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeGroupRole(groupID, roleShortName, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7100,7 +7374,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public removeGroupUser(groupID: number, userID: number, options?: AxiosRequestConfig) {
+  public removeGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeGroupUser(groupID, userID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7115,7 +7389,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public removeUserSignerCloudWallet(userID: number, walletAddress: string, options?: AxiosRequestConfig) {
+  public removeUserSignerCloudWallet(userID: number, walletAddress: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeUserSignerCloudWallet(userID, walletAddress, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7130,7 +7404,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public removeUserSignerWeb3Wallet(userID: number, walletAddress: string, options?: AxiosRequestConfig) {
+  public removeUserSignerWeb3Wallet(userID: number, walletAddress: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .removeUserSignerWeb3Wallet(userID, walletAddress, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7145,7 +7419,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public setUserSignerCloudWallet(userID: number, walletAddress: string, options?: AxiosRequestConfig) {
+  public setUserSignerCloudWallet(userID: number, walletAddress: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .setUserSignerCloudWallet(userID, walletAddress, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7165,7 +7439,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
     userID: number,
     walletAddress: string,
     signerLabel?: SignerLabel,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return AdminApiFp(this.configuration)
       .setUserSignerWeb3Wallet(userID, walletAddress, signerLabel, options)
@@ -7181,7 +7455,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: AxiosRequestConfig) {
+  public updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .updateApiKey(apiKeyID, baseAPIKey, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7202,7 +7476,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getBlock: async (chain: ChainName, block: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getBlock: async (chain: ChainName, block: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('getBlock', 'chain', chain);
       // verify required parameter 'block' is not null or undefined
@@ -7243,7 +7517,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getChainStatus: async (chain: ChainName, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getChainStatus: async (chain: ChainName, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('getChainStatus', 'chain', chain);
       const localVarPath = `/chains/{chain}/status`.replace(`{${'chain'}}`, encodeURIComponent(String(chain)));
@@ -7286,7 +7560,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
       chain: ChainName,
       hash: string,
       include?: GetTransactionIncludeEnum,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('getTransaction', 'chain', chain);
@@ -7338,7 +7612,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
       chain: ChainName,
       hash: string,
       include?: GetTransactionReceiptIncludeEnum,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('getTransactionReceipt', 'chain', chain);
@@ -7388,7 +7662,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
     submitSignedTransaction: async (
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('submitSignedTransaction', 'chain', chain);
@@ -7440,7 +7714,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
     transferEth: async (
       chain: ChainName,
       postMethodArgs?: PostMethodArgs,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('transferEth', 'chain', chain);
@@ -7495,10 +7769,19 @@ export const ChainsApiFp = function (configuration?: Configuration) {
     async getBlock(
       chain: ChainName,
       block: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBlock200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getBlock(chain, block, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ChainsApi.getBlock']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the chain status.
@@ -7509,10 +7792,19 @@ export const ChainsApiFp = function (configuration?: Configuration) {
      */
     async getChainStatus(
       chain: ChainName,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetChainStatus200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getChainStatus(chain, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ChainsApi.getChainStatus']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a transaction.
@@ -7527,10 +7819,19 @@ export const ChainsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       hash: string,
       include?: GetTransactionIncludeEnum,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(chain, hash, include, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ChainsApi.getTransaction']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the receipt of a transaction that\'s been successfully added to the blockchain.
@@ -7545,10 +7846,19 @@ export const ChainsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       hash: string,
       include?: GetTransactionReceiptIncludeEnum,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransactionReceipt200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTransactionReceipt(chain, hash, include, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ChainsApi.getTransactionReceipt']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Receives a pre-signed raw transaction and submits it to the blockchain.
@@ -7561,14 +7871,23 @@ export const ChainsApiFp = function (configuration?: Configuration) {
     async submitSignedTransaction(
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.submitSignedTransaction(
         chain,
         signedTransactionSubmission,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ChainsApi.submitSignedTransaction']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a transaction for sending the native token between addresses.
@@ -7581,10 +7900,19 @@ export const ChainsApiFp = function (configuration?: Configuration) {
     async transferEth(
       chain: ChainName,
       postMethodArgs?: PostMethodArgs,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.transferEth(chain, postMethodArgs, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ChainsApi.transferEth']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -7703,7 +8031,7 @@ export interface ChainsApiInterface {
    * @throws {RequiredError}
    * @memberof ChainsApiInterface
    */
-  getBlock(chain: ChainName, block: string, options?: AxiosRequestConfig): AxiosPromise<GetBlock200Response>;
+  getBlock(chain: ChainName, block: string, options?: RawAxiosRequestConfig): AxiosPromise<GetBlock200Response>;
 
   /**
    * Returns the chain status.
@@ -7713,7 +8041,7 @@ export interface ChainsApiInterface {
    * @throws {RequiredError}
    * @memberof ChainsApiInterface
    */
-  getChainStatus(chain: ChainName, options?: AxiosRequestConfig): AxiosPromise<GetChainStatus200Response>;
+  getChainStatus(chain: ChainName, options?: RawAxiosRequestConfig): AxiosPromise<GetChainStatus200Response>;
 
   /**
    * Returns a transaction.
@@ -7729,7 +8057,7 @@ export interface ChainsApiInterface {
     chain: ChainName,
     hash: string,
     include?: GetTransactionIncludeEnum,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetTransaction200Response>;
 
   /**
@@ -7746,7 +8074,7 @@ export interface ChainsApiInterface {
     chain: ChainName,
     hash: string,
     include?: GetTransactionReceiptIncludeEnum,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetTransactionReceipt200Response>;
 
   /**
@@ -7761,7 +8089,7 @@ export interface ChainsApiInterface {
   submitSignedTransaction(
     chain: ChainName,
     signedTransactionSubmission?: SignedTransactionSubmission,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -7776,7 +8104,7 @@ export interface ChainsApiInterface {
   transferEth(
     chain: ChainName,
     postMethodArgs?: PostMethodArgs,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 }
 
@@ -7796,7 +8124,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @throws {RequiredError}
    * @memberof ChainsApi
    */
-  public getBlock(chain: ChainName, block: string, options?: AxiosRequestConfig) {
+  public getBlock(chain: ChainName, block: string, options?: RawAxiosRequestConfig) {
     return ChainsApiFp(this.configuration)
       .getBlock(chain, block, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7810,7 +8138,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @throws {RequiredError}
    * @memberof ChainsApi
    */
-  public getChainStatus(chain: ChainName, options?: AxiosRequestConfig) {
+  public getChainStatus(chain: ChainName, options?: RawAxiosRequestConfig) {
     return ChainsApiFp(this.configuration)
       .getChainStatus(chain, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7830,7 +8158,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
     chain: ChainName,
     hash: string,
     include?: GetTransactionIncludeEnum,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ChainsApiFp(this.configuration)
       .getTransaction(chain, hash, include, options)
@@ -7851,7 +8179,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
     chain: ChainName,
     hash: string,
     include?: GetTransactionReceiptIncludeEnum,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ChainsApiFp(this.configuration)
       .getTransactionReceipt(chain, hash, include, options)
@@ -7870,7 +8198,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
   public submitSignedTransaction(
     chain: ChainName,
     signedTransactionSubmission?: SignedTransactionSubmission,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ChainsApiFp(this.configuration)
       .submitSignedTransaction(chain, signedTransactionSubmission, options)
@@ -7886,7 +8214,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @throws {RequiredError}
    * @memberof ChainsApi
    */
-  public transferEth(chain: ChainName, postMethodArgs?: PostMethodArgs, options?: AxiosRequestConfig) {
+  public transferEth(chain: ChainName, postMethodArgs?: PostMethodArgs, options?: RawAxiosRequestConfig) {
     return ChainsApiFp(this.configuration)
       .transferEth(chain, postMethodArgs, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7932,7 +8260,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       contract: string,
       method: string,
       postMethodArgs?: PostMethodArgs,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('callContractFunction', 'chain', chain);
@@ -7987,7 +8315,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     createContract: async (
       contract: string,
       baseContract?: BaseContract,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('createContract', 'contract', contract);
@@ -8030,7 +8358,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      */
     createContracts: async (
       baseContract?: Array<BaseContract>,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/contracts`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8069,7 +8397,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteContract: async (contract: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    deleteContract: async (contract: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('deleteContract', 'contract', contract);
       const localVarPath = `/contracts/{contract}`.replace(`{${'contract'}}`, encodeURIComponent(String(contract)));
@@ -8110,7 +8438,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     deleteContractVersion: async (
       contract: string,
       version: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('deleteContractVersion', 'contract', contract);
@@ -8156,7 +8484,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     deployContract: async (
       contract: string,
       postMethodArgs?: PostMethodArgs,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('deployContract', 'contract', contract);
@@ -8206,7 +8534,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       contract: string,
       version: string,
       postMethodArgs?: PostMethodArgs,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('deployContractVersion', 'contract', contract);
@@ -8251,7 +8579,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getContract: async (contract: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getContract: async (contract: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('getContract', 'contract', contract);
       const localVarPath = `/contracts/{contract}`.replace(`{${'contract'}}`, encodeURIComponent(String(contract)));
@@ -8292,7 +8620,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     getContractVersion: async (
       contract: string,
       version: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('getContractVersion', 'contract', contract);
@@ -8334,7 +8662,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getContractVersions: async (contract: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getContractVersions: async (contract: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('getContractVersions', 'contract', contract);
       const localVarPath = `/contracts/{contract}/all`.replace(`{${'contract'}}`, encodeURIComponent(String(contract)));
@@ -8377,7 +8705,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       chain: ChainName,
       addressOrLabel: string,
       contract: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('getEventMonitorStatus', 'chain', chain);
@@ -8428,7 +8756,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       contract: string,
       version: string,
       event: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('getEventTypeConversions', 'contract', contract);
@@ -8479,7 +8807,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       contract: string,
       version: string,
       method: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('getFunctionTypeConversions', 'contract', contract);
@@ -8530,7 +8858,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       chain: ChainName,
       addressOrLabel: string,
       linkAddressContractRequest?: LinkAddressContractRequest,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('linkAddressContract', 'chain', chain);
@@ -8579,7 +8907,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listContractVersions: async (contract: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listContractVersions: async (contract: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('listContractVersions', 'contract', contract);
       const localVarPath = `/contracts/{contract}/versions`.replace(
@@ -8618,7 +8946,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listContracts: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listContracts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/contracts`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8661,7 +8989,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       version: string,
       event: string,
       contractEventOptions?: ContractEventOptions,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('setEventTypeConversions', 'contract', contract);
@@ -8717,7 +9045,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       version: string,
       method: string,
       contractMethodOptions?: ContractMethodOptions,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('setFunctionTypeConversions', 'contract', contract);
@@ -8771,7 +9099,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       chain: ChainName,
       addressOrLabel: string,
       contract: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('unlinkAddressContract', 'chain', chain);
@@ -8836,7 +9164,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       contract: string,
       method: string,
       postMethodArgs?: PostMethodArgs,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CallContractFunction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.callContractFunction(
         chain,
@@ -8846,7 +9174,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         postMethodArgs,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.callContractFunction']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds a contract.
@@ -8859,10 +9196,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     async createContract(
       contract: string,
       baseContract?: BaseContract,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createContract(contract, baseContract, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.createContract']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds multiple contracts.
@@ -8873,10 +9219,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      */
     async createContracts(
       baseContract?: Array<BaseContract>,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createContracts(baseContract, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.createContracts']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Deletes a contract and all its versions.
@@ -8887,10 +9242,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      */
     async deleteContract(
       contract: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteContract(contract, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.deleteContract']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Deletes a specific contract version.
@@ -8903,10 +9267,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     async deleteContractVersion(
       contract: string,
       version: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteContractVersion(contract, version, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.deleteContractVersion']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a transaction to deploy the given contract to the blockchain.
@@ -8919,10 +9292,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     async deployContract(
       contract: string,
       postMethodArgs?: PostMethodArgs,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeployContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deployContract(contract, postMethodArgs, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.deployContract']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a transaction to deploy the given contract version to the blockchain.
@@ -8937,7 +9319,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       contract: string,
       version: string,
       postMethodArgs?: PostMethodArgs,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeployContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deployContractVersion(
         contract,
@@ -8945,7 +9327,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         postMethodArgs,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.deployContractVersion']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the given contract.
@@ -8956,10 +9347,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      */
     async getContract(
       contract: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getContract(contract, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.getContract']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a specific contract version.
@@ -8972,10 +9372,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     async getContractVersion(
       contract: string,
       version: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getContractVersion(contract, version, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.getContractVersion']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns all the versions of a contract.
@@ -8986,10 +9395,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      */
     async getContractVersions(
       contract: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetContractVersions200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getContractVersions(contract, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.getContractVersions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the event monitor status for a given address and contract.
@@ -9004,7 +9422,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       addressOrLabel: string,
       contract: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetEventMonitorStatus200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getEventMonitorStatus(
         chain,
@@ -9012,7 +9430,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         contract,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.getEventMonitorStatus']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the type conversion options for a given contract and event signature.
@@ -9027,7 +9454,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       contract: string,
       version: string,
       event: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetEventTypeConversions200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getEventTypeConversions(
         contract,
@@ -9035,7 +9462,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         event,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.getEventTypeConversions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the type conversion options for a given contract and function signature.
@@ -9050,7 +9486,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       contract: string,
       version: string,
       method: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetFunctionTypeConversions200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getFunctionTypeConversions(
         contract,
@@ -9058,7 +9494,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         method,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.getFunctionTypeConversions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Links an address to a contract.
@@ -9073,7 +9518,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       addressOrLabel: string,
       linkAddressContractRequest?: LinkAddressContractRequest,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetAddress201Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.linkAddressContract(
         chain,
@@ -9081,7 +9526,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         linkAddressContractRequest,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.linkAddressContract']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a list of the versions of a contract.
@@ -9092,10 +9546,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      */
     async listContractVersions(
       contract: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListContractVersions200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listContractVersions(contract, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.listContractVersions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a list of contracts.
@@ -9104,10 +9567,19 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async listContracts(
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListContracts200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listContracts(options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.listContracts']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Sets the type conversion options for a given contract and event signature.
@@ -9124,7 +9596,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       version: string,
       event: string,
       contractEventOptions?: ContractEventOptions,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setEventTypeConversions(
         contract,
@@ -9133,7 +9605,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         contractEventOptions,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.setEventTypeConversions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Sets the type conversion options for a given contract and function signature.
@@ -9150,7 +9631,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       version: string,
       method: string,
       contractMethodOptions?: ContractMethodOptions,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setFunctionTypeConversions(
         contract,
@@ -9159,7 +9640,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         contractMethodOptions,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.setFunctionTypeConversions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Unlinks an address from a contract.
@@ -9174,7 +9664,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       addressOrLabel: string,
       contract: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetAddress201Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.unlinkAddressContract(
         chain,
@@ -9182,7 +9672,16 @@ export const ContractsApiFp = function (configuration?: Configuration) {
         contract,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['ContractsApi.unlinkAddressContract']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -9507,7 +10006,7 @@ export interface ContractsApiInterface {
     contract: string,
     method: string,
     postMethodArgs?: PostMethodArgs,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<CallContractFunction200Response>;
 
   /**
@@ -9522,7 +10021,7 @@ export interface ContractsApiInterface {
   createContract(
     contract: string,
     baseContract?: BaseContract,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetContract200Response>;
 
   /**
@@ -9533,7 +10032,7 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  createContracts(baseContract?: Array<BaseContract>, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  createContracts(baseContract?: Array<BaseContract>, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Deletes a contract and all its versions.
@@ -9543,7 +10042,7 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  deleteContract(contract: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  deleteContract(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Deletes a specific contract version.
@@ -9554,7 +10053,7 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  deleteContractVersion(contract: string, version: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  deleteContractVersion(contract: string, version: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns a transaction to deploy the given contract to the blockchain.
@@ -9568,7 +10067,7 @@ export interface ContractsApiInterface {
   deployContract(
     contract: string,
     postMethodArgs?: PostMethodArgs,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<DeployContract200Response>;
 
   /**
@@ -9585,7 +10084,7 @@ export interface ContractsApiInterface {
     contract: string,
     version: string,
     postMethodArgs?: PostMethodArgs,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<DeployContract200Response>;
 
   /**
@@ -9596,7 +10095,7 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  getContract(contract: string, options?: AxiosRequestConfig): AxiosPromise<GetContract200Response>;
+  getContract(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<GetContract200Response>;
 
   /**
    * Returns a specific contract version.
@@ -9610,7 +10109,7 @@ export interface ContractsApiInterface {
   getContractVersion(
     contract: string,
     version: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetContract200Response>;
 
   /**
@@ -9621,7 +10120,7 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  getContractVersions(contract: string, options?: AxiosRequestConfig): AxiosPromise<GetContractVersions200Response>;
+  getContractVersions(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<GetContractVersions200Response>;
 
   /**
    * Returns the event monitor status for a given address and contract.
@@ -9637,7 +10136,7 @@ export interface ContractsApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     contract: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetEventMonitorStatus200Response>;
 
   /**
@@ -9654,7 +10153,7 @@ export interface ContractsApiInterface {
     contract: string,
     version: string,
     event: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetEventTypeConversions200Response>;
 
   /**
@@ -9671,7 +10170,7 @@ export interface ContractsApiInterface {
     contract: string,
     version: string,
     method: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetFunctionTypeConversions200Response>;
 
   /**
@@ -9688,7 +10187,7 @@ export interface ContractsApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     linkAddressContractRequest?: LinkAddressContractRequest,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<SetAddress201Response>;
 
   /**
@@ -9699,7 +10198,10 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  listContractVersions(contract: string, options?: AxiosRequestConfig): AxiosPromise<ListContractVersions200Response>;
+  listContractVersions(
+    contract: string,
+    options?: RawAxiosRequestConfig
+  ): AxiosPromise<ListContractVersions200Response>;
 
   /**
    * Returns a list of contracts.
@@ -9708,7 +10210,7 @@ export interface ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  listContracts(options?: AxiosRequestConfig): AxiosPromise<ListContracts200Response>;
+  listContracts(options?: RawAxiosRequestConfig): AxiosPromise<ListContracts200Response>;
 
   /**
    * Sets the type conversion options for a given contract and event signature.
@@ -9726,7 +10228,7 @@ export interface ContractsApiInterface {
     version: string,
     event: string,
     contractEventOptions?: ContractEventOptions,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -9745,7 +10247,7 @@ export interface ContractsApiInterface {
     version: string,
     method: string,
     contractMethodOptions?: ContractMethodOptions,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -9762,7 +10264,7 @@ export interface ContractsApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     contract: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<SetAddress201Response>;
 }
 
@@ -9791,7 +10293,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     contract: string,
     method: string,
     postMethodArgs?: PostMethodArgs,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
       .callContractFunction(chain, addressOrLabel, contract, method, postMethodArgs, options)
@@ -9807,7 +10309,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public createContract(contract: string, baseContract?: BaseContract, options?: AxiosRequestConfig) {
+  public createContract(contract: string, baseContract?: BaseContract, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .createContract(contract, baseContract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9821,7 +10323,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public createContracts(baseContract?: Array<BaseContract>, options?: AxiosRequestConfig) {
+  public createContracts(baseContract?: Array<BaseContract>, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .createContracts(baseContract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9835,7 +10337,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public deleteContract(contract: string, options?: AxiosRequestConfig) {
+  public deleteContract(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .deleteContract(contract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9850,7 +10352,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public deleteContractVersion(contract: string, version: string, options?: AxiosRequestConfig) {
+  public deleteContractVersion(contract: string, version: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .deleteContractVersion(contract, version, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9865,7 +10367,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public deployContract(contract: string, postMethodArgs?: PostMethodArgs, options?: AxiosRequestConfig) {
+  public deployContract(contract: string, postMethodArgs?: PostMethodArgs, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .deployContract(contract, postMethodArgs, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9885,7 +10387,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     contract: string,
     version: string,
     postMethodArgs?: PostMethodArgs,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
       .deployContractVersion(contract, version, postMethodArgs, options)
@@ -9900,7 +10402,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public getContract(contract: string, options?: AxiosRequestConfig) {
+  public getContract(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .getContract(contract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9915,7 +10417,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public getContractVersion(contract: string, version: string, options?: AxiosRequestConfig) {
+  public getContractVersion(contract: string, version: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .getContractVersion(contract, version, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9929,7 +10431,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public getContractVersions(contract: string, options?: AxiosRequestConfig) {
+  public getContractVersions(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .getContractVersions(contract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9949,7 +10451,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     contract: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
       .getEventMonitorStatus(chain, addressOrLabel, contract, options)
@@ -9966,7 +10468,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public getEventTypeConversions(contract: string, version: string, event: string, options?: AxiosRequestConfig) {
+  public getEventTypeConversions(contract: string, version: string, event: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .getEventTypeConversions(contract, version, event, options)
       .then((request) => request(this.axios, this.basePath));
@@ -9982,7 +10484,12 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public getFunctionTypeConversions(contract: string, version: string, method: string, options?: AxiosRequestConfig) {
+  public getFunctionTypeConversions(
+    contract: string,
+    version: string,
+    method: string,
+    options?: RawAxiosRequestConfig
+  ) {
     return ContractsApiFp(this.configuration)
       .getFunctionTypeConversions(contract, version, method, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10002,7 +10509,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     linkAddressContractRequest?: LinkAddressContractRequest,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
       .linkAddressContract(chain, addressOrLabel, linkAddressContractRequest, options)
@@ -10017,7 +10524,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public listContractVersions(contract: string, options?: AxiosRequestConfig) {
+  public listContractVersions(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .listContractVersions(contract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10030,7 +10537,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public listContracts(options?: AxiosRequestConfig) {
+  public listContracts(options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .listContracts(options)
       .then((request) => request(this.axios, this.basePath));
@@ -10052,7 +10559,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     version: string,
     event: string,
     contractEventOptions?: ContractEventOptions,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
       .setEventTypeConversions(contract, version, event, contractEventOptions, options)
@@ -10075,7 +10582,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     version: string,
     method: string,
     contractMethodOptions?: ContractMethodOptions,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
       .setFunctionTypeConversions(contract, version, method, contractMethodOptions, options)
@@ -10096,7 +10603,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     chain: ChainName,
     addressOrLabel: string,
     contract: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
       .unlinkAddressContract(chain, addressOrLabel, contract, options)
@@ -10117,7 +10624,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    countEventQueryRecords: async (eventQuery: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    countEventQueryRecords: async (eventQuery: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'eventQuery' is not null or undefined
       assertParamExists('countEventQueryRecords', 'eventQuery', eventQuery);
       const localVarPath = `/queries/{event_query}/count`.replace(
@@ -10157,7 +10664,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteEventQuery: async (eventQuery: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    deleteEventQuery: async (eventQuery: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'eventQuery' is not null or undefined
       assertParamExists('deleteEventQuery', 'eventQuery', eventQuery);
       const localVarPath = `/queries/{event_query}`.replace(
@@ -10203,7 +10710,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       offset?: number,
       limit?: number,
       eventQuery?: EventQuery,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/queries`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -10256,7 +10763,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       eventQuery: string,
       offset?: number,
       limit?: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'eventQuery' is not null or undefined
       assertParamExists('executeEventQuery', 'eventQuery', eventQuery);
@@ -10305,7 +10812,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getEventQuery: async (eventQuery: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getEventQuery: async (eventQuery: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'eventQuery' is not null or undefined
       assertParamExists('getEventQuery', 'eventQuery', eventQuery);
       const localVarPath = `/queries/{event_query}`.replace(
@@ -10344,7 +10851,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listEventQueries: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listEventQueries: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/queries`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10383,7 +10890,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
     setEventQuery: async (
       eventQuery: string,
       eventQuery2?: EventQuery,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'eventQuery' is not null or undefined
       assertParamExists('setEventQuery', 'eventQuery', eventQuery);
@@ -10439,10 +10946,19 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
      */
     async countEventQueryRecords(
       eventQuery: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountEventQueryRecords200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.countEventQueryRecords(eventQuery, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventQueriesApi.countEventQueryRecords']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Deletes the given saved event query.
@@ -10453,10 +10969,19 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
      */
     async deleteEventQuery(
       eventQuery: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEventQuery(eventQuery, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventQueriesApi.deleteEventQuery']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Executes an arbitrary event query.
@@ -10471,7 +10996,7 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
       offset?: number,
       limit?: number,
       eventQuery?: EventQuery,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExecuteArbitraryEventQuery200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.executeArbitraryEventQuery(
         offset,
@@ -10479,7 +11004,16 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
         eventQuery,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventQueriesApi.executeArbitraryEventQuery']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Executes the given saved event query.
@@ -10494,10 +11028,19 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
       eventQuery: string,
       offset?: number,
       limit?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExecuteArbitraryEventQuery200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.executeEventQuery(eventQuery, offset, limit, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventQueriesApi.executeEventQuery']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns the given saved event query.
@@ -10508,10 +11051,19 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
      */
     async getEventQuery(
       eventQuery: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetEventQuery200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getEventQuery(eventQuery, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventQueriesApi.getEventQuery']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a list of saved event queries.
@@ -10520,10 +11072,19 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async listEventQueries(
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEventQueries200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listEventQueries(options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventQueriesApi.listEventQueries']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Creates or updates the given saved event query.
@@ -10536,10 +11097,19 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
     async setEventQuery(
       eventQuery: string,
       eventQuery2?: EventQuery,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setEventQuery(eventQuery, eventQuery2, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventQueriesApi.setEventQuery']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -10662,7 +11232,7 @@ export interface EventQueriesApiInterface {
    */
   countEventQueryRecords(
     eventQuery: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<CountEventQueryRecords200Response>;
 
   /**
@@ -10673,7 +11243,7 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  deleteEventQuery(eventQuery: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Executes an arbitrary event query.
@@ -10689,7 +11259,7 @@ export interface EventQueriesApiInterface {
     offset?: number,
     limit?: number,
     eventQuery?: EventQuery,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<ExecuteArbitraryEventQuery200Response>;
 
   /**
@@ -10706,7 +11276,7 @@ export interface EventQueriesApiInterface {
     eventQuery: string,
     offset?: number,
     limit?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<ExecuteArbitraryEventQuery200Response>;
 
   /**
@@ -10717,7 +11287,7 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  getEventQuery(eventQuery: string, options?: AxiosRequestConfig): AxiosPromise<GetEventQuery200Response>;
+  getEventQuery(eventQuery: string, options?: RawAxiosRequestConfig): AxiosPromise<GetEventQuery200Response>;
 
   /**
    * Returns a list of saved event queries.
@@ -10726,7 +11296,7 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  listEventQueries(options?: AxiosRequestConfig): AxiosPromise<ListEventQueries200Response>;
+  listEventQueries(options?: RawAxiosRequestConfig): AxiosPromise<ListEventQueries200Response>;
 
   /**
    * Creates or updates the given saved event query.
@@ -10737,7 +11307,11 @@ export interface EventQueriesApiInterface {
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
-  setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  setEventQuery(
+    eventQuery: string,
+    eventQuery2?: EventQuery,
+    options?: RawAxiosRequestConfig
+  ): AxiosPromise<BaseResponse>;
 }
 
 /**
@@ -10755,7 +11329,7 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
-  public countEventQueryRecords(eventQuery: string, options?: AxiosRequestConfig) {
+  public countEventQueryRecords(eventQuery: string, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
       .countEventQueryRecords(eventQuery, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10769,7 +11343,7 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
-  public deleteEventQuery(eventQuery: string, options?: AxiosRequestConfig) {
+  public deleteEventQuery(eventQuery: string, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
       .deleteEventQuery(eventQuery, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10789,7 +11363,7 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
     offset?: number,
     limit?: number,
     eventQuery?: EventQuery,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return EventQueriesApiFp(this.configuration)
       .executeArbitraryEventQuery(offset, limit, eventQuery, options)
@@ -10806,7 +11380,7 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
-  public executeEventQuery(eventQuery: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
+  public executeEventQuery(eventQuery: string, offset?: number, limit?: number, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
       .executeEventQuery(eventQuery, offset, limit, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10820,7 +11394,7 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
-  public getEventQuery(eventQuery: string, options?: AxiosRequestConfig) {
+  public getEventQuery(eventQuery: string, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
       .getEventQuery(eventQuery, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10833,7 +11407,7 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
-  public listEventQueries(options?: AxiosRequestConfig) {
+  public listEventQueries(options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
       .listEventQueries(options)
       .then((request) => request(this.axios, this.basePath));
@@ -10848,7 +11422,7 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
-  public setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: AxiosRequestConfig) {
+  public setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
       .setEventQuery(eventQuery, eventQuery2, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10892,7 +11466,7 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/events/count`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11000,7 +11574,7 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/events`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11118,7 +11692,7 @@ export const EventsApiFp = function (configuration?: Configuration) {
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetEventCount200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getEventCount(
         blockHash,
@@ -11135,7 +11709,16 @@ export const EventsApiFp = function (configuration?: Configuration) {
         offset,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventsApi.getEventCount']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns all events stored in the database.
@@ -11168,7 +11751,7 @@ export const EventsApiFp = function (configuration?: Configuration) {
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEvents200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listEvents(
         blockHash,
@@ -11185,7 +11768,16 @@ export const EventsApiFp = function (configuration?: Configuration) {
         offset,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['EventsApi.listEvents']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -11340,7 +11932,7 @@ export interface EventsApiInterface {
     eventSignature?: string,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<GetEventCount200Response>;
 
   /**
@@ -11375,7 +11967,7 @@ export interface EventsApiInterface {
     eventSignature?: string,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<ListEvents200Response>;
 }
 
@@ -11418,7 +12010,7 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
     eventSignature?: string,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return EventsApiFp(this.configuration)
       .getEventCount(
@@ -11471,7 +12063,7 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
     eventSignature?: string,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return EventsApiFp(this.configuration)
       .listEvents(
@@ -11508,7 +12100,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      */
     addHsmConfig: async (
       baseAzureAccount?: BaseAzureAccount,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/hsm/config`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11547,7 +12139,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmKey: async (addKey?: AddKey, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    addHsmKey: async (addKey?: AddKey, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/hsm/key`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11585,7 +12177,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createHsmKey: async (createKey?: CreateKey, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    createHsmKey: async (createKey?: CreateKey, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/hsm/key/new`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11622,7 +12214,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listHsm: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listHsm: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/hsm`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11673,7 +12265,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       publicAddress?: string,
       limit?: number,
       offset?: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/hsm/wallets`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11741,7 +12333,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeHsmConfig: async (clientId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    removeHsmConfig: async (clientId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'clientId' is not null or undefined
       assertParamExists('removeHsmConfig', 'clientId', clientId);
       const localVarPath = `/hsm/config/{client_id}`.replace(`{${'client_id'}}`, encodeURIComponent(String(clientId)));
@@ -11778,7 +12370,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeHsmKey: async (walletAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    removeHsmKey: async (walletAddress: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'walletAddress' is not null or undefined
       assertParamExists('removeHsmKey', 'walletAddress', walletAddress);
       const localVarPath = `/hsm/key/{wallet_address}`.replace(
@@ -11824,7 +12416,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       chain: ChainName,
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('setLocalNonce', 'chain', chain);
@@ -11873,7 +12465,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
     signAndSubmitTransaction: async (
       chain: ChainName,
       baseTransactionToSign?: BaseTransactionToSign,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('signAndSubmitTransaction', 'chain', chain);
@@ -11918,7 +12510,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
     signData: async (
       chain: ChainName,
       hSMSignRequest?: HSMSignRequest,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('signData', 'chain', chain);
@@ -11971,10 +12563,19 @@ export const HsmApiFp = function (configuration?: Configuration) {
      */
     async addHsmConfig(
       baseAzureAccount?: BaseAzureAccount,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmConfig(baseAzureAccount, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.addHsmConfig']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Adds an existing key configuration.
@@ -11985,10 +12586,19 @@ export const HsmApiFp = function (configuration?: Configuration) {
      */
     async addHsmKey(
       addKey?: AddKey,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmKey(addKey, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.addHsmKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Creates a new key in the Azure KeyVault.
@@ -11999,10 +12609,19 @@ export const HsmApiFp = function (configuration?: Configuration) {
      */
     async createHsmKey(
       createKey?: CreateKey,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateHsmKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createHsmKey(createKey, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.createHsmKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a list of HSM configs and their associated wallets.
@@ -12011,10 +12630,18 @@ export const HsmApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async listHsm(
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListHsm200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listHsm(options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath = operationServerMap['HsmApi.listHsm']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Returns a list of HSM wallets.
@@ -12039,7 +12666,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
       publicAddress?: string,
       limit?: number,
       offset?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListHsmWallets200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listHsmWallets(
         keyName,
@@ -12052,7 +12679,16 @@ export const HsmApiFp = function (configuration?: Configuration) {
         offset,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.listHsmWallets']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes the specified Azure account configuration and its associated keys.
@@ -12063,10 +12699,19 @@ export const HsmApiFp = function (configuration?: Configuration) {
      */
     async removeHsmConfig(
       clientId: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeHsmConfig(clientId, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.removeHsmConfig']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Removes the specified key configuration.
@@ -12077,10 +12722,19 @@ export const HsmApiFp = function (configuration?: Configuration) {
      */
     async removeHsmKey(
       walletAddress: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.removeHsmKey(walletAddress, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.removeHsmKey']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
@@ -12095,7 +12749,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setLocalNonce(
         chain,
@@ -12103,7 +12757,16 @@ export const HsmApiFp = function (configuration?: Configuration) {
         setNonceRequest,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.setLocalNonce']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Signs and submits the given transaction using an HSM address.
@@ -12116,14 +12779,23 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async signAndSubmitTransaction(
       chain: ChainName,
       baseTransactionToSign?: BaseTransactionToSign,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signAndSubmitTransaction(
         chain,
         baseTransactionToSign,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.signAndSubmitTransaction']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Signs the given data using the given HSM address.
@@ -12136,10 +12808,19 @@ export const HsmApiFp = function (configuration?: Configuration) {
     async signData(
       chain: ChainName,
       hSMSignRequest?: HSMSignRequest,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SignData200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signData(chain, hSMSignRequest, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['HsmApi.signData']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -12303,7 +12984,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds an existing key configuration.
@@ -12313,7 +12994,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addHsmKey(addKey?: AddKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Creates a new key in the Azure KeyVault.
@@ -12323,7 +13004,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  createHsmKey(createKey?: CreateKey, options?: AxiosRequestConfig): AxiosPromise<CreateHsmKey200Response>;
+  createHsmKey(createKey?: CreateKey, options?: RawAxiosRequestConfig): AxiosPromise<CreateHsmKey200Response>;
 
   /**
    * Returns a list of HSM configs and their associated wallets.
@@ -12332,7 +13013,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  listHsm(options?: AxiosRequestConfig): AxiosPromise<ListHsm200Response>;
+  listHsm(options?: RawAxiosRequestConfig): AxiosPromise<ListHsm200Response>;
 
   /**
    * Returns a list of HSM wallets.
@@ -12358,7 +13039,7 @@ export interface HsmApiInterface {
     publicAddress?: string,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<ListHsmWallets200Response>;
 
   /**
@@ -12369,7 +13050,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  removeHsmConfig(clientId: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  removeHsmConfig(clientId: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Removes the specified key configuration.
@@ -12379,7 +13060,7 @@ export interface HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  removeHsmKey(walletAddress: string, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  removeHsmKey(walletAddress: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
@@ -12395,7 +13076,7 @@ export interface HsmApiInterface {
     chain: ChainName,
     walletAddress: string,
     setNonceRequest?: SetNonceRequest,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
   /**
@@ -12410,7 +13091,7 @@ export interface HsmApiInterface {
   signAndSubmitTransaction(
     chain: ChainName,
     baseTransactionToSign?: BaseTransactionToSign,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 
   /**
@@ -12425,7 +13106,7 @@ export interface HsmApiInterface {
   signData(
     chain: ChainName,
     hSMSignRequest?: HSMSignRequest,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<SignData200Response>;
 }
 
@@ -12444,7 +13125,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: AxiosRequestConfig) {
+  public addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .addHsmConfig(baseAzureAccount, options)
       .then((request) => request(this.axios, this.basePath));
@@ -12458,7 +13139,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public addHsmKey(addKey?: AddKey, options?: AxiosRequestConfig) {
+  public addHsmKey(addKey?: AddKey, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .addHsmKey(addKey, options)
       .then((request) => request(this.axios, this.basePath));
@@ -12472,7 +13153,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public createHsmKey(createKey?: CreateKey, options?: AxiosRequestConfig) {
+  public createHsmKey(createKey?: CreateKey, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .createHsmKey(createKey, options)
       .then((request) => request(this.axios, this.basePath));
@@ -12485,7 +13166,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public listHsm(options?: AxiosRequestConfig) {
+  public listHsm(options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .listHsm(options)
       .then((request) => request(this.axios, this.basePath));
@@ -12515,7 +13196,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
     publicAddress?: string,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return HsmApiFp(this.configuration)
       .listHsmWallets(keyName, keyVersion, vaultName, baseGroupName, clientId, publicAddress, limit, offset, options)
@@ -12530,7 +13211,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public removeHsmConfig(clientId: string, options?: AxiosRequestConfig) {
+  public removeHsmConfig(clientId: string, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .removeHsmConfig(clientId, options)
       .then((request) => request(this.axios, this.basePath));
@@ -12544,7 +13225,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public removeHsmKey(walletAddress: string, options?: AxiosRequestConfig) {
+  public removeHsmKey(walletAddress: string, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .removeHsmKey(walletAddress, options)
       .then((request) => request(this.axios, this.basePath));
@@ -12564,7 +13245,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
     chain: ChainName,
     walletAddress: string,
     setNonceRequest?: SetNonceRequest,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return HsmApiFp(this.configuration)
       .setLocalNonce(chain, walletAddress, setNonceRequest, options)
@@ -12583,7 +13264,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   public signAndSubmitTransaction(
     chain: ChainName,
     baseTransactionToSign?: BaseTransactionToSign,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return HsmApiFp(this.configuration)
       .signAndSubmitTransaction(chain, baseTransactionToSign, options)
@@ -12599,7 +13280,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public signData(chain: ChainName, hSMSignRequest?: HSMSignRequest, options?: AxiosRequestConfig) {
+  public signData(chain: ChainName, hSMSignRequest?: HSMSignRequest, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .signData(chain, hSMSignRequest, options)
       .then((request) => request(this.axios, this.basePath));
@@ -12627,7 +13308,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       walletAddress: string,
       nonce: number,
       gasParams?: GasParams,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('cancelTransaction', 'chain', chain);
@@ -12679,7 +13360,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
     countWalletTransactions: async (
       chain: ChainName,
       walletAddress: string,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('countWalletTransactions', 'chain', chain);
@@ -12735,7 +13416,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       status?: TransactionStatus,
       limit?: number,
       offset?: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('listWalletTransactions', 'chain', chain);
@@ -12805,7 +13486,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       walletAddress: string,
       nonce: number,
       gasParams?: GasParams,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('speedUpTransaction', 'chain', chain);
@@ -12871,7 +13552,7 @@ export const TxmApiFp = function (configuration?: Configuration) {
       walletAddress: string,
       nonce: number,
       gasParams?: GasParams,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.cancelTransaction(
         chain,
@@ -12880,7 +13561,16 @@ export const TxmApiFp = function (configuration?: Configuration) {
         gasParams,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['TxmApi.cancelTransaction']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Count all transactions for the given wallet address.
@@ -12893,10 +13583,19 @@ export const TxmApiFp = function (configuration?: Configuration) {
     async countWalletTransactions(
       chain: ChainName,
       walletAddress: string,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountWalletTransactions200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.countWalletTransactions(chain, walletAddress, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['TxmApi.countWalletTransactions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * List the transactions submitted by the given wallet address.
@@ -12919,7 +13618,7 @@ export const TxmApiFp = function (configuration?: Configuration) {
       status?: TransactionStatus,
       limit?: number,
       offset?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListWalletTransactions200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listWalletTransactions(
         chain,
@@ -12931,7 +13630,16 @@ export const TxmApiFp = function (configuration?: Configuration) {
         offset,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['TxmApi.listWalletTransactions']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Speeds up a transaction by resubmitting it with a higher gas price.
@@ -12948,7 +13656,7 @@ export const TxmApiFp = function (configuration?: Configuration) {
       walletAddress: string,
       nonce: number,
       gasParams?: GasParams,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.speedUpTransaction(
         chain,
@@ -12957,7 +13665,16 @@ export const TxmApiFp = function (configuration?: Configuration) {
         gasParams,
         options
       );
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['TxmApi.speedUpTransaction']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -13080,7 +13797,7 @@ export interface TxmApiInterface {
     walletAddress: string,
     nonce: number,
     gasParams?: GasParams,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 
   /**
@@ -13095,7 +13812,7 @@ export interface TxmApiInterface {
   countWalletTransactions(
     chain: ChainName,
     walletAddress: string,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<CountWalletTransactions200Response>;
 
   /**
@@ -13120,7 +13837,7 @@ export interface TxmApiInterface {
     status?: TransactionStatus,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<ListWalletTransactions200Response>;
 
   /**
@@ -13139,7 +13856,7 @@ export interface TxmApiInterface {
     walletAddress: string,
     nonce: number,
     gasParams?: GasParams,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 }
 
@@ -13166,7 +13883,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
     walletAddress: string,
     nonce: number,
     gasParams?: GasParams,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return TxmApiFp(this.configuration)
       .cancelTransaction(chain, walletAddress, nonce, gasParams, options)
@@ -13182,7 +13899,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * @throws {RequiredError}
    * @memberof TxmApi
    */
-  public countWalletTransactions(chain: ChainName, walletAddress: string, options?: AxiosRequestConfig) {
+  public countWalletTransactions(chain: ChainName, walletAddress: string, options?: RawAxiosRequestConfig) {
     return TxmApiFp(this.configuration)
       .countWalletTransactions(chain, walletAddress, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13210,7 +13927,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
     status?: TransactionStatus,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return TxmApiFp(this.configuration)
       .listWalletTransactions(chain, walletAddress, hash, nonce, status, limit, offset, options)
@@ -13233,7 +13950,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
     walletAddress: string,
     nonce: number,
     gasParams?: GasParams,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ) {
     return TxmApiFp(this.configuration)
       .speedUpTransaction(chain, walletAddress, nonce, gasParams, options)
@@ -13254,7 +13971,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    countWebhookEvents: async (webhookID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    countWebhookEvents: async (webhookID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'webhookID' is not null or undefined
       assertParamExists('countWebhookEvents', 'webhookID', webhookID);
       const localVarPath = `/webhooks/{webhookID}/events/count`.replace(
@@ -13293,7 +14010,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    countWebhooks: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    countWebhooks: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/webhooks/count`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13330,7 +14047,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
      */
     createWebhook: async (
       baseWebhookEndpoint?: BaseWebhookEndpoint,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/webhooks`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -13369,7 +14086,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteWebhook: async (webhookID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    deleteWebhook: async (webhookID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'webhookID' is not null or undefined
       assertParamExists('deleteWebhook', 'webhookID', webhookID);
       const localVarPath = `/webhooks/{webhookID}`.replace(`{${'webhookID'}}`, encodeURIComponent(String(webhookID)));
@@ -13406,7 +14123,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getWebhook: async (webhookID: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getWebhook: async (webhookID: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'webhookID' is not null or undefined
       assertParamExists('getWebhook', 'webhookID', webhookID);
       const localVarPath = `/webhooks/{webhookID}`.replace(`{${'webhookID'}}`, encodeURIComponent(String(webhookID)));
@@ -13449,7 +14166,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
       webhookID: number,
       limit?: number,
       offset?: number,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'webhookID' is not null or undefined
       assertParamExists('listWebhookEvents', 'webhookID', webhookID);
@@ -13499,7 +14216,11 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listWebhooks: async (limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    listWebhooks: async (
+      limit?: number,
+      offset?: number,
+      options: RawAxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
       const localVarPath = `/webhooks`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13546,7 +14267,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
     updateWebhook: async (
       webhookID: number,
       baseWebhookEndpoint?: BaseWebhookEndpoint,
-      options: AxiosRequestConfig = {}
+      options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'webhookID' is not null or undefined
       assertParamExists('updateWebhook', 'webhookID', webhookID);
@@ -13599,10 +14320,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
      */
     async countWebhookEvents(
       webhookID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountWebhookEvents200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.countWebhookEvents(webhookID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.countWebhookEvents']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Count all webhook endpoints.
@@ -13611,10 +14341,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async countWebhooks(
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountWebhooks200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.countWebhooks(options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.countWebhooks']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Create a webhook.
@@ -13625,10 +14364,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
      */
     async createWebhook(
       baseWebhookEndpoint?: BaseWebhookEndpoint,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createWebhook(baseWebhookEndpoint, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.createWebhook']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Delete a webhook endpoint.
@@ -13639,10 +14387,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
      */
     async deleteWebhook(
       webhookID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteWebhook(webhookID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.deleteWebhook']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Get a webhook endpoint.
@@ -13653,10 +14410,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
      */
     async getWebhook(
       webhookID: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getWebhook(webhookID, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.getWebhook']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * List events for the given webhook endpoint.
@@ -13671,10 +14437,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
       webhookID: number,
       limit?: number,
       offset?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListWebhookEvents200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listWebhookEvents(webhookID, limit, offset, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.listWebhookEvents']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * List all webhook endpoints.
@@ -13687,10 +14462,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
     async listWebhooks(
       limit?: number,
       offset?: number,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListWebhooks200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listWebhooks(limit, offset, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.listWebhooks']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      * Update a webhook endpoint.
@@ -13703,10 +14487,19 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
     async updateWebhook(
       webhookID: number,
       baseWebhookEndpoint?: BaseWebhookEndpoint,
-      options?: AxiosRequestConfig
+      options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.updateWebhook(webhookID, baseWebhookEndpoint, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['WebhooksApi.updateWebhook']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     }
   };
 };
@@ -13831,7 +14624,7 @@ export interface WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApiInterface
    */
-  countWebhookEvents(webhookID: number, options?: AxiosRequestConfig): AxiosPromise<CountWebhookEvents200Response>;
+  countWebhookEvents(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<CountWebhookEvents200Response>;
 
   /**
    * Count all webhook endpoints.
@@ -13840,7 +14633,7 @@ export interface WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApiInterface
    */
-  countWebhooks(options?: AxiosRequestConfig): AxiosPromise<CountWebhooks200Response>;
+  countWebhooks(options?: RawAxiosRequestConfig): AxiosPromise<CountWebhooks200Response>;
 
   /**
    * Create a webhook.
@@ -13852,7 +14645,7 @@ export interface WebhooksApiInterface {
    */
   createWebhook(
     baseWebhookEndpoint?: BaseWebhookEndpoint,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<CreateWebhook200Response>;
 
   /**
@@ -13863,7 +14656,7 @@ export interface WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApiInterface
    */
-  deleteWebhook(webhookID: number, options?: AxiosRequestConfig): AxiosPromise<BaseResponse>;
+  deleteWebhook(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Get a webhook endpoint.
@@ -13873,7 +14666,7 @@ export interface WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApiInterface
    */
-  getWebhook(webhookID: number, options?: AxiosRequestConfig): AxiosPromise<CreateWebhook200Response>;
+  getWebhook(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<CreateWebhook200Response>;
 
   /**
    * List events for the given webhook endpoint.
@@ -13889,7 +14682,7 @@ export interface WebhooksApiInterface {
     webhookID: number,
     limit?: number,
     offset?: number,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<ListWebhookEvents200Response>;
 
   /**
@@ -13901,7 +14694,7 @@ export interface WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApiInterface
    */
-  listWebhooks(limit?: number, offset?: number, options?: AxiosRequestConfig): AxiosPromise<ListWebhooks200Response>;
+  listWebhooks(limit?: number, offset?: number, options?: RawAxiosRequestConfig): AxiosPromise<ListWebhooks200Response>;
 
   /**
    * Update a webhook endpoint.
@@ -13915,7 +14708,7 @@ export interface WebhooksApiInterface {
   updateWebhook(
     webhookID: number,
     baseWebhookEndpoint?: BaseWebhookEndpoint,
-    options?: AxiosRequestConfig
+    options?: RawAxiosRequestConfig
   ): AxiosPromise<CreateWebhook200Response>;
 }
 
@@ -13934,7 +14727,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public countWebhookEvents(webhookID: number, options?: AxiosRequestConfig) {
+  public countWebhookEvents(webhookID: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .countWebhookEvents(webhookID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13947,7 +14740,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public countWebhooks(options?: AxiosRequestConfig) {
+  public countWebhooks(options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .countWebhooks(options)
       .then((request) => request(this.axios, this.basePath));
@@ -13961,7 +14754,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public createWebhook(baseWebhookEndpoint?: BaseWebhookEndpoint, options?: AxiosRequestConfig) {
+  public createWebhook(baseWebhookEndpoint?: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .createWebhook(baseWebhookEndpoint, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13975,7 +14768,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public deleteWebhook(webhookID: number, options?: AxiosRequestConfig) {
+  public deleteWebhook(webhookID: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .deleteWebhook(webhookID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13989,7 +14782,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public getWebhook(webhookID: number, options?: AxiosRequestConfig) {
+  public getWebhook(webhookID: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .getWebhook(webhookID, options)
       .then((request) => request(this.axios, this.basePath));
@@ -14005,7 +14798,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public listWebhookEvents(webhookID: number, limit?: number, offset?: number, options?: AxiosRequestConfig) {
+  public listWebhookEvents(webhookID: number, limit?: number, offset?: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .listWebhookEvents(webhookID, limit, offset, options)
       .then((request) => request(this.axios, this.basePath));
@@ -14020,7 +14813,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public listWebhooks(limit?: number, offset?: number, options?: AxiosRequestConfig) {
+  public listWebhooks(limit?: number, offset?: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .listWebhooks(limit, offset, options)
       .then((request) => request(this.axios, this.basePath));
@@ -14035,7 +14828,7 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public updateWebhook(webhookID: number, baseWebhookEndpoint?: BaseWebhookEndpoint, options?: AxiosRequestConfig) {
+  public updateWebhook(webhookID: number, baseWebhookEndpoint?: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .updateWebhook(webhookID, baseWebhookEndpoint, options)
       .then((request) => request(this.axios, this.basePath));

@@ -16,7 +16,7 @@ on:
 
 env:
   # Go / Node / PostgreSQL version to use in the CI
-  NODE_VER: "18"
+  NODE_VER: "20"
 
 jobs:
   generate:
@@ -36,11 +36,11 @@ jobs:
               exit 1
           fi
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "${{ env.NODE_VER }}"
           registry-url: https://registry.npmjs.org/
