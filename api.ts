@@ -77,6 +77,55 @@ export interface APIKey {
   signature: string;
 }
 /**
+ * A freshly created API key with its secret.
+ * @export
+ * @interface APIKeyWithSecret
+ */
+export interface APIKeyWithSecret {
+  /**
+   * A label.
+   * @type {string}
+   * @memberof APIKeyWithSecret
+   */
+  label: string;
+  /**
+   *
+   * @type {number}
+   * @memberof APIKeyWithSecret
+   */
+  id: number;
+  /**
+   * The time the API key was created.
+   * @type {string}
+   * @memberof APIKeyWithSecret
+   */
+  createdAt: string;
+  /**
+   * The time the API key was last used.
+   * @type {string}
+   * @memberof APIKeyWithSecret
+   */
+  lastUsedAt?: string;
+  /**
+   * The ID of the user that created the API key.
+   * @type {number}
+   * @memberof APIKeyWithSecret
+   */
+  createdBy: number;
+  /**
+   * The signature of the API key.
+   * @type {string}
+   * @memberof APIKeyWithSecret
+   */
+  signature: string;
+  /**
+   * The secret key of the API key.
+   * @type {string}
+   * @memberof APIKeyWithSecret
+   */
+  key: string;
+}
+/**
  *
  * @export
  * @interface AcceptInvite200Response
@@ -1599,10 +1648,10 @@ export interface CreateApiKey200Response {
   message: string;
   /**
    *
-   * @type {APIKey}
+   * @type {APIKeyWithSecret}
    * @memberof CreateApiKey200Response
    */
-  result: APIKey;
+  result: APIKeyWithSecret;
 }
 /**
  *
@@ -2200,6 +2249,31 @@ export interface GasParams {
    * @memberof GasParams
    */
   gas?: number;
+}
+/**
+ *
+ * @export
+ * @interface GetApiKey200Response
+ */
+export interface GetApiKey200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof GetApiKey200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof GetApiKey200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {APIKey}
+   * @memberof GetApiKey200Response
+   */
+  result: APIKey;
 }
 /**
  *
@@ -6037,7 +6111,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
     async getApiKey(
       apiKeyID: number,
       options?: RawAxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getApiKey(apiKeyID, options);
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
       const localVarOperationServerBasePath =
@@ -6570,7 +6644,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getApiKey(apiKeyID: number, options?: any): AxiosPromise<CreateApiKey200Response> {
+    getApiKey(apiKeyID: number, options?: any): AxiosPromise<GetApiKey200Response> {
       return localVarFp.getApiKey(apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6878,7 +6952,7 @@ export interface AdminApiInterface {
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<CreateApiKey200Response>;
+  getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKey200Response>;
 
   /**
    * Invites a new user.
