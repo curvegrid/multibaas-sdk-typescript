@@ -1046,6 +1046,12 @@ export interface ContractABI {
  */
 export interface ContractABIEvent {
   /**
+   * The keccak256 hash as a hex string of 256 bits.
+   * @type {string}
+   * @memberof ContractABIEvent
+   */
+  id: string;
+  /**
    *
    * @type {string}
    * @memberof ContractABIEvent
@@ -1107,6 +1113,12 @@ export interface ContractABIEventArgument {
  * @interface ContractABIMethod
  */
 export interface ContractABIMethod {
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof ContractABIMethod
+   */
+  id: string;
   /**
    * Name of the function.
    * @type {string}
@@ -1174,6 +1186,12 @@ export interface ContractABIMethod {
  * @interface ContractABIMethod1
  */
 export interface ContractABIMethod1 {
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof ContractABIMethod1
+   */
+  id: string;
   /**
    * Name of the function.
    * @type {string}
@@ -1508,6 +1526,12 @@ export interface ContractOverview {
    * @memberof ContractOverview
    */
   isFavorite?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof ContractOverview
+   */
+  deployable: boolean;
   /**
    * List of contract instances.
    * @type {Array<ContractInstance>}
