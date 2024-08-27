@@ -40,7 +40,7 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
  */
 export interface APIKey {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof APIKey
    */
@@ -83,7 +83,7 @@ export interface APIKey {
  */
 export interface APIKeyWithSecret {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof APIKeyWithSecret
    */
@@ -201,7 +201,7 @@ export interface AddKey {
  */
 export interface Address {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof Address
    */
@@ -262,7 +262,7 @@ export interface Address {
  */
 export interface AddressLabel {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof AddressLabel
    */
@@ -330,7 +330,7 @@ export interface AuditLog {
  */
 export interface AzureAccount {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof AzureAccount
    */
@@ -447,7 +447,7 @@ export interface AzureWallet {
  */
 export interface BaseAPIKey {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof BaseAPIKey
    */
@@ -460,7 +460,7 @@ export interface BaseAPIKey {
  */
 export interface BaseAzureAccount {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof BaseAzureAccount
    */
@@ -503,7 +503,7 @@ export interface BaseAzureAccount {
  */
 export interface BaseContract {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof BaseContract
    */
@@ -694,7 +694,7 @@ export interface BaseWebhookEndpoint {
    */
   url: string;
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof BaseWebhookEndpoint
    */
@@ -936,7 +936,7 @@ export interface ChainStatus {
  */
 export interface Contract {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof Contract
    */
@@ -1476,7 +1476,7 @@ export interface ContractInformation {
    */
   address: string;
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof ContractInformation
    */
@@ -1488,7 +1488,7 @@ export interface ContractInformation {
    */
   name: string;
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof ContractInformation
    */
@@ -1520,7 +1520,7 @@ export interface ContractInstance {
  */
 export interface ContractMetadata {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof ContractMetadata
    */
@@ -1595,7 +1595,7 @@ export interface ContractMethodOptions {
  */
 export interface ContractOverview {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof ContractOverview
    */
@@ -1776,7 +1776,7 @@ export interface CreateApiKey200Response {
  */
 export interface CreateApiKeyRequest {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof CreateApiKeyRequest
    */
@@ -1919,7 +1919,7 @@ export interface DeployContractTransaction {
    */
   deployAt?: string;
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof DeployContractTransaction
    */
@@ -2804,7 +2804,7 @@ export interface Invite {
  */
 export interface LinkAddressContractRequest {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof LinkAddressContractRequest
    */
@@ -2929,7 +2929,7 @@ export interface ListContractVersions200Response {
  */
 export interface ListContractVersions200ResponseAllOfResult {
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof ListContractVersions200ResponseAllOfResult
    */
@@ -4289,7 +4289,7 @@ export interface WebhookEndpoint {
    */
   url: string;
   /**
-   * A label.
+   * An alias to easily identify and reference the entity in subsequent requests.
    * @type {string}
    * @memberof WebhookEndpoint
    */
@@ -4714,7 +4714,11 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteAddress(chain: ChainName, addressOrLabel: string, options?: any): AxiosPromise<BaseResponse> {
+    deleteAddress(
+      chain: ChainName,
+      addressOrLabel: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp.deleteAddress(chain, addressOrLabel, options).then((request) => request(axios, basePath));
     },
     /**
@@ -4730,7 +4734,7 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
       chain: ChainName,
       addressOrLabel: string,
       include?: Array<GetAddressIncludeEnum>,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<SetAddress201Response> {
       return localVarFp.getAddress(chain, addressOrLabel, include, options).then((request) => request(axios, basePath));
     },
@@ -4741,7 +4745,7 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listAddresses(chain: ChainName, options?: any): AxiosPromise<ListAddresses200Response> {
+    listAddresses(chain: ChainName, options?: RawAxiosRequestConfig): AxiosPromise<ListAddresses200Response> {
       return localVarFp.listAddresses(chain, options).then((request) => request(axios, basePath));
     },
     /**
@@ -4752,7 +4756,11 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    setAddress(chain: ChainName, addressLabel?: AddressLabel, options?: any): AxiosPromise<SetAddress201Response> {
+    setAddress(
+      chain: ChainName,
+      addressLabel?: AddressLabel,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<SetAddress201Response> {
       return localVarFp.setAddress(chain, addressLabel, options).then((request) => request(axios, basePath));
     }
   };
@@ -6823,7 +6831,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
     acceptInvite(
       inviteID: string,
       acceptInviteRequest?: AcceptInviteRequest,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<AcceptInvite200Response> {
       return localVarFp
         .acceptInvite(inviteID, acceptInviteRequest, options)
@@ -6836,7 +6844,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: any): AxiosPromise<BaseResponse> {
+    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addCorsOrigin(cORSOrigin, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6847,7 +6855,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addGroupApiKey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+    addGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addGroupApiKey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6858,7 +6866,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addGroupRole(groupID: number, roleShortName: string, options?: any): AxiosPromise<BaseResponse> {
+    addGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addGroupRole(groupID, roleShortName, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6869,7 +6877,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addGroupUser(groupID: number, userID: number, options?: any): AxiosPromise<BaseResponse> {
+    addGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6879,7 +6887,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    checkInvite(inviteID: string, options?: any): AxiosPromise<BaseResponse> {
+    checkInvite(inviteID: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.checkInvite(inviteID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6889,7 +6897,10 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createApiKey(createApiKeyRequest?: CreateApiKeyRequest, options?: any): AxiosPromise<CreateApiKey200Response> {
+    createApiKey(
+      createApiKeyRequest?: CreateApiKeyRequest,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<CreateApiKey200Response> {
       return localVarFp.createApiKey(createApiKeyRequest, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6899,7 +6910,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteApiKey(apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+    deleteApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.deleteApiKey(apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6909,7 +6920,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteUser(userID: number, options?: any): AxiosPromise<BaseResponse> {
+    deleteUser(userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.deleteUser(userID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6919,7 +6930,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getApiKey(apiKeyID: number, options?: any): AxiosPromise<GetApiKey200Response> {
+    getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKey200Response> {
       return localVarFp.getApiKey(apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6929,7 +6940,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    inviteUser(invite?: Invite, options?: any): AxiosPromise<BaseResponse> {
+    inviteUser(invite?: Invite, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.inviteUser(invite, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6939,7 +6950,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listApiKeys(all?: boolean, options?: any): AxiosPromise<ListApiKeys200Response> {
+    listApiKeys(all?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ListApiKeys200Response> {
       return localVarFp.listApiKeys(all, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6948,7 +6959,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listAuditLogs(options?: any): AxiosPromise<ListAuditLogs200Response> {
+    listAuditLogs(options?: RawAxiosRequestConfig): AxiosPromise<ListAuditLogs200Response> {
       return localVarFp.listAuditLogs(options).then((request) => request(axios, basePath));
     },
     /**
@@ -6957,7 +6968,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listCorsOrigins(options?: any): AxiosPromise<ListCorsOrigins200Response> {
+    listCorsOrigins(options?: RawAxiosRequestConfig): AxiosPromise<ListCorsOrigins200Response> {
       return localVarFp.listCorsOrigins(options).then((request) => request(axios, basePath));
     },
     /**
@@ -6973,7 +6984,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       userID?: number,
       apiKeyID?: number,
       assignable?: boolean,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<ListGroups200Response> {
       return localVarFp.listGroups(userID, apiKeyID, assignable, options).then((request) => request(axios, basePath));
     },
@@ -6984,7 +6995,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listUserSigners(userID: number, options?: any): AxiosPromise<ListUserSigners200Response> {
+    listUserSigners(userID: number, options?: RawAxiosRequestConfig): AxiosPromise<ListUserSigners200Response> {
       return localVarFp.listUserSigners(userID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6994,7 +7005,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listUsers(groupID?: number, options?: any): AxiosPromise<ListUsers200Response> {
+    listUsers(groupID?: number, options?: RawAxiosRequestConfig): AxiosPromise<ListUsers200Response> {
       return localVarFp.listUsers(groupID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -7004,7 +7015,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeCorsOrigin(originID: number, options?: any): AxiosPromise<BaseResponse> {
+    removeCorsOrigin(originID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.removeCorsOrigin(originID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -7015,7 +7026,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeGroupApiKey(groupID: number, apiKeyID: number, options?: any): AxiosPromise<BaseResponse> {
+    removeGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.removeGroupApiKey(groupID, apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -7026,7 +7037,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeGroupRole(groupID: number, roleShortName: string, options?: any): AxiosPromise<BaseResponse> {
+    removeGroupRole(
+      groupID: number,
+      roleShortName: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp.removeGroupRole(groupID, roleShortName, options).then((request) => request(axios, basePath));
     },
     /**
@@ -7037,7 +7052,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeGroupUser(groupID: number, userID: number, options?: any): AxiosPromise<BaseResponse> {
+    removeGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.removeGroupUser(groupID, userID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -7048,7 +7063,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeUserSignerCloudWallet(userID: number, walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+    removeUserSignerCloudWallet(
+      userID: number,
+      walletAddress: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp
         .removeUserSignerCloudWallet(userID, walletAddress, options)
         .then((request) => request(axios, basePath));
@@ -7061,7 +7080,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeUserSignerSafeAccount(userID: number, walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+    removeUserSignerSafeAccount(
+      userID: number,
+      walletAddress: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp
         .removeUserSignerSafeAccount(userID, walletAddress, options)
         .then((request) => request(axios, basePath));
@@ -7074,7 +7097,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeUserSignerWeb3Wallet(userID: number, walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+    removeUserSignerWeb3Wallet(
+      userID: number,
+      walletAddress: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp
         .removeUserSignerWeb3Wallet(userID, walletAddress, options)
         .then((request) => request(axios, basePath));
@@ -7087,7 +7114,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    setUserSignerCloudWallet(userID: number, walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+    setUserSignerCloudWallet(
+      userID: number,
+      walletAddress: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp
         .setUserSignerCloudWallet(userID, walletAddress, options)
         .then((request) => request(axios, basePath));
@@ -7105,7 +7136,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       userID: number,
       walletAddress: string,
       signerLabel?: SignerLabel,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
         .setUserSignerSafeAccount(userID, walletAddress, signerLabel, options)
@@ -7124,7 +7155,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       userID: number,
       walletAddress: string,
       signerLabel?: SignerLabel,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
         .setUserSignerWeb3Wallet(userID, walletAddress, signerLabel, options)
@@ -7138,7 +7169,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: any): AxiosPromise<BaseResponse> {
+    updateApiKey(
+      apiKeyID: number,
+      baseAPIKey?: BaseAPIKey,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp.updateApiKey(apiKeyID, baseAPIKey, options).then((request) => request(axios, basePath));
     }
   };
@@ -8381,7 +8416,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getBlock(chain: ChainName, block: string, options?: any): AxiosPromise<GetBlock200Response> {
+    getBlock(chain: ChainName, block: string, options?: RawAxiosRequestConfig): AxiosPromise<GetBlock200Response> {
       return localVarFp.getBlock(chain, block, options).then((request) => request(axios, basePath));
     },
     /**
@@ -8391,7 +8426,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getChainStatus(chain: ChainName, options?: any): AxiosPromise<GetChainStatus200Response> {
+    getChainStatus(chain: ChainName, options?: RawAxiosRequestConfig): AxiosPromise<GetChainStatus200Response> {
       return localVarFp.getChainStatus(chain, options).then((request) => request(axios, basePath));
     },
     /**
@@ -8407,7 +8442,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
       chain: ChainName,
       hash: string,
       include?: GetTransactionIncludeEnum,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<GetTransaction200Response> {
       return localVarFp.getTransaction(chain, hash, include, options).then((request) => request(axios, basePath));
     },
@@ -8424,7 +8459,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
       chain: ChainName,
       hash: string,
       include?: GetTransactionReceiptIncludeEnum,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<GetTransactionReceipt200Response> {
       return localVarFp
         .getTransactionReceipt(chain, hash, include, options)
@@ -8441,7 +8476,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
     submitSignedTransaction(
       chain: ChainName,
       signedTransactionSubmission?: SignedTransactionSubmission,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
         .submitSignedTransaction(chain, signedTransactionSubmission, options)
@@ -8458,7 +8493,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
     transferEth(
       chain: ChainName,
       postMethodArgs?: PostMethodArgs,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp.transferEth(chain, postMethodArgs, options).then((request) => request(axios, basePath));
     }
@@ -10159,7 +10194,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       contract: string,
       method: string,
       postMethodArgs?: PostMethodArgs,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<CallContractFunction200Response> {
       return localVarFp
         .callContractFunction(chain, addressOrLabel, contract, method, postMethodArgs, options)
@@ -10173,7 +10208,11 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createContract(contract: string, baseContract?: BaseContract, options?: any): AxiosPromise<GetContract200Response> {
+    createContract(
+      contract: string,
+      baseContract?: BaseContract,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<GetContract200Response> {
       return localVarFp.createContract(contract, baseContract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10183,7 +10222,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createContracts(baseContract?: Array<BaseContract>, options?: any): AxiosPromise<BaseResponse> {
+    createContracts(baseContract?: Array<BaseContract>, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.createContracts(baseContract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10193,7 +10232,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteContract(contract: string, options?: any): AxiosPromise<BaseResponse> {
+    deleteContract(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.deleteContract(contract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10204,7 +10243,11 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteContractVersion(contract: string, version: string, options?: any): AxiosPromise<BaseResponse> {
+    deleteContractVersion(
+      contract: string,
+      version: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp.deleteContractVersion(contract, version, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10218,7 +10261,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     deployContract(
       contract: string,
       postMethodArgs?: PostMethodArgs,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<DeployContract200Response> {
       return localVarFp.deployContract(contract, postMethodArgs, options).then((request) => request(axios, basePath));
     },
@@ -10235,7 +10278,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       contract: string,
       version: string,
       postMethodArgs?: PostMethodArgs,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<DeployContract200Response> {
       return localVarFp
         .deployContractVersion(contract, version, postMethodArgs, options)
@@ -10248,7 +10291,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getContract(contract: string, options?: any): AxiosPromise<GetContract200Response> {
+    getContract(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<GetContract200Response> {
       return localVarFp.getContract(contract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10259,7 +10302,11 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getContractVersion(contract: string, version: string, options?: any): AxiosPromise<GetContract200Response> {
+    getContractVersion(
+      contract: string,
+      version: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<GetContract200Response> {
       return localVarFp.getContractVersion(contract, version, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10269,7 +10316,10 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getContractVersions(contract: string, options?: any): AxiosPromise<GetContractVersions200Response> {
+    getContractVersions(
+      contract: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<GetContractVersions200Response> {
       return localVarFp.getContractVersions(contract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10285,7 +10335,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       chain: ChainName,
       addressOrLabel: string,
       contract: string,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<GetEventMonitorStatus200Response> {
       return localVarFp
         .getEventMonitorStatus(chain, addressOrLabel, contract, options)
@@ -10304,7 +10354,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       contract: string,
       version: string,
       event: string,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<GetEventTypeConversions200Response> {
       return localVarFp
         .getEventTypeConversions(contract, version, event, options)
@@ -10323,7 +10373,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       contract: string,
       version: string,
       method: string,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<GetFunctionTypeConversions200Response> {
       return localVarFp
         .getFunctionTypeConversions(contract, version, method, options)
@@ -10342,7 +10392,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       chain: ChainName,
       addressOrLabel: string,
       linkAddressContractRequest?: LinkAddressContractRequest,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<SetAddress201Response> {
       return localVarFp
         .linkAddressContract(chain, addressOrLabel, linkAddressContractRequest, options)
@@ -10355,7 +10405,10 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listContractVersions(contract: string, options?: any): AxiosPromise<ListContractVersions200Response> {
+    listContractVersions(
+      contract: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<ListContractVersions200Response> {
       return localVarFp.listContractVersions(contract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10364,7 +10417,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listContracts(options?: any): AxiosPromise<ListContracts200Response> {
+    listContracts(options?: RawAxiosRequestConfig): AxiosPromise<ListContracts200Response> {
       return localVarFp.listContracts(options).then((request) => request(axios, basePath));
     },
     /**
@@ -10382,7 +10435,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       version: string,
       event: string,
       contractEventOptions?: ContractEventOptions,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
         .setEventTypeConversions(contract, version, event, contractEventOptions, options)
@@ -10403,7 +10456,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       version: string,
       method: string,
       contractMethodOptions?: ContractMethodOptions,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
         .setFunctionTypeConversions(contract, version, method, contractMethodOptions, options)
@@ -10422,7 +10475,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       chain: ChainName,
       addressOrLabel: string,
       contract: string,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<SetAddress201Response> {
       return localVarFp
         .unlinkAddressContract(chain, addressOrLabel, contract, options)
@@ -11581,7 +11634,10 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    countEventQueryRecords(eventQuery: string, options?: any): AxiosPromise<CountEventQueryRecords200Response> {
+    countEventQueryRecords(
+      eventQuery: string,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<CountEventQueryRecords200Response> {
       return localVarFp.countEventQueryRecords(eventQuery, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11591,7 +11647,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteEventQuery(eventQuery: string, options?: any): AxiosPromise<BaseResponse> {
+    deleteEventQuery(eventQuery: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.deleteEventQuery(eventQuery, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11607,7 +11663,7 @@ export const EventQueriesApiFactory = function (
       offset?: number,
       limit?: number,
       eventQuery?: EventQuery,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<ExecuteArbitraryEventQuery200Response> {
       return localVarFp
         .executeArbitraryEventQuery(offset, limit, eventQuery, options)
@@ -11626,7 +11682,7 @@ export const EventQueriesApiFactory = function (
       eventQuery: string,
       offset?: number,
       limit?: number,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<ExecuteArbitraryEventQuery200Response> {
       return localVarFp
         .executeEventQuery(eventQuery, offset, limit, options)
@@ -11639,7 +11695,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getEventQuery(eventQuery: string, options?: any): AxiosPromise<GetEventQuery200Response> {
+    getEventQuery(eventQuery: string, options?: RawAxiosRequestConfig): AxiosPromise<GetEventQuery200Response> {
       return localVarFp.getEventQuery(eventQuery, options).then((request) => request(axios, basePath));
     },
     /**
@@ -11648,7 +11704,7 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listEventQueries(options?: any): AxiosPromise<ListEventQueries200Response> {
+    listEventQueries(options?: RawAxiosRequestConfig): AxiosPromise<ListEventQueries200Response> {
       return localVarFp.listEventQueries(options).then((request) => request(axios, basePath));
     },
     /**
@@ -11659,7 +11715,11 @@ export const EventQueriesApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: any): AxiosPromise<BaseResponse> {
+    setEventQuery(
+      eventQuery: string,
+      eventQuery2?: EventQuery,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<BaseResponse> {
       return localVarFp.setEventQuery(eventQuery, eventQuery2, options).then((request) => request(axios, basePath));
     }
   };
@@ -12269,7 +12329,7 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<GetEventCount200Response> {
       return localVarFp
         .getEventCount(
@@ -12320,7 +12380,7 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
       eventSignature?: string,
       limit?: number,
       offset?: number,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<ListEvents200Response> {
       return localVarFp
         .listEvents(
@@ -13288,7 +13348,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: any): AxiosPromise<BaseResponse> {
+    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addHsmConfig(baseAzureAccount, options).then((request) => request(axios, basePath));
     },
     /**
@@ -13298,7 +13358,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmKey(addKey?: AddKey, options?: any): AxiosPromise<BaseResponse> {
+    addHsmKey(addKey?: AddKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addHsmKey(addKey, options).then((request) => request(axios, basePath));
     },
     /**
@@ -13308,7 +13368,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createHsmKey(createKey?: CreateKey, options?: any): AxiosPromise<CreateHsmKey200Response> {
+    createHsmKey(createKey?: CreateKey, options?: RawAxiosRequestConfig): AxiosPromise<CreateHsmKey200Response> {
       return localVarFp.createHsmKey(createKey, options).then((request) => request(axios, basePath));
     },
     /**
@@ -13317,7 +13377,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listHsm(options?: any): AxiosPromise<ListHsm200Response> {
+    listHsm(options?: RawAxiosRequestConfig): AxiosPromise<ListHsm200Response> {
       return localVarFp.listHsm(options).then((request) => request(axios, basePath));
     },
     /**
@@ -13343,7 +13403,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
       publicAddress?: string,
       limit?: number,
       offset?: number,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<ListHsmWallets200Response> {
       return localVarFp
         .listHsmWallets(keyName, keyVersion, vaultName, baseGroupName, clientId, publicAddress, limit, offset, options)
@@ -13356,7 +13416,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeHsmConfig(clientId: string, options?: any): AxiosPromise<BaseResponse> {
+    removeHsmConfig(clientId: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.removeHsmConfig(clientId, options).then((request) => request(axios, basePath));
     },
     /**
@@ -13366,7 +13426,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeHsmKey(walletAddress: string, options?: any): AxiosPromise<BaseResponse> {
+    removeHsmKey(walletAddress: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.removeHsmKey(walletAddress, options).then((request) => request(axios, basePath));
     },
     /**
@@ -13382,7 +13442,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
       chain: ChainName,
       walletAddress: string,
       setNonceRequest?: SetNonceRequest,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
         .setLocalNonce(chain, walletAddress, setNonceRequest, options)
@@ -13399,7 +13459,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
     signAndSubmitTransaction(
       chain: ChainName,
       baseTransactionToSign?: BaseTransactionToSign,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp
         .signAndSubmitTransaction(chain, baseTransactionToSign, options)
@@ -13413,7 +13473,11 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signData(chain: ChainName, hSMSignRequest?: HSMSignRequest, options?: any): AxiosPromise<SignData200Response> {
+    signData(
+      chain: ChainName,
+      hSMSignRequest?: HSMSignRequest,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<SignData200Response> {
       return localVarFp.signData(chain, hSMSignRequest, options).then((request) => request(axios, basePath));
     }
   };
@@ -14150,7 +14214,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
       walletAddress: string,
       nonce: number,
       gasParams?: GasParams,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp
         .cancelTransaction(chain, walletAddress, nonce, gasParams, options)
@@ -14167,7 +14231,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
     countWalletTransactions(
       chain: ChainName,
       walletAddress: string,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<CountWalletTransactions200Response> {
       return localVarFp
         .countWalletTransactions(chain, walletAddress, options)
@@ -14194,7 +14258,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
       status?: TransactionStatus,
       limit?: number,
       offset?: number,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<ListWalletTransactions200Response> {
       return localVarFp
         .listWalletTransactions(chain, walletAddress, hash, nonce, status, limit, offset, options)
@@ -14215,7 +14279,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
       walletAddress: string,
       nonce: number,
       gasParams?: GasParams,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp
         .speedUpTransaction(chain, walletAddress, nonce, gasParams, options)
@@ -14967,7 +15031,10 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    countWebhookEvents(webhookID: number, options?: any): AxiosPromise<CountWebhookEvents200Response> {
+    countWebhookEvents(
+      webhookID: number,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<CountWebhookEvents200Response> {
       return localVarFp.countWebhookEvents(webhookID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -14976,7 +15043,7 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    countWebhooks(options?: any): AxiosPromise<CountWebhooks200Response> {
+    countWebhooks(options?: RawAxiosRequestConfig): AxiosPromise<CountWebhooks200Response> {
       return localVarFp.countWebhooks(options).then((request) => request(axios, basePath));
     },
     /**
@@ -14986,7 +15053,10 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createWebhook(baseWebhookEndpoint?: BaseWebhookEndpoint, options?: any): AxiosPromise<CreateWebhook200Response> {
+    createWebhook(
+      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<CreateWebhook200Response> {
       return localVarFp.createWebhook(baseWebhookEndpoint, options).then((request) => request(axios, basePath));
     },
     /**
@@ -14996,7 +15066,7 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteWebhook(webhookID: number, options?: any): AxiosPromise<BaseResponse> {
+    deleteWebhook(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.deleteWebhook(webhookID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -15006,7 +15076,7 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getWebhook(webhookID: number, options?: any): AxiosPromise<CreateWebhook200Response> {
+    getWebhook(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<CreateWebhook200Response> {
       return localVarFp.getWebhook(webhookID, options).then((request) => request(axios, basePath));
     },
     /**
@@ -15022,7 +15092,7 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
       webhookID: number,
       limit?: number,
       offset?: number,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<ListWebhookEvents200Response> {
       return localVarFp
         .listWebhookEvents(webhookID, limit, offset, options)
@@ -15036,7 +15106,11 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listWebhooks(limit?: number, offset?: number, options?: any): AxiosPromise<ListWebhooks200Response> {
+    listWebhooks(
+      limit?: number,
+      offset?: number,
+      options?: RawAxiosRequestConfig
+    ): AxiosPromise<ListWebhooks200Response> {
       return localVarFp.listWebhooks(limit, offset, options).then((request) => request(axios, basePath));
     },
     /**
@@ -15050,7 +15124,7 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
     updateWebhook(
       webhookID: number,
       baseWebhookEndpoint?: BaseWebhookEndpoint,
-      options?: any
+      options?: RawAxiosRequestConfig
     ): AxiosPromise<CreateWebhook200Response> {
       return localVarFp
         .updateWebhook(webhookID, baseWebhookEndpoint, options)
