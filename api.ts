@@ -254,6 +254,12 @@ export interface Address {
    * @memberof Address
    */
   contracts: Array<ContractMetadata>;
+  /**
+   *
+   * @type {Array<ContractLookup>}
+   * @memberof Address
+   */
+  contractLookup?: Array<ContractLookup>;
 }
 /**
  * An address and it\'s label.
@@ -1514,6 +1520,73 @@ export interface ContractInstance {
   address: string;
 }
 /**
+ * The contract lookup item.
+ * @export
+ * @interface ContractLookup
+ */
+export interface ContractLookup {
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  address: string;
+  /**
+   * The name of the contract.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  name?: string;
+  /**
+   * The contract ABI JSON string.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  abi: string;
+  /**
+   * The smart-contract bytecode.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  bytecode: string;
+  /**
+   * The contract\'s source code.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  source?: string;
+  /**
+   * The user documentation JSON string.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  userdoc?: string;
+  /**
+   * The developer documentation JSON string.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  devdoc?: string;
+  /**
+   * Indicates whether the contract has been verified.
+   * @type {boolean}
+   * @memberof ContractLookup
+   */
+  verified: boolean;
+  /**
+   * The name of the service that provided the contract verification.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  verifiedSource?: string;
+  /**
+   * The URL to the contract\'s verification details on the verification service.
+   * @type {string}
+   * @memberof ContractLookup
+   */
+  verifiedLink?: string;
+}
+/**
  *
  * @export
  * @interface ContractMetadata
@@ -2193,8 +2266,7 @@ export const EventQueryFieldAggregatorEnum = {
   Last: 'last',
   First: 'first',
   Min: 'min',
-  Max: 'max',
-  Null: 'null'
+  Max: 'max'
 } as const;
 
 export type EventQueryFieldAggregatorEnum =
@@ -4457,7 +4529,7 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
      * @summary Get address
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address. - &#x60;contractLookup&#x60; to get the contract(s) details for this address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4545,17 +4617,19 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
      * Associates an address with a label.
      * @summary Create or update address
      * @param {ChainName} chain The blockchain chain label.
-     * @param {AddressLabel} [addressLabel]
+     * @param {AddressLabel} addressLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setAddress: async (
       chain: ChainName,
-      addressLabel?: AddressLabel,
+      addressLabel: AddressLabel,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('setAddress', 'chain', chain);
+      // verify required parameter 'addressLabel' is not null or undefined
+      assertParamExists('setAddress', 'addressLabel', addressLabel);
       const localVarPath = `/chains/{chain}/addresses`.replace(`{${'chain'}}`, encodeURIComponent(String(chain)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4626,7 +4700,7 @@ export const AddressesApiFp = function (configuration?: Configuration) {
      * @summary Get address
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address. - &#x60;contractLookup&#x60; to get the contract(s) details for this address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4675,13 +4749,13 @@ export const AddressesApiFp = function (configuration?: Configuration) {
      * Associates an address with a label.
      * @summary Create or update address
      * @param {ChainName} chain The blockchain chain label.
-     * @param {AddressLabel} [addressLabel]
+     * @param {AddressLabel} addressLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async setAddress(
       chain: ChainName,
-      addressLabel?: AddressLabel,
+      addressLabel: AddressLabel,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetAddress201Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setAddress(chain, addressLabel, options);
@@ -4726,7 +4800,7 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * @summary Get address
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+     * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address. - &#x60;contractLookup&#x60; to get the contract(s) details for this address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4752,13 +4826,13 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
      * Associates an address with a label.
      * @summary Create or update address
      * @param {ChainName} chain The blockchain chain label.
-     * @param {AddressLabel} [addressLabel]
+     * @param {AddressLabel} addressLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setAddress(
       chain: ChainName,
-      addressLabel?: AddressLabel,
+      addressLabel: AddressLabel,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<SetAddress201Response> {
       return localVarFp.setAddress(chain, addressLabel, options).then((request) => request(axios, basePath));
@@ -4788,7 +4862,7 @@ export interface AddressesApiInterface {
    * @summary Get address
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} addressOrLabel An address or the label of an address.
-   * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+   * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address. - &#x60;contractLookup&#x60; to get the contract(s) details for this address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AddressesApiInterface
@@ -4814,14 +4888,14 @@ export interface AddressesApiInterface {
    * Associates an address with a label.
    * @summary Create or update address
    * @param {ChainName} chain The blockchain chain label.
-   * @param {AddressLabel} [addressLabel]
+   * @param {AddressLabel} addressLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AddressesApiInterface
    */
   setAddress(
     chain: ChainName,
-    addressLabel?: AddressLabel,
+    addressLabel: AddressLabel,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<SetAddress201Response>;
 }
@@ -4853,7 +4927,7 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @summary Get address
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} addressOrLabel An address or the label of an address.
-   * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address.
+   * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address. - &#x60;contractLookup&#x60; to get the contract(s) details for this address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AddressesApi
@@ -4887,12 +4961,12 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * Associates an address with a label.
    * @summary Create or update address
    * @param {ChainName} chain The blockchain chain label.
-   * @param {AddressLabel} [addressLabel]
+   * @param {AddressLabel} addressLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AddressesApi
    */
-  public setAddress(chain: ChainName, addressLabel?: AddressLabel, options?: RawAxiosRequestConfig) {
+  public setAddress(chain: ChainName, addressLabel: AddressLabel, options?: RawAxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
       .setAddress(chain, addressLabel, options)
       .then((request) => request(this.axios, this.basePath));
@@ -4905,7 +4979,8 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
 export const GetAddressIncludeEnum = {
   Balance: 'balance',
   Code: 'code',
-  Nonce: 'nonce'
+  Nonce: 'nonce',
+  ContractLookup: 'contractLookup'
 } as const;
 export type GetAddressIncludeEnum = typeof GetAddressIncludeEnum[keyof typeof GetAddressIncludeEnum];
 
@@ -4919,17 +4994,19 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Accepts a user invite.
      * @summary Accept invite
      * @param {string} inviteID
-     * @param {AcceptInviteRequest} [acceptInviteRequest]
+     * @param {AcceptInviteRequest} acceptInviteRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     acceptInvite: async (
       inviteID: string,
-      acceptInviteRequest?: AcceptInviteRequest,
+      acceptInviteRequest: AcceptInviteRequest,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'inviteID' is not null or undefined
       assertParamExists('acceptInvite', 'inviteID', inviteID);
+      // verify required parameter 'acceptInviteRequest' is not null or undefined
+      assertParamExists('acceptInvite', 'acceptInviteRequest', acceptInviteRequest);
       const localVarPath = `/invites/{inviteID}`.replace(`{${'inviteID'}}`, encodeURIComponent(String(inviteID)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4961,11 +5038,13 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     /**
      * Adds a CORS origin.
      * @summary Add CORS origin
-     * @param {CORSOrigin} [cORSOrigin]
+     * @param {CORSOrigin} cORSOrigin
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addCorsOrigin: async (cORSOrigin?: CORSOrigin, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+    addCorsOrigin: async (cORSOrigin: CORSOrigin, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'cORSOrigin' is not null or undefined
+      assertParamExists('addCorsOrigin', 'cORSOrigin', cORSOrigin);
       const localVarPath = `/cors`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5168,14 +5247,16 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     /**
      * Creates an API key and adds it to group IDs.
      * @summary Create API key
-     * @param {CreateApiKeyRequest} [createApiKeyRequest]
+     * @param {CreateApiKeyRequest} createApiKeyRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createApiKey: async (
-      createApiKeyRequest?: CreateApiKeyRequest,
+      createApiKeyRequest: CreateApiKeyRequest,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
+      // verify required parameter 'createApiKeyRequest' is not null or undefined
+      assertParamExists('createApiKey', 'createApiKeyRequest', createApiKeyRequest);
       const localVarPath = `/api_keys`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5320,11 +5401,13 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
     /**
      * Invites a new user.
      * @summary Invite user
-     * @param {Invite} [invite]
+     * @param {Invite} invite
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    inviteUser: async (invite?: Invite, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+    inviteUser: async (invite: Invite, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'invite' is not null or undefined
+      assertParamExists('inviteUser', 'invite', invite);
       const localVarPath = `/invites`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5771,7 +5854,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Removes a cloud wallet signer from a user.
      * @summary Remove user cloud wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5817,7 +5900,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Removes a safe account signer from a user.
      * @summary Remove user safe account signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5863,7 +5946,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Removes a web3 wallet signer from a user.
      * @summary Remove user web3 wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5909,7 +5992,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Adds or updates a user\'s cloud wallet signer.
      * @summary Add or update user cloud wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5955,21 +6038,23 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Adds or updates a user\'s safe account signer.
      * @summary Add or update user safe account signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SignerLabel} [signerLabel]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SignerLabel} signerLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setUserSignerSafeAccount: async (
       userID: number,
       walletAddress: string,
-      signerLabel?: SignerLabel,
+      signerLabel: SignerLabel,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('setUserSignerSafeAccount', 'userID', userID);
       // verify required parameter 'walletAddress' is not null or undefined
       assertParamExists('setUserSignerSafeAccount', 'walletAddress', walletAddress);
+      // verify required parameter 'signerLabel' is not null or undefined
+      assertParamExists('setUserSignerSafeAccount', 'signerLabel', signerLabel);
       const localVarPath = `/users/{userID}/safeaccounts/{wallet_address}`
         .replace(`{${'userID'}}`, encodeURIComponent(String(userID)))
         .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)));
@@ -6006,21 +6091,23 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Adds or updates a user\'s web3 wallet signer.
      * @summary Add or update user web3 wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SignerLabel} [signerLabel]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SignerLabel} signerLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setUserSignerWeb3Wallet: async (
       userID: number,
       walletAddress: string,
-      signerLabel?: SignerLabel,
+      signerLabel: SignerLabel,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'userID' is not null or undefined
       assertParamExists('setUserSignerWeb3Wallet', 'userID', userID);
       // verify required parameter 'walletAddress' is not null or undefined
       assertParamExists('setUserSignerWeb3Wallet', 'walletAddress', walletAddress);
+      // verify required parameter 'signerLabel' is not null or undefined
+      assertParamExists('setUserSignerWeb3Wallet', 'signerLabel', signerLabel);
       const localVarPath = `/users/{userID}/web3wallets/{wallet_address}`
         .replace(`{${'userID'}}`, encodeURIComponent(String(userID)))
         .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)));
@@ -6057,17 +6144,19 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
      * Updates an API key.
      * @summary Update API key
      * @param {number} apiKeyID
-     * @param {BaseAPIKey} [baseAPIKey]
+     * @param {BaseAPIKey} baseAPIKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateApiKey: async (
       apiKeyID: number,
-      baseAPIKey?: BaseAPIKey,
+      baseAPIKey: BaseAPIKey,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'apiKeyID' is not null or undefined
       assertParamExists('updateApiKey', 'apiKeyID', apiKeyID);
+      // verify required parameter 'baseAPIKey' is not null or undefined
+      assertParamExists('updateApiKey', 'baseAPIKey', baseAPIKey);
       const localVarPath = `/api_keys/{apiKeyID}`.replace(`{${'apiKeyID'}}`, encodeURIComponent(String(apiKeyID)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6112,13 +6201,13 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Accepts a user invite.
      * @summary Accept invite
      * @param {string} inviteID
-     * @param {AcceptInviteRequest} [acceptInviteRequest]
+     * @param {AcceptInviteRequest} acceptInviteRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async acceptInvite(
       inviteID: string,
-      acceptInviteRequest?: AcceptInviteRequest,
+      acceptInviteRequest: AcceptInviteRequest,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AcceptInvite200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.acceptInvite(inviteID, acceptInviteRequest, options);
@@ -6136,12 +6225,12 @@ export const AdminApiFp = function (configuration?: Configuration) {
     /**
      * Adds a CORS origin.
      * @summary Add CORS origin
-     * @param {CORSOrigin} [cORSOrigin]
+     * @param {CORSOrigin} cORSOrigin
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async addCorsOrigin(
-      cORSOrigin?: CORSOrigin,
+      cORSOrigin: CORSOrigin,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addCorsOrigin(cORSOrigin, options);
@@ -6257,12 +6346,12 @@ export const AdminApiFp = function (configuration?: Configuration) {
     /**
      * Creates an API key and adds it to group IDs.
      * @summary Create API key
-     * @param {CreateApiKeyRequest} [createApiKeyRequest]
+     * @param {CreateApiKeyRequest} createApiKeyRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createApiKey(
-      createApiKeyRequest?: CreateApiKeyRequest,
+      createApiKeyRequest: CreateApiKeyRequest,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateApiKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createApiKey(createApiKeyRequest, options);
@@ -6349,12 +6438,12 @@ export const AdminApiFp = function (configuration?: Configuration) {
     /**
      * Invites a new user.
      * @summary Invite user
-     * @param {Invite} [invite]
+     * @param {Invite} invite
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async inviteUser(
-      invite?: Invite,
+      invite: Invite,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.inviteUser(invite, options);
@@ -6609,7 +6698,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Removes a cloud wallet signer from a user.
      * @summary Remove user cloud wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6638,7 +6727,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Removes a safe account signer from a user.
      * @summary Remove user safe account signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6667,7 +6756,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Removes a web3 wallet signer from a user.
      * @summary Remove user web3 wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6696,7 +6785,7 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Adds or updates a user\'s cloud wallet signer.
      * @summary Add or update user cloud wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6725,15 +6814,15 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Adds or updates a user\'s safe account signer.
      * @summary Add or update user safe account signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SignerLabel} [signerLabel]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SignerLabel} signerLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async setUserSignerSafeAccount(
       userID: number,
       walletAddress: string,
-      signerLabel?: SignerLabel,
+      signerLabel: SignerLabel,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setUserSignerSafeAccount(
@@ -6757,15 +6846,15 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Adds or updates a user\'s web3 wallet signer.
      * @summary Add or update user web3 wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SignerLabel} [signerLabel]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SignerLabel} signerLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async setUserSignerWeb3Wallet(
       userID: number,
       walletAddress: string,
-      signerLabel?: SignerLabel,
+      signerLabel: SignerLabel,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setUserSignerWeb3Wallet(
@@ -6789,13 +6878,13 @@ export const AdminApiFp = function (configuration?: Configuration) {
      * Updates an API key.
      * @summary Update API key
      * @param {number} apiKeyID
-     * @param {BaseAPIKey} [baseAPIKey]
+     * @param {BaseAPIKey} baseAPIKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async updateApiKey(
       apiKeyID: number,
-      baseAPIKey?: BaseAPIKey,
+      baseAPIKey: BaseAPIKey,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.updateApiKey(apiKeyID, baseAPIKey, options);
@@ -6824,13 +6913,13 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Accepts a user invite.
      * @summary Accept invite
      * @param {string} inviteID
-     * @param {AcceptInviteRequest} [acceptInviteRequest]
+     * @param {AcceptInviteRequest} acceptInviteRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     acceptInvite(
       inviteID: string,
-      acceptInviteRequest?: AcceptInviteRequest,
+      acceptInviteRequest: AcceptInviteRequest,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<AcceptInvite200Response> {
       return localVarFp
@@ -6840,11 +6929,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
     /**
      * Adds a CORS origin.
      * @summary Add CORS origin
-     * @param {CORSOrigin} [cORSOrigin]
+     * @param {CORSOrigin} cORSOrigin
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addCorsOrigin(cORSOrigin?: CORSOrigin, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
+    addCorsOrigin(cORSOrigin: CORSOrigin, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addCorsOrigin(cORSOrigin, options).then((request) => request(axios, basePath));
     },
     /**
@@ -6893,12 +6982,12 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
     /**
      * Creates an API key and adds it to group IDs.
      * @summary Create API key
-     * @param {CreateApiKeyRequest} [createApiKeyRequest]
+     * @param {CreateApiKeyRequest} createApiKeyRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createApiKey(
-      createApiKeyRequest?: CreateApiKeyRequest,
+      createApiKeyRequest: CreateApiKeyRequest,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<CreateApiKey200Response> {
       return localVarFp.createApiKey(createApiKeyRequest, options).then((request) => request(axios, basePath));
@@ -6936,11 +7025,11 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
     /**
      * Invites a new user.
      * @summary Invite user
-     * @param {Invite} [invite]
+     * @param {Invite} invite
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    inviteUser(invite?: Invite, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
+    inviteUser(invite: Invite, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.inviteUser(invite, options).then((request) => request(axios, basePath));
     },
     /**
@@ -7059,7 +7148,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Removes a cloud wallet signer from a user.
      * @summary Remove user cloud wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7076,7 +7165,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Removes a safe account signer from a user.
      * @summary Remove user safe account signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7093,7 +7182,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Removes a web3 wallet signer from a user.
      * @summary Remove user web3 wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7110,7 +7199,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Adds or updates a user\'s cloud wallet signer.
      * @summary Add or update user cloud wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7127,15 +7216,15 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Adds or updates a user\'s safe account signer.
      * @summary Add or update user safe account signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SignerLabel} [signerLabel]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SignerLabel} signerLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setUserSignerSafeAccount(
       userID: number,
       walletAddress: string,
-      signerLabel?: SignerLabel,
+      signerLabel: SignerLabel,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
@@ -7146,15 +7235,15 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Adds or updates a user\'s web3 wallet signer.
      * @summary Add or update user web3 wallet signer
      * @param {number} userID
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SignerLabel} [signerLabel]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SignerLabel} signerLabel
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setUserSignerWeb3Wallet(
       userID: number,
       walletAddress: string,
-      signerLabel?: SignerLabel,
+      signerLabel: SignerLabel,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
@@ -7165,13 +7254,13 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
      * Updates an API key.
      * @summary Update API key
      * @param {number} apiKeyID
-     * @param {BaseAPIKey} [baseAPIKey]
+     * @param {BaseAPIKey} baseAPIKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateApiKey(
       apiKeyID: number,
-      baseAPIKey?: BaseAPIKey,
+      baseAPIKey: BaseAPIKey,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp.updateApiKey(apiKeyID, baseAPIKey, options).then((request) => request(axios, basePath));
@@ -7189,26 +7278,26 @@ export interface AdminApiInterface {
    * Accepts a user invite.
    * @summary Accept invite
    * @param {string} inviteID
-   * @param {AcceptInviteRequest} [acceptInviteRequest]
+   * @param {AcceptInviteRequest} acceptInviteRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
   acceptInvite(
     inviteID: string,
-    acceptInviteRequest?: AcceptInviteRequest,
+    acceptInviteRequest: AcceptInviteRequest,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<AcceptInvite200Response>;
 
   /**
    * Adds a CORS origin.
    * @summary Add CORS origin
-   * @param {CORSOrigin} [cORSOrigin]
+   * @param {CORSOrigin} cORSOrigin
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  addCorsOrigin(cORSOrigin?: CORSOrigin, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addCorsOrigin(cORSOrigin: CORSOrigin, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds an API key to a group.
@@ -7256,13 +7345,13 @@ export interface AdminApiInterface {
   /**
    * Creates an API key and adds it to group IDs.
    * @summary Create API key
-   * @param {CreateApiKeyRequest} [createApiKeyRequest]
+   * @param {CreateApiKeyRequest} createApiKeyRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
   createApiKey(
-    createApiKeyRequest?: CreateApiKeyRequest,
+    createApiKeyRequest: CreateApiKeyRequest,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<CreateApiKey200Response>;
 
@@ -7299,12 +7388,12 @@ export interface AdminApiInterface {
   /**
    * Invites a new user.
    * @summary Invite user
-   * @param {Invite} [invite]
+   * @param {Invite} invite
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  inviteUser(invite?: Invite, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
+  inviteUser(invite: Invite, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Returns all the API keys.
@@ -7418,7 +7507,7 @@ export interface AdminApiInterface {
    * Removes a cloud wallet signer from a user.
    * @summary Remove user cloud wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
@@ -7433,7 +7522,7 @@ export interface AdminApiInterface {
    * Removes a safe account signer from a user.
    * @summary Remove user safe account signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
@@ -7448,7 +7537,7 @@ export interface AdminApiInterface {
    * Removes a web3 wallet signer from a user.
    * @summary Remove user web3 wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
@@ -7463,7 +7552,7 @@ export interface AdminApiInterface {
    * Adds or updates a user\'s cloud wallet signer.
    * @summary Add or update user cloud wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
@@ -7478,8 +7567,8 @@ export interface AdminApiInterface {
    * Adds or updates a user\'s safe account signer.
    * @summary Add or update user safe account signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {SignerLabel} [signerLabel]
+   * @param {string} walletAddress An Ethereum address.
+   * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
@@ -7487,7 +7576,7 @@ export interface AdminApiInterface {
   setUserSignerSafeAccount(
     userID: number,
     walletAddress: string,
-    signerLabel?: SignerLabel,
+    signerLabel: SignerLabel,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
@@ -7495,8 +7584,8 @@ export interface AdminApiInterface {
    * Adds or updates a user\'s web3 wallet signer.
    * @summary Add or update user web3 wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {SignerLabel} [signerLabel]
+   * @param {string} walletAddress An Ethereum address.
+   * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
@@ -7504,7 +7593,7 @@ export interface AdminApiInterface {
   setUserSignerWeb3Wallet(
     userID: number,
     walletAddress: string,
-    signerLabel?: SignerLabel,
+    signerLabel: SignerLabel,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
@@ -7512,12 +7601,12 @@ export interface AdminApiInterface {
    * Updates an API key.
    * @summary Update API key
    * @param {number} apiKeyID
-   * @param {BaseAPIKey} [baseAPIKey]
+   * @param {BaseAPIKey} baseAPIKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApiInterface
    */
-  updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
+  updateApiKey(apiKeyID: number, baseAPIKey: BaseAPIKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 }
 
 /**
@@ -7531,12 +7620,12 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Accepts a user invite.
    * @summary Accept invite
    * @param {string} inviteID
-   * @param {AcceptInviteRequest} [acceptInviteRequest]
+   * @param {AcceptInviteRequest} acceptInviteRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public acceptInvite(inviteID: string, acceptInviteRequest?: AcceptInviteRequest, options?: RawAxiosRequestConfig) {
+  public acceptInvite(inviteID: string, acceptInviteRequest: AcceptInviteRequest, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .acceptInvite(inviteID, acceptInviteRequest, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7545,12 +7634,12 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   /**
    * Adds a CORS origin.
    * @summary Add CORS origin
-   * @param {CORSOrigin} [cORSOrigin]
+   * @param {CORSOrigin} cORSOrigin
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public addCorsOrigin(cORSOrigin?: CORSOrigin, options?: RawAxiosRequestConfig) {
+  public addCorsOrigin(cORSOrigin: CORSOrigin, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .addCorsOrigin(cORSOrigin, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7618,12 +7707,12 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   /**
    * Creates an API key and adds it to group IDs.
    * @summary Create API key
-   * @param {CreateApiKeyRequest} [createApiKeyRequest]
+   * @param {CreateApiKeyRequest} createApiKeyRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public createApiKey(createApiKeyRequest?: CreateApiKeyRequest, options?: RawAxiosRequestConfig) {
+  public createApiKey(createApiKeyRequest: CreateApiKeyRequest, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .createApiKey(createApiKeyRequest, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7674,12 +7763,12 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   /**
    * Invites a new user.
    * @summary Invite user
-   * @param {Invite} [invite]
+   * @param {Invite} invite
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public inviteUser(invite?: Invite, options?: RawAxiosRequestConfig) {
+  public inviteUser(invite: Invite, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .inviteUser(invite, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7832,7 +7921,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Removes a cloud wallet signer from a user.
    * @summary Remove user cloud wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
@@ -7847,7 +7936,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Removes a safe account signer from a user.
    * @summary Remove user safe account signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
@@ -7862,7 +7951,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Removes a web3 wallet signer from a user.
    * @summary Remove user web3 wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
@@ -7877,7 +7966,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Adds or updates a user\'s cloud wallet signer.
    * @summary Add or update user cloud wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
@@ -7892,8 +7981,8 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Adds or updates a user\'s safe account signer.
    * @summary Add or update user safe account signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {SignerLabel} [signerLabel]
+   * @param {string} walletAddress An Ethereum address.
+   * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
@@ -7901,7 +7990,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public setUserSignerSafeAccount(
     userID: number,
     walletAddress: string,
-    signerLabel?: SignerLabel,
+    signerLabel: SignerLabel,
     options?: RawAxiosRequestConfig
   ) {
     return AdminApiFp(this.configuration)
@@ -7913,8 +8002,8 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Adds or updates a user\'s web3 wallet signer.
    * @summary Add or update user web3 wallet signer
    * @param {number} userID
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {SignerLabel} [signerLabel]
+   * @param {string} walletAddress An Ethereum address.
+   * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
@@ -7922,7 +8011,7 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public setUserSignerWeb3Wallet(
     userID: number,
     walletAddress: string,
-    signerLabel?: SignerLabel,
+    signerLabel: SignerLabel,
     options?: RawAxiosRequestConfig
   ) {
     return AdminApiFp(this.configuration)
@@ -7934,12 +8023,12 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * Updates an API key.
    * @summary Update API key
    * @param {number} apiKeyID
-   * @param {BaseAPIKey} [baseAPIKey]
+   * @param {BaseAPIKey} baseAPIKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AdminApi
    */
-  public updateApiKey(apiKeyID: number, baseAPIKey?: BaseAPIKey, options?: RawAxiosRequestConfig) {
+  public updateApiKey(apiKeyID: number, baseAPIKey: BaseAPIKey, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .updateApiKey(apiKeyID, baseAPIKey, options)
       .then((request) => request(this.axios, this.basePath));
@@ -8139,17 +8228,19 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * Receives a pre-signed raw transaction and submits it to the blockchain.
      * @summary Submit signed transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {SignedTransactionSubmission} [signedTransactionSubmission]
+     * @param {SignedTransactionSubmission} signedTransactionSubmission
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     submitSignedTransaction: async (
       chain: ChainName,
-      signedTransactionSubmission?: SignedTransactionSubmission,
+      signedTransactionSubmission: SignedTransactionSubmission,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('submitSignedTransaction', 'chain', chain);
+      // verify required parameter 'signedTransactionSubmission' is not null or undefined
+      assertParamExists('submitSignedTransaction', 'signedTransactionSubmission', signedTransactionSubmission);
       const localVarPath = `/chains/{chain}/transactions/submit`.replace(
         `{${'chain'}}`,
         encodeURIComponent(String(chain))
@@ -8191,17 +8282,19 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * Returns a transaction for sending the native token between addresses.
      * @summary Transfer ETH
      * @param {ChainName} chain The blockchain chain label.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     transferEth: async (
       chain: ChainName,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('transferEth', 'chain', chain);
+      // verify required parameter 'postMethodArgs' is not null or undefined
+      assertParamExists('transferEth', 'postMethodArgs', postMethodArgs);
       const localVarPath = `/chains/{chain}/transfers`.replace(`{${'chain'}}`, encodeURIComponent(String(chain)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8348,13 +8441,13 @@ export const ChainsApiFp = function (configuration?: Configuration) {
      * Receives a pre-signed raw transaction and submits it to the blockchain.
      * @summary Submit signed transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {SignedTransactionSubmission} [signedTransactionSubmission]
+     * @param {SignedTransactionSubmission} signedTransactionSubmission
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async submitSignedTransaction(
       chain: ChainName,
-      signedTransactionSubmission?: SignedTransactionSubmission,
+      signedTransactionSubmission: SignedTransactionSubmission,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.submitSignedTransaction(
@@ -8377,13 +8470,13 @@ export const ChainsApiFp = function (configuration?: Configuration) {
      * Returns a transaction for sending the native token between addresses.
      * @summary Transfer ETH
      * @param {ChainName} chain The blockchain chain label.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async transferEth(
       chain: ChainName,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.transferEth(chain, postMethodArgs, options);
@@ -8469,13 +8562,13 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * Receives a pre-signed raw transaction and submits it to the blockchain.
      * @summary Submit signed transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {SignedTransactionSubmission} [signedTransactionSubmission]
+     * @param {SignedTransactionSubmission} signedTransactionSubmission
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     submitSignedTransaction(
       chain: ChainName,
-      signedTransactionSubmission?: SignedTransactionSubmission,
+      signedTransactionSubmission: SignedTransactionSubmission,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
@@ -8486,13 +8579,13 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * Returns a transaction for sending the native token between addresses.
      * @summary Transfer ETH
      * @param {ChainName} chain The blockchain chain label.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     transferEth(
       chain: ChainName,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp.transferEth(chain, postMethodArgs, options).then((request) => request(axios, basePath));
@@ -8565,14 +8658,14 @@ export interface ChainsApiInterface {
    * Receives a pre-signed raw transaction and submits it to the blockchain.
    * @summary Submit signed transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {SignedTransactionSubmission} [signedTransactionSubmission]
+   * @param {SignedTransactionSubmission} signedTransactionSubmission
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApiInterface
    */
   submitSignedTransaction(
     chain: ChainName,
-    signedTransactionSubmission?: SignedTransactionSubmission,
+    signedTransactionSubmission: SignedTransactionSubmission,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
@@ -8580,14 +8673,14 @@ export interface ChainsApiInterface {
    * Returns a transaction for sending the native token between addresses.
    * @summary Transfer ETH
    * @param {ChainName} chain The blockchain chain label.
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApiInterface
    */
   transferEth(
     chain: ChainName,
-    postMethodArgs?: PostMethodArgs,
+    postMethodArgs: PostMethodArgs,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 }
@@ -8674,14 +8767,14 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * Receives a pre-signed raw transaction and submits it to the blockchain.
    * @summary Submit signed transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {SignedTransactionSubmission} [signedTransactionSubmission]
+   * @param {SignedTransactionSubmission} signedTransactionSubmission
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApi
    */
   public submitSignedTransaction(
     chain: ChainName,
-    signedTransactionSubmission?: SignedTransactionSubmission,
+    signedTransactionSubmission: SignedTransactionSubmission,
     options?: RawAxiosRequestConfig
   ) {
     return ChainsApiFp(this.configuration)
@@ -8693,12 +8786,12 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * Returns a transaction for sending the native token between addresses.
    * @summary Transfer ETH
    * @param {ChainName} chain The blockchain chain label.
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ChainsApi
    */
-  public transferEth(chain: ChainName, postMethodArgs?: PostMethodArgs, options?: RawAxiosRequestConfig) {
+  public transferEth(chain: ChainName, postMethodArgs: PostMethodArgs, options?: RawAxiosRequestConfig) {
     return ChainsApiFp(this.configuration)
       .transferEth(chain, postMethodArgs, options)
       .then((request) => request(this.axios, this.basePath));
@@ -8734,7 +8827,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {string} addressOrLabel An address or the label of an address.
      * @param {string} contract
      * @param {string} method Contract function.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8743,7 +8836,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       addressOrLabel: string,
       contract: string,
       method: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
@@ -8754,6 +8847,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       assertParamExists('callContractFunction', 'contract', contract);
       // verify required parameter 'method' is not null or undefined
       assertParamExists('callContractFunction', 'method', method);
+      // verify required parameter 'postMethodArgs' is not null or undefined
+      assertParamExists('callContractFunction', 'postMethodArgs', postMethodArgs);
       const localVarPath = `/chains/{chain}/addresses/{address-or-label}/contracts/{contract}/methods/{method}`
         .replace(`{${'chain'}}`, encodeURIComponent(String(chain)))
         .replace(`{${'address-or-label'}}`, encodeURIComponent(String(addressOrLabel)))
@@ -8792,17 +8887,19 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * Adds a contract.
      * @summary Create a contract
      * @param {string} contract
-     * @param {BaseContract} [baseContract]
+     * @param {BaseContract} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createContract: async (
       contract: string,
-      baseContract?: BaseContract,
+      baseContract: BaseContract,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('createContract', 'contract', contract);
+      // verify required parameter 'baseContract' is not null or undefined
+      assertParamExists('createContract', 'baseContract', baseContract);
       const localVarPath = `/contracts/{contract}`.replace(`{${'contract'}}`, encodeURIComponent(String(contract)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8836,14 +8933,16 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Adds multiple contracts.
      * @summary Create multiple contracts
-     * @param {Array<BaseContract>} [baseContract]
+     * @param {Array<BaseContract>} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createContracts: async (
-      baseContract?: Array<BaseContract>,
+      baseContract: Array<BaseContract>,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
+      // verify required parameter 'baseContract' is not null or undefined
+      assertParamExists('createContracts', 'baseContract', baseContract);
       const localVarPath = `/contracts`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8961,17 +9060,19 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * Returns a transaction to deploy the given contract to the blockchain.
      * @summary Deploy a contract
      * @param {string} contract
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     deployContract: async (
       contract: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('deployContract', 'contract', contract);
+      // verify required parameter 'postMethodArgs' is not null or undefined
+      assertParamExists('deployContract', 'postMethodArgs', postMethodArgs);
       const localVarPath = `/contracts/{contract}/deploy`.replace(
         `{${'contract'}}`,
         encodeURIComponent(String(contract))
@@ -9010,20 +9111,22 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @summary Deploy a contract version
      * @param {string} contract
      * @param {string} version Contract Version.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     deployContractVersion: async (
       contract: string,
       version: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
       assertParamExists('deployContractVersion', 'contract', contract);
       // verify required parameter 'version' is not null or undefined
       assertParamExists('deployContractVersion', 'version', version);
+      // verify required parameter 'postMethodArgs' is not null or undefined
+      assertParamExists('deployContractVersion', 'postMethodArgs', postMethodArgs);
       const localVarPath = `/contracts/{contract}/{version}/deploy`
         .replace(`{${'contract'}}`, encodeURIComponent(String(contract)))
         .replace(`{${'version'}}`, encodeURIComponent(String(version)));
@@ -9334,20 +9437,22 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @summary Link address and contract
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {LinkAddressContractRequest} [linkAddressContractRequest]
+     * @param {LinkAddressContractRequest} linkAddressContractRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     linkAddressContract: async (
       chain: ChainName,
       addressOrLabel: string,
-      linkAddressContractRequest?: LinkAddressContractRequest,
+      linkAddressContractRequest: LinkAddressContractRequest,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('linkAddressContract', 'chain', chain);
       // verify required parameter 'addressOrLabel' is not null or undefined
       assertParamExists('linkAddressContract', 'addressOrLabel', addressOrLabel);
+      // verify required parameter 'linkAddressContractRequest' is not null or undefined
+      assertParamExists('linkAddressContract', 'linkAddressContractRequest', linkAddressContractRequest);
       const localVarPath = `/chains/{chain}/addresses/{address-or-label}/contracts`
         .replace(`{${'chain'}}`, encodeURIComponent(String(chain)))
         .replace(`{${'address-or-label'}}`, encodeURIComponent(String(addressOrLabel)));
@@ -9464,7 +9569,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {string} contract
      * @param {string} version Contract Version.
      * @param {string} event Contract Event.
-     * @param {ContractEventOptions} [contractEventOptions]
+     * @param {ContractEventOptions} contractEventOptions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9472,7 +9577,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       contract: string,
       version: string,
       event: string,
-      contractEventOptions?: ContractEventOptions,
+      contractEventOptions: ContractEventOptions,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
@@ -9481,6 +9586,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       assertParamExists('setEventTypeConversions', 'version', version);
       // verify required parameter 'event' is not null or undefined
       assertParamExists('setEventTypeConversions', 'event', event);
+      // verify required parameter 'contractEventOptions' is not null or undefined
+      assertParamExists('setEventTypeConversions', 'contractEventOptions', contractEventOptions);
       const localVarPath = `/contracts/{contract}/{version}/events/{event}`
         .replace(`{${'contract'}}`, encodeURIComponent(String(contract)))
         .replace(`{${'version'}}`, encodeURIComponent(String(version)))
@@ -9520,7 +9627,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * @param {string} contract
      * @param {string} version Contract Version.
      * @param {string} method Contract function.
-     * @param {ContractMethodOptions} [contractMethodOptions]
+     * @param {ContractMethodOptions} contractMethodOptions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9528,7 +9635,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       contract: string,
       version: string,
       method: string,
-      contractMethodOptions?: ContractMethodOptions,
+      contractMethodOptions: ContractMethodOptions,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'contract' is not null or undefined
@@ -9537,6 +9644,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       assertParamExists('setFunctionTypeConversions', 'version', version);
       // verify required parameter 'method' is not null or undefined
       assertParamExists('setFunctionTypeConversions', 'method', method);
+      // verify required parameter 'contractMethodOptions' is not null or undefined
+      assertParamExists('setFunctionTypeConversions', 'contractMethodOptions', contractMethodOptions);
       const localVarPath = `/contracts/{contract}/{version}/methods/{method}`
         .replace(`{${'contract'}}`, encodeURIComponent(String(contract)))
         .replace(`{${'version'}}`, encodeURIComponent(String(version)))
@@ -9638,7 +9747,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * @param {string} addressOrLabel An address or the label of an address.
      * @param {string} contract
      * @param {string} method Contract function.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9647,7 +9756,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       addressOrLabel: string,
       contract: string,
       method: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CallContractFunction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.callContractFunction(
@@ -9673,13 +9782,13 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * Adds a contract.
      * @summary Create a contract
      * @param {string} contract
-     * @param {BaseContract} [baseContract]
+     * @param {BaseContract} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createContract(
       contract: string,
-      baseContract?: BaseContract,
+      baseContract: BaseContract,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createContract(contract, baseContract, options);
@@ -9697,12 +9806,12 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Adds multiple contracts.
      * @summary Create multiple contracts
-     * @param {Array<BaseContract>} [baseContract]
+     * @param {Array<BaseContract>} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createContracts(
-      baseContract?: Array<BaseContract>,
+      baseContract: Array<BaseContract>,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createContracts(baseContract, options);
@@ -9769,13 +9878,13 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * Returns a transaction to deploy the given contract to the blockchain.
      * @summary Deploy a contract
      * @param {string} contract
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async deployContract(
       contract: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeployContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deployContract(contract, postMethodArgs, options);
@@ -9795,14 +9904,14 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * @summary Deploy a contract version
      * @param {string} contract
      * @param {string} version Contract Version.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async deployContractVersion(
       contract: string,
       version: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeployContract200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deployContractVersion(
@@ -9994,14 +10103,14 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * @summary Link address and contract
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {LinkAddressContractRequest} [linkAddressContractRequest]
+     * @param {LinkAddressContractRequest} linkAddressContractRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async linkAddressContract(
       chain: ChainName,
       addressOrLabel: string,
-      linkAddressContractRequest?: LinkAddressContractRequest,
+      linkAddressContractRequest: LinkAddressContractRequest,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetAddress201Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.linkAddressContract(
@@ -10071,7 +10180,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * @param {string} contract
      * @param {string} version Contract Version.
      * @param {string} event Contract Event.
-     * @param {ContractEventOptions} [contractEventOptions]
+     * @param {ContractEventOptions} contractEventOptions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10079,7 +10188,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       contract: string,
       version: string,
       event: string,
-      contractEventOptions?: ContractEventOptions,
+      contractEventOptions: ContractEventOptions,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setEventTypeConversions(
@@ -10106,7 +10215,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * @param {string} contract
      * @param {string} version Contract Version.
      * @param {string} method Contract function.
-     * @param {ContractMethodOptions} [contractMethodOptions]
+     * @param {ContractMethodOptions} contractMethodOptions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10114,7 +10223,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
       contract: string,
       version: string,
       method: string,
-      contractMethodOptions?: ContractMethodOptions,
+      contractMethodOptions: ContractMethodOptions,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setFunctionTypeConversions(
@@ -10184,7 +10293,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {string} addressOrLabel An address or the label of an address.
      * @param {string} contract
      * @param {string} method Contract function.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10193,7 +10302,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       addressOrLabel: string,
       contract: string,
       method: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<CallContractFunction200Response> {
       return localVarFp
@@ -10204,13 +10313,13 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * Adds a contract.
      * @summary Create a contract
      * @param {string} contract
-     * @param {BaseContract} [baseContract]
+     * @param {BaseContract} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createContract(
       contract: string,
-      baseContract?: BaseContract,
+      baseContract: BaseContract,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<GetContract200Response> {
       return localVarFp.createContract(contract, baseContract, options).then((request) => request(axios, basePath));
@@ -10218,11 +10327,11 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Adds multiple contracts.
      * @summary Create multiple contracts
-     * @param {Array<BaseContract>} [baseContract]
+     * @param {Array<BaseContract>} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createContracts(baseContract?: Array<BaseContract>, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
+    createContracts(baseContract: Array<BaseContract>, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.createContracts(baseContract, options).then((request) => request(axios, basePath));
     },
     /**
@@ -10254,13 +10363,13 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * Returns a transaction to deploy the given contract to the blockchain.
      * @summary Deploy a contract
      * @param {string} contract
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     deployContract(
       contract: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<DeployContract200Response> {
       return localVarFp.deployContract(contract, postMethodArgs, options).then((request) => request(axios, basePath));
@@ -10270,14 +10379,14 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @summary Deploy a contract version
      * @param {string} contract
      * @param {string} version Contract Version.
-     * @param {PostMethodArgs} [postMethodArgs]
+     * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     deployContractVersion(
       contract: string,
       version: string,
-      postMethodArgs?: PostMethodArgs,
+      postMethodArgs: PostMethodArgs,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<DeployContract200Response> {
       return localVarFp
@@ -10384,14 +10493,14 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @summary Link address and contract
      * @param {ChainName} chain The blockchain chain label.
      * @param {string} addressOrLabel An address or the label of an address.
-     * @param {LinkAddressContractRequest} [linkAddressContractRequest]
+     * @param {LinkAddressContractRequest} linkAddressContractRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     linkAddressContract(
       chain: ChainName,
       addressOrLabel: string,
-      linkAddressContractRequest?: LinkAddressContractRequest,
+      linkAddressContractRequest: LinkAddressContractRequest,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<SetAddress201Response> {
       return localVarFp
@@ -10426,7 +10535,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {string} contract
      * @param {string} version Contract Version.
      * @param {string} event Contract Event.
-     * @param {ContractEventOptions} [contractEventOptions]
+     * @param {ContractEventOptions} contractEventOptions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10434,7 +10543,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       contract: string,
       version: string,
       event: string,
-      contractEventOptions?: ContractEventOptions,
+      contractEventOptions: ContractEventOptions,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
@@ -10447,7 +10556,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * @param {string} contract
      * @param {string} version Contract Version.
      * @param {string} method Contract function.
-     * @param {ContractMethodOptions} [contractMethodOptions]
+     * @param {ContractMethodOptions} contractMethodOptions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10455,7 +10564,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
       contract: string,
       version: string,
       method: string,
-      contractMethodOptions?: ContractMethodOptions,
+      contractMethodOptions: ContractMethodOptions,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
@@ -10497,7 +10606,7 @@ export interface ContractsApiInterface {
    * @param {string} addressOrLabel An address or the label of an address.
    * @param {string} contract
    * @param {string} method Contract function.
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
@@ -10507,7 +10616,7 @@ export interface ContractsApiInterface {
     addressOrLabel: string,
     contract: string,
     method: string,
-    postMethodArgs?: PostMethodArgs,
+    postMethodArgs: PostMethodArgs,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<CallContractFunction200Response>;
 
@@ -10515,26 +10624,26 @@ export interface ContractsApiInterface {
    * Adds a contract.
    * @summary Create a contract
    * @param {string} contract
-   * @param {BaseContract} [baseContract]
+   * @param {BaseContract} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
   createContract(
     contract: string,
-    baseContract?: BaseContract,
+    baseContract: BaseContract,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<GetContract200Response>;
 
   /**
    * Adds multiple contracts.
    * @summary Create multiple contracts
-   * @param {Array<BaseContract>} [baseContract]
+   * @param {Array<BaseContract>} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
-  createContracts(baseContract?: Array<BaseContract>, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
+  createContracts(baseContract: Array<BaseContract>, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Deletes a contract and all its versions.
@@ -10561,14 +10670,14 @@ export interface ContractsApiInterface {
    * Returns a transaction to deploy the given contract to the blockchain.
    * @summary Deploy a contract
    * @param {string} contract
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
    */
   deployContract(
     contract: string,
-    postMethodArgs?: PostMethodArgs,
+    postMethodArgs: PostMethodArgs,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<DeployContract200Response>;
 
@@ -10577,7 +10686,7 @@ export interface ContractsApiInterface {
    * @summary Deploy a contract version
    * @param {string} contract
    * @param {string} version Contract Version.
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
@@ -10585,7 +10694,7 @@ export interface ContractsApiInterface {
   deployContractVersion(
     contract: string,
     version: string,
-    postMethodArgs?: PostMethodArgs,
+    postMethodArgs: PostMethodArgs,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<DeployContract200Response>;
 
@@ -10680,7 +10789,7 @@ export interface ContractsApiInterface {
    * @summary Link address and contract
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} addressOrLabel An address or the label of an address.
-   * @param {LinkAddressContractRequest} [linkAddressContractRequest]
+   * @param {LinkAddressContractRequest} linkAddressContractRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
@@ -10688,7 +10797,7 @@ export interface ContractsApiInterface {
   linkAddressContract(
     chain: ChainName,
     addressOrLabel: string,
-    linkAddressContractRequest?: LinkAddressContractRequest,
+    linkAddressContractRequest: LinkAddressContractRequest,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<SetAddress201Response>;
 
@@ -10720,7 +10829,7 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {string} version Contract Version.
    * @param {string} event Contract Event.
-   * @param {ContractEventOptions} [contractEventOptions]
+   * @param {ContractEventOptions} contractEventOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
@@ -10729,7 +10838,7 @@ export interface ContractsApiInterface {
     contract: string,
     version: string,
     event: string,
-    contractEventOptions?: ContractEventOptions,
+    contractEventOptions: ContractEventOptions,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
@@ -10739,7 +10848,7 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {string} version Contract Version.
    * @param {string} method Contract function.
-   * @param {ContractMethodOptions} [contractMethodOptions]
+   * @param {ContractMethodOptions} contractMethodOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApiInterface
@@ -10748,7 +10857,7 @@ export interface ContractsApiInterface {
     contract: string,
     version: string,
     method: string,
-    contractMethodOptions?: ContractMethodOptions,
+    contractMethodOptions: ContractMethodOptions,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
@@ -10784,7 +10893,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} addressOrLabel An address or the label of an address.
    * @param {string} contract
    * @param {string} method Contract function.
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
@@ -10794,7 +10903,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     addressOrLabel: string,
     contract: string,
     method: string,
-    postMethodArgs?: PostMethodArgs,
+    postMethodArgs: PostMethodArgs,
     options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
@@ -10806,12 +10915,12 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * Adds a contract.
    * @summary Create a contract
    * @param {string} contract
-   * @param {BaseContract} [baseContract]
+   * @param {BaseContract} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public createContract(contract: string, baseContract?: BaseContract, options?: RawAxiosRequestConfig) {
+  public createContract(contract: string, baseContract: BaseContract, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .createContract(contract, baseContract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10820,12 +10929,12 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Adds multiple contracts.
    * @summary Create multiple contracts
-   * @param {Array<BaseContract>} [baseContract]
+   * @param {Array<BaseContract>} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public createContracts(baseContract?: Array<BaseContract>, options?: RawAxiosRequestConfig) {
+  public createContracts(baseContract: Array<BaseContract>, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .createContracts(baseContract, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10864,12 +10973,12 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * Returns a transaction to deploy the given contract to the blockchain.
    * @summary Deploy a contract
    * @param {string} contract
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
    */
-  public deployContract(contract: string, postMethodArgs?: PostMethodArgs, options?: RawAxiosRequestConfig) {
+  public deployContract(contract: string, postMethodArgs: PostMethodArgs, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
       .deployContract(contract, postMethodArgs, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10880,7 +10989,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @summary Deploy a contract version
    * @param {string} contract
    * @param {string} version Contract Version.
-   * @param {PostMethodArgs} [postMethodArgs]
+   * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
@@ -10888,7 +10997,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   public deployContractVersion(
     contract: string,
     version: string,
-    postMethodArgs?: PostMethodArgs,
+    postMethodArgs: PostMethodArgs,
     options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
@@ -11002,7 +11111,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @summary Link address and contract
    * @param {ChainName} chain The blockchain chain label.
    * @param {string} addressOrLabel An address or the label of an address.
-   * @param {LinkAddressContractRequest} [linkAddressContractRequest]
+   * @param {LinkAddressContractRequest} linkAddressContractRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
@@ -11010,7 +11119,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   public linkAddressContract(
     chain: ChainName,
     addressOrLabel: string,
-    linkAddressContractRequest?: LinkAddressContractRequest,
+    linkAddressContractRequest: LinkAddressContractRequest,
     options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
@@ -11051,7 +11160,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {string} version Contract Version.
    * @param {string} event Contract Event.
-   * @param {ContractEventOptions} [contractEventOptions]
+   * @param {ContractEventOptions} contractEventOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
@@ -11060,7 +11169,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     contract: string,
     version: string,
     event: string,
-    contractEventOptions?: ContractEventOptions,
+    contractEventOptions: ContractEventOptions,
     options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
@@ -11074,7 +11183,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {string} version Contract Version.
    * @param {string} method Contract function.
-   * @param {ContractMethodOptions} [contractMethodOptions]
+   * @param {ContractMethodOptions} contractMethodOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ContractsApi
@@ -11083,7 +11192,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
     contract: string,
     version: string,
     method: string,
-    contractMethodOptions?: ContractMethodOptions,
+    contractMethodOptions: ContractMethodOptions,
     options?: RawAxiosRequestConfig
   ) {
     return ContractsApiFp(this.configuration)
@@ -11202,18 +11311,20 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
     /**
      * Executes an arbitrary event query.
      * @summary Execute arbitrary event query
+     * @param {EventQuery} eventQuery
      * @param {number} [offset]
      * @param {number} [limit]
-     * @param {EventQuery} [eventQuery]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     executeArbitraryEventQuery: async (
+      eventQuery: EventQuery,
       offset?: number,
       limit?: number,
-      eventQuery?: EventQuery,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
+      // verify required parameter 'eventQuery' is not null or undefined
+      assertParamExists('executeArbitraryEventQuery', 'eventQuery', eventQuery);
       const localVarPath = `/queries`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11385,17 +11496,19 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
      * Creates or updates the given saved event query.
      * @summary Create or update event query
      * @param {string} eventQuery An event query label.
-     * @param {EventQuery} [eventQuery2]
+     * @param {EventQuery} eventQuery2
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setEventQuery: async (
       eventQuery: string,
-      eventQuery2?: EventQuery,
+      eventQuery2: EventQuery,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'eventQuery' is not null or undefined
       assertParamExists('setEventQuery', 'eventQuery', eventQuery);
+      // verify required parameter 'eventQuery2' is not null or undefined
+      assertParamExists('setEventQuery', 'eventQuery2', eventQuery2);
       const localVarPath = `/queries/{event_query}`.replace(
         `{${'event_query'}}`,
         encodeURIComponent(String(eventQuery))
@@ -11488,22 +11601,22 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
     /**
      * Executes an arbitrary event query.
      * @summary Execute arbitrary event query
+     * @param {EventQuery} eventQuery
      * @param {number} [offset]
      * @param {number} [limit]
-     * @param {EventQuery} [eventQuery]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async executeArbitraryEventQuery(
+      eventQuery: EventQuery,
       offset?: number,
       limit?: number,
-      eventQuery?: EventQuery,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExecuteArbitraryEventQuery200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.executeArbitraryEventQuery(
+        eventQuery,
         offset,
         limit,
-        eventQuery,
         options
       );
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -11592,13 +11705,13 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
      * Creates or updates the given saved event query.
      * @summary Create or update event query
      * @param {string} eventQuery An event query label.
-     * @param {EventQuery} [eventQuery2]
+     * @param {EventQuery} eventQuery2
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async setEventQuery(
       eventQuery: string,
-      eventQuery2?: EventQuery,
+      eventQuery2: EventQuery,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setEventQuery(eventQuery, eventQuery2, options);
@@ -11653,20 +11766,20 @@ export const EventQueriesApiFactory = function (
     /**
      * Executes an arbitrary event query.
      * @summary Execute arbitrary event query
+     * @param {EventQuery} eventQuery
      * @param {number} [offset]
      * @param {number} [limit]
-     * @param {EventQuery} [eventQuery]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     executeArbitraryEventQuery(
+      eventQuery: EventQuery,
       offset?: number,
       limit?: number,
-      eventQuery?: EventQuery,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<ExecuteArbitraryEventQuery200Response> {
       return localVarFp
-        .executeArbitraryEventQuery(offset, limit, eventQuery, options)
+        .executeArbitraryEventQuery(eventQuery, offset, limit, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -11711,13 +11824,13 @@ export const EventQueriesApiFactory = function (
      * Creates or updates the given saved event query.
      * @summary Create or update event query
      * @param {string} eventQuery An event query label.
-     * @param {EventQuery} [eventQuery2]
+     * @param {EventQuery} eventQuery2
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setEventQuery(
       eventQuery: string,
-      eventQuery2?: EventQuery,
+      eventQuery2: EventQuery,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp.setEventQuery(eventQuery, eventQuery2, options).then((request) => request(axios, basePath));
@@ -11757,17 +11870,17 @@ export interface EventQueriesApiInterface {
   /**
    * Executes an arbitrary event query.
    * @summary Execute arbitrary event query
+   * @param {EventQuery} eventQuery
    * @param {number} [offset]
    * @param {number} [limit]
-   * @param {EventQuery} [eventQuery]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
   executeArbitraryEventQuery(
+    eventQuery: EventQuery,
     offset?: number,
     limit?: number,
-    eventQuery?: EventQuery,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<ExecuteArbitraryEventQuery200Response>;
 
@@ -11811,14 +11924,14 @@ export interface EventQueriesApiInterface {
    * Creates or updates the given saved event query.
    * @summary Create or update event query
    * @param {string} eventQuery An event query label.
-   * @param {EventQuery} [eventQuery2]
+   * @param {EventQuery} eventQuery2
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof EventQueriesApiInterface
    */
   setEventQuery(
     eventQuery: string,
-    eventQuery2?: EventQuery,
+    eventQuery2: EventQuery,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 }
@@ -11861,21 +11974,21 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
   /**
    * Executes an arbitrary event query.
    * @summary Execute arbitrary event query
+   * @param {EventQuery} eventQuery
    * @param {number} [offset]
    * @param {number} [limit]
-   * @param {EventQuery} [eventQuery]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
   public executeArbitraryEventQuery(
+    eventQuery: EventQuery,
     offset?: number,
     limit?: number,
-    eventQuery?: EventQuery,
     options?: RawAxiosRequestConfig
   ) {
     return EventQueriesApiFp(this.configuration)
-      .executeArbitraryEventQuery(offset, limit, eventQuery, options)
+      .executeArbitraryEventQuery(eventQuery, offset, limit, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -11926,12 +12039,12 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * Creates or updates the given saved event query.
    * @summary Create or update event query
    * @param {string} eventQuery An event query label.
-   * @param {EventQuery} [eventQuery2]
+   * @param {EventQuery} eventQuery2
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof EventQueriesApi
    */
-  public setEventQuery(eventQuery: string, eventQuery2?: EventQuery, options?: RawAxiosRequestConfig) {
+  public setEventQuery(eventQuery: string, eventQuery2: EventQuery, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
       .setEventQuery(eventQuery, eventQuery2, options)
       .then((request) => request(this.axios, this.basePath));
@@ -12603,14 +12716,16 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
     /**
      * Adds a new Azure account configuration.
      * @summary Add HSM config
-     * @param {BaseAzureAccount} [baseAzureAccount]
+     * @param {BaseAzureAccount} baseAzureAccount
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     addHsmConfig: async (
-      baseAzureAccount?: BaseAzureAccount,
+      baseAzureAccount: BaseAzureAccount,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
+      // verify required parameter 'baseAzureAccount' is not null or undefined
+      assertParamExists('addHsmConfig', 'baseAzureAccount', baseAzureAccount);
       const localVarPath = `/hsm/config`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12644,11 +12759,13 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
     /**
      * Adds an existing key configuration.
      * @summary Add HSM key
-     * @param {AddKey} [addKey]
+     * @param {AddKey} addKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmKey: async (addKey?: AddKey, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+    addHsmKey: async (addKey: AddKey, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'addKey' is not null or undefined
+      assertParamExists('addHsmKey', 'addKey', addKey);
       const localVarPath = `/hsm/key`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12682,11 +12799,13 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
     /**
      * Creates a new key in the Azure KeyVault.
      * @summary Create HSM key
-     * @param {CreateKey} [createKey]
+     * @param {CreateKey} createKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createHsmKey: async (createKey?: CreateKey, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+    createHsmKey: async (createKey: CreateKey, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'createKey' is not null or undefined
+      assertParamExists('createHsmKey', 'createKey', createKey);
       const localVarPath = `/hsm/key/new`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12875,7 +12994,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
     /**
      * Removes the specified key configuration.
      * @summary Remove HSM key
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -12916,21 +13035,23 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
      * @summary Set local nonce
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SetNonceRequest} [setNonceRequest]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SetNonceRequest} setNonceRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setLocalNonce: async (
       chain: ChainName,
       walletAddress: string,
-      setNonceRequest?: SetNonceRequest,
+      setNonceRequest: SetNonceRequest,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('setLocalNonce', 'chain', chain);
       // verify required parameter 'walletAddress' is not null or undefined
       assertParamExists('setLocalNonce', 'walletAddress', walletAddress);
+      // verify required parameter 'setNonceRequest' is not null or undefined
+      assertParamExists('setLocalNonce', 'setNonceRequest', setNonceRequest);
       const localVarPath = `/chains/{chain}/hsm/nonce/{wallet_address}`
         .replace(`{${'chain'}}`, encodeURIComponent(String(chain)))
         .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)));
@@ -12967,17 +13088,19 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * Signs and submits the given transaction using an HSM address.
      * @summary Sign and submit transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {BaseTransactionToSign} [baseTransactionToSign]
+     * @param {BaseTransactionToSign} baseTransactionToSign
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     signAndSubmitTransaction: async (
       chain: ChainName,
-      baseTransactionToSign?: BaseTransactionToSign,
+      baseTransactionToSign: BaseTransactionToSign,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('signAndSubmitTransaction', 'chain', chain);
+      // verify required parameter 'baseTransactionToSign' is not null or undefined
+      assertParamExists('signAndSubmitTransaction', 'baseTransactionToSign', baseTransactionToSign);
       const localVarPath = `/chains/{chain}/hsm/submit`.replace(`{${'chain'}}`, encodeURIComponent(String(chain)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13012,17 +13135,19 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * Signs the given data using the given HSM address.
      * @summary Sign data
      * @param {ChainName} chain The blockchain chain label.
-     * @param {HSMSignRequest} [hSMSignRequest]
+     * @param {HSMSignRequest} hSMSignRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     signData: async (
       chain: ChainName,
-      hSMSignRequest?: HSMSignRequest,
+      hSMSignRequest: HSMSignRequest,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('signData', 'chain', chain);
+      // verify required parameter 'hSMSignRequest' is not null or undefined
+      assertParamExists('signData', 'hSMSignRequest', hSMSignRequest);
       const localVarPath = `/chains/{chain}/hsm/sign`.replace(`{${'chain'}}`, encodeURIComponent(String(chain)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13066,12 +13191,12 @@ export const HsmApiFp = function (configuration?: Configuration) {
     /**
      * Adds a new Azure account configuration.
      * @summary Add HSM config
-     * @param {BaseAzureAccount} [baseAzureAccount]
+     * @param {BaseAzureAccount} baseAzureAccount
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async addHsmConfig(
-      baseAzureAccount?: BaseAzureAccount,
+      baseAzureAccount: BaseAzureAccount,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmConfig(baseAzureAccount, options);
@@ -13089,12 +13214,12 @@ export const HsmApiFp = function (configuration?: Configuration) {
     /**
      * Adds an existing key configuration.
      * @summary Add HSM key
-     * @param {AddKey} [addKey]
+     * @param {AddKey} addKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async addHsmKey(
-      addKey?: AddKey,
+      addKey: AddKey,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.addHsmKey(addKey, options);
@@ -13112,12 +13237,12 @@ export const HsmApiFp = function (configuration?: Configuration) {
     /**
      * Creates a new key in the Azure KeyVault.
      * @summary Create HSM key
-     * @param {CreateKey} [createKey]
+     * @param {CreateKey} createKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createHsmKey(
-      createKey?: CreateKey,
+      createKey: CreateKey,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateHsmKey200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createHsmKey(createKey, options);
@@ -13225,7 +13350,7 @@ export const HsmApiFp = function (configuration?: Configuration) {
     /**
      * Removes the specified key configuration.
      * @summary Remove HSM key
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13249,15 +13374,15 @@ export const HsmApiFp = function (configuration?: Configuration) {
      * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
      * @summary Set local nonce
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SetNonceRequest} [setNonceRequest]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SetNonceRequest} setNonceRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async setLocalNonce(
       chain: ChainName,
       walletAddress: string,
-      setNonceRequest?: SetNonceRequest,
+      setNonceRequest: SetNonceRequest,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.setLocalNonce(
@@ -13281,13 +13406,13 @@ export const HsmApiFp = function (configuration?: Configuration) {
      * Signs and submits the given transaction using an HSM address.
      * @summary Sign and submit transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {BaseTransactionToSign} [baseTransactionToSign]
+     * @param {BaseTransactionToSign} baseTransactionToSign
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async signAndSubmitTransaction(
       chain: ChainName,
-      baseTransactionToSign?: BaseTransactionToSign,
+      baseTransactionToSign: BaseTransactionToSign,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signAndSubmitTransaction(
@@ -13310,13 +13435,13 @@ export const HsmApiFp = function (configuration?: Configuration) {
      * Signs the given data using the given HSM address.
      * @summary Sign data
      * @param {ChainName} chain The blockchain chain label.
-     * @param {HSMSignRequest} [hSMSignRequest]
+     * @param {HSMSignRequest} hSMSignRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async signData(
       chain: ChainName,
-      hSMSignRequest?: HSMSignRequest,
+      hSMSignRequest: HSMSignRequest,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SignData200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signData(chain, hSMSignRequest, options);
@@ -13344,31 +13469,31 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
     /**
      * Adds a new Azure account configuration.
      * @summary Add HSM config
-     * @param {BaseAzureAccount} [baseAzureAccount]
+     * @param {BaseAzureAccount} baseAzureAccount
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
+    addHsmConfig(baseAzureAccount: BaseAzureAccount, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addHsmConfig(baseAzureAccount, options).then((request) => request(axios, basePath));
     },
     /**
      * Adds an existing key configuration.
      * @summary Add HSM key
-     * @param {AddKey} [addKey]
+     * @param {AddKey} addKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addHsmKey(addKey?: AddKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
+    addHsmKey(addKey: AddKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse> {
       return localVarFp.addHsmKey(addKey, options).then((request) => request(axios, basePath));
     },
     /**
      * Creates a new key in the Azure KeyVault.
      * @summary Create HSM key
-     * @param {CreateKey} [createKey]
+     * @param {CreateKey} createKey
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createHsmKey(createKey?: CreateKey, options?: RawAxiosRequestConfig): AxiosPromise<CreateHsmKey200Response> {
+    createHsmKey(createKey: CreateKey, options?: RawAxiosRequestConfig): AxiosPromise<CreateHsmKey200Response> {
       return localVarFp.createHsmKey(createKey, options).then((request) => request(axios, basePath));
     },
     /**
@@ -13422,7 +13547,7 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
     /**
      * Removes the specified key configuration.
      * @summary Remove HSM key
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13433,15 +13558,15 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
      * @summary Set local nonce
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
-     * @param {SetNonceRequest} [setNonceRequest]
+     * @param {string} walletAddress An Ethereum address.
+     * @param {SetNonceRequest} setNonceRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     setLocalNonce(
       chain: ChainName,
       walletAddress: string,
-      setNonceRequest?: SetNonceRequest,
+      setNonceRequest: SetNonceRequest,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<BaseResponse> {
       return localVarFp
@@ -13452,13 +13577,13 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * Signs and submits the given transaction using an HSM address.
      * @summary Sign and submit transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {BaseTransactionToSign} [baseTransactionToSign]
+     * @param {BaseTransactionToSign} baseTransactionToSign
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     signAndSubmitTransaction(
       chain: ChainName,
-      baseTransactionToSign?: BaseTransactionToSign,
+      baseTransactionToSign: BaseTransactionToSign,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp
@@ -13469,13 +13594,13 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * Signs the given data using the given HSM address.
      * @summary Sign data
      * @param {ChainName} chain The blockchain chain label.
-     * @param {HSMSignRequest} [hSMSignRequest]
+     * @param {HSMSignRequest} hSMSignRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     signData(
       chain: ChainName,
-      hSMSignRequest?: HSMSignRequest,
+      hSMSignRequest: HSMSignRequest,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<SignData200Response> {
       return localVarFp.signData(chain, hSMSignRequest, options).then((request) => request(axios, basePath));
@@ -13492,32 +13617,32 @@ export interface HsmApiInterface {
   /**
    * Adds a new Azure account configuration.
    * @summary Add HSM config
-   * @param {BaseAzureAccount} [baseAzureAccount]
+   * @param {BaseAzureAccount} baseAzureAccount
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addHsmConfig(baseAzureAccount: BaseAzureAccount, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Adds an existing key configuration.
    * @summary Add HSM key
-   * @param {AddKey} [addKey]
+   * @param {AddKey} addKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  addHsmKey(addKey?: AddKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
+  addHsmKey(addKey: AddKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
   /**
    * Creates a new key in the Azure KeyVault.
    * @summary Create HSM key
-   * @param {CreateKey} [createKey]
+   * @param {CreateKey} createKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
-  createHsmKey(createKey?: CreateKey, options?: RawAxiosRequestConfig): AxiosPromise<CreateHsmKey200Response>;
+  createHsmKey(createKey: CreateKey, options?: RawAxiosRequestConfig): AxiosPromise<CreateHsmKey200Response>;
 
   /**
    * Returns a list of HSM configs and their associated wallets.
@@ -13568,7 +13693,7 @@ export interface HsmApiInterface {
   /**
    * Removes the specified key configuration.
    * @summary Remove HSM key
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
@@ -13579,8 +13704,8 @@ export interface HsmApiInterface {
    * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
    * @summary Set local nonce
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {SetNonceRequest} [setNonceRequest]
+   * @param {string} walletAddress An Ethereum address.
+   * @param {SetNonceRequest} setNonceRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
@@ -13588,7 +13713,7 @@ export interface HsmApiInterface {
   setLocalNonce(
     chain: ChainName,
     walletAddress: string,
-    setNonceRequest?: SetNonceRequest,
+    setNonceRequest: SetNonceRequest,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<BaseResponse>;
 
@@ -13596,14 +13721,14 @@ export interface HsmApiInterface {
    * Signs and submits the given transaction using an HSM address.
    * @summary Sign and submit transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {BaseTransactionToSign} [baseTransactionToSign]
+   * @param {BaseTransactionToSign} baseTransactionToSign
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
   signAndSubmitTransaction(
     chain: ChainName,
-    baseTransactionToSign?: BaseTransactionToSign,
+    baseTransactionToSign: BaseTransactionToSign,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 
@@ -13611,14 +13736,14 @@ export interface HsmApiInterface {
    * Signs the given data using the given HSM address.
    * @summary Sign data
    * @param {ChainName} chain The blockchain chain label.
-   * @param {HSMSignRequest} [hSMSignRequest]
+   * @param {HSMSignRequest} hSMSignRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
   signData(
     chain: ChainName,
-    hSMSignRequest?: HSMSignRequest,
+    hSMSignRequest: HSMSignRequest,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<SignData200Response>;
 }
@@ -13633,12 +13758,12 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   /**
    * Adds a new Azure account configuration.
    * @summary Add HSM config
-   * @param {BaseAzureAccount} [baseAzureAccount]
+   * @param {BaseAzureAccount} baseAzureAccount
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public addHsmConfig(baseAzureAccount?: BaseAzureAccount, options?: RawAxiosRequestConfig) {
+  public addHsmConfig(baseAzureAccount: BaseAzureAccount, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .addHsmConfig(baseAzureAccount, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13647,12 +13772,12 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   /**
    * Adds an existing key configuration.
    * @summary Add HSM key
-   * @param {AddKey} [addKey]
+   * @param {AddKey} addKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public addHsmKey(addKey?: AddKey, options?: RawAxiosRequestConfig) {
+  public addHsmKey(addKey: AddKey, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .addHsmKey(addKey, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13661,12 +13786,12 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   /**
    * Creates a new key in the Azure KeyVault.
    * @summary Create HSM key
-   * @param {CreateKey} [createKey]
+   * @param {CreateKey} createKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public createHsmKey(createKey?: CreateKey, options?: RawAxiosRequestConfig) {
+  public createHsmKey(createKey: CreateKey, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .createHsmKey(createKey, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13733,7 +13858,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   /**
    * Removes the specified key configuration.
    * @summary Remove HSM key
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
@@ -13748,8 +13873,8 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
    * @summary Set local nonce
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
-   * @param {SetNonceRequest} [setNonceRequest]
+   * @param {string} walletAddress An Ethereum address.
+   * @param {SetNonceRequest} setNonceRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
@@ -13757,7 +13882,7 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
   public setLocalNonce(
     chain: ChainName,
     walletAddress: string,
-    setNonceRequest?: SetNonceRequest,
+    setNonceRequest: SetNonceRequest,
     options?: RawAxiosRequestConfig
   ) {
     return HsmApiFp(this.configuration)
@@ -13769,14 +13894,14 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * Signs and submits the given transaction using an HSM address.
    * @summary Sign and submit transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {BaseTransactionToSign} [baseTransactionToSign]
+   * @param {BaseTransactionToSign} baseTransactionToSign
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
    */
   public signAndSubmitTransaction(
     chain: ChainName,
-    baseTransactionToSign?: BaseTransactionToSign,
+    baseTransactionToSign: BaseTransactionToSign,
     options?: RawAxiosRequestConfig
   ) {
     return HsmApiFp(this.configuration)
@@ -13788,12 +13913,12 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * Signs the given data using the given HSM address.
    * @summary Sign data
    * @param {ChainName} chain The blockchain chain label.
-   * @param {HSMSignRequest} [hSMSignRequest]
+   * @param {HSMSignRequest} hSMSignRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
    */
-  public signData(chain: ChainName, hSMSignRequest?: HSMSignRequest, options?: RawAxiosRequestConfig) {
+  public signData(chain: ChainName, hSMSignRequest: HSMSignRequest, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
       .signData(chain, hSMSignRequest, options)
       .then((request) => request(this.axios, this.basePath));
@@ -13810,9 +13935,9 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
      * Cancels a transaction by resubmitting it as no-op transaction and with a higher gas price.
      * @summary Cancel transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {number} nonce Transaction nonce.
-     * @param {GasParams} [gasParams]
+     * @param {GasParams} gasParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13820,7 +13945,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       chain: ChainName,
       walletAddress: string,
       nonce: number,
-      gasParams?: GasParams,
+      gasParams: GasParams,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
@@ -13829,6 +13954,8 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       assertParamExists('cancelTransaction', 'walletAddress', walletAddress);
       // verify required parameter 'nonce' is not null or undefined
       assertParamExists('cancelTransaction', 'nonce', nonce);
+      // verify required parameter 'gasParams' is not null or undefined
+      assertParamExists('cancelTransaction', 'gasParams', gasParams);
       const localVarPath = `/chains/{chain}/txm/{wallet_address}/nonce/{nonce}/cancel`
         .replace(`{${'chain'}}`, encodeURIComponent(String(chain)))
         .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)))
@@ -13866,7 +13993,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
      * Count all transactions for the given wallet address.
      * @summary Count all transactions for a wallet
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13912,7 +14039,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
      * List the transactions submitted by the given wallet address.
      * @summary List transactions for a wallet
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {string} [hash] Filter transactions by transaction hash. To filter for multiple hashes, use ampersands: &#x60;?hash&#x3D;HASH1&amp;hash&#x3D;HASH2&amp;hash&#x3D;HASH3&#x60;
      * @param {number} [nonce] Filter transactions by nonce
      * @param {TransactionStatus} [status] Filter transactions by status
@@ -13988,9 +14115,9 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
      * Speeds up a transaction by resubmitting it with a higher gas price.
      * @summary Speed up transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {number} nonce Transaction nonce.
-     * @param {GasParams} [gasParams]
+     * @param {GasParams} gasParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13998,7 +14125,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       chain: ChainName,
       walletAddress: string,
       nonce: number,
-      gasParams?: GasParams,
+      gasParams: GasParams,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
@@ -14007,6 +14134,8 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       assertParamExists('speedUpTransaction', 'walletAddress', walletAddress);
       // verify required parameter 'nonce' is not null or undefined
       assertParamExists('speedUpTransaction', 'nonce', nonce);
+      // verify required parameter 'gasParams' is not null or undefined
+      assertParamExists('speedUpTransaction', 'gasParams', gasParams);
       const localVarPath = `/chains/{chain}/txm/{wallet_address}/nonce/{nonce}/speed_up`
         .replace(`{${'chain'}}`, encodeURIComponent(String(chain)))
         .replace(`{${'wallet_address'}}`, encodeURIComponent(String(walletAddress)))
@@ -14054,9 +14183,9 @@ export const TxmApiFp = function (configuration?: Configuration) {
      * Cancels a transaction by resubmitting it as no-op transaction and with a higher gas price.
      * @summary Cancel transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {number} nonce Transaction nonce.
-     * @param {GasParams} [gasParams]
+     * @param {GasParams} gasParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14064,7 +14193,7 @@ export const TxmApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       walletAddress: string,
       nonce: number,
-      gasParams?: GasParams,
+      gasParams: GasParams,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.cancelTransaction(
@@ -14089,7 +14218,7 @@ export const TxmApiFp = function (configuration?: Configuration) {
      * Count all transactions for the given wallet address.
      * @summary Count all transactions for a wallet
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14114,7 +14243,7 @@ export const TxmApiFp = function (configuration?: Configuration) {
      * List the transactions submitted by the given wallet address.
      * @summary List transactions for a wallet
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {string} [hash] Filter transactions by transaction hash. To filter for multiple hashes, use ampersands: &#x60;?hash&#x3D;HASH1&amp;hash&#x3D;HASH2&amp;hash&#x3D;HASH3&#x60;
      * @param {number} [nonce] Filter transactions by nonce
      * @param {TransactionStatus} [status] Filter transactions by status
@@ -14158,9 +14287,9 @@ export const TxmApiFp = function (configuration?: Configuration) {
      * Speeds up a transaction by resubmitting it with a higher gas price.
      * @summary Speed up transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {number} nonce Transaction nonce.
-     * @param {GasParams} [gasParams]
+     * @param {GasParams} gasParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14168,7 +14297,7 @@ export const TxmApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       walletAddress: string,
       nonce: number,
-      gasParams?: GasParams,
+      gasParams: GasParams,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.speedUpTransaction(
@@ -14203,9 +14332,9 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
      * Cancels a transaction by resubmitting it as no-op transaction and with a higher gas price.
      * @summary Cancel transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {number} nonce Transaction nonce.
-     * @param {GasParams} [gasParams]
+     * @param {GasParams} gasParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14213,7 +14342,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
       chain: ChainName,
       walletAddress: string,
       nonce: number,
-      gasParams?: GasParams,
+      gasParams: GasParams,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp
@@ -14224,7 +14353,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
      * Count all transactions for the given wallet address.
      * @summary Count all transactions for a wallet
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14241,7 +14370,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
      * List the transactions submitted by the given wallet address.
      * @summary List transactions for a wallet
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {string} [hash] Filter transactions by transaction hash. To filter for multiple hashes, use ampersands: &#x60;?hash&#x3D;HASH1&amp;hash&#x3D;HASH2&amp;hash&#x3D;HASH3&#x60;
      * @param {number} [nonce] Filter transactions by nonce
      * @param {TransactionStatus} [status] Filter transactions by status
@@ -14268,9 +14397,9 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
      * Speeds up a transaction by resubmitting it with a higher gas price.
      * @summary Speed up transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} walletAddress An HSM ethereum address.
+     * @param {string} walletAddress An Ethereum address.
      * @param {number} nonce Transaction nonce.
-     * @param {GasParams} [gasParams]
+     * @param {GasParams} gasParams
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14278,7 +14407,7 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
       chain: ChainName,
       walletAddress: string,
       nonce: number,
-      gasParams?: GasParams,
+      gasParams: GasParams,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp
@@ -14298,9 +14427,9 @@ export interface TxmApiInterface {
    * Cancels a transaction by resubmitting it as no-op transaction and with a higher gas price.
    * @summary Cancel transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {number} nonce Transaction nonce.
-   * @param {GasParams} [gasParams]
+   * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TxmApiInterface
@@ -14309,7 +14438,7 @@ export interface TxmApiInterface {
     chain: ChainName,
     walletAddress: string,
     nonce: number,
-    gasParams?: GasParams,
+    gasParams: GasParams,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 
@@ -14317,7 +14446,7 @@ export interface TxmApiInterface {
    * Count all transactions for the given wallet address.
    * @summary Count all transactions for a wallet
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TxmApiInterface
@@ -14332,7 +14461,7 @@ export interface TxmApiInterface {
    * List the transactions submitted by the given wallet address.
    * @summary List transactions for a wallet
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {string} [hash] Filter transactions by transaction hash. To filter for multiple hashes, use ampersands: &#x60;?hash&#x3D;HASH1&amp;hash&#x3D;HASH2&amp;hash&#x3D;HASH3&#x60;
    * @param {number} [nonce] Filter transactions by nonce
    * @param {TransactionStatus} [status] Filter transactions by status
@@ -14357,9 +14486,9 @@ export interface TxmApiInterface {
    * Speeds up a transaction by resubmitting it with a higher gas price.
    * @summary Speed up transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {number} nonce Transaction nonce.
-   * @param {GasParams} [gasParams]
+   * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TxmApiInterface
@@ -14368,7 +14497,7 @@ export interface TxmApiInterface {
     chain: ChainName,
     walletAddress: string,
     nonce: number,
-    gasParams?: GasParams,
+    gasParams: GasParams,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 }
@@ -14384,9 +14513,9 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * Cancels a transaction by resubmitting it as no-op transaction and with a higher gas price.
    * @summary Cancel transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {number} nonce Transaction nonce.
-   * @param {GasParams} [gasParams]
+   * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TxmApi
@@ -14395,7 +14524,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
     chain: ChainName,
     walletAddress: string,
     nonce: number,
-    gasParams?: GasParams,
+    gasParams: GasParams,
     options?: RawAxiosRequestConfig
   ) {
     return TxmApiFp(this.configuration)
@@ -14407,7 +14536,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * Count all transactions for the given wallet address.
    * @summary Count all transactions for a wallet
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TxmApi
@@ -14422,7 +14551,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * List the transactions submitted by the given wallet address.
    * @summary List transactions for a wallet
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {string} [hash] Filter transactions by transaction hash. To filter for multiple hashes, use ampersands: &#x60;?hash&#x3D;HASH1&amp;hash&#x3D;HASH2&amp;hash&#x3D;HASH3&#x60;
    * @param {number} [nonce] Filter transactions by nonce
    * @param {TransactionStatus} [status] Filter transactions by status
@@ -14451,9 +14580,9 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * Speeds up a transaction by resubmitting it with a higher gas price.
    * @summary Speed up transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} walletAddress An HSM ethereum address.
+   * @param {string} walletAddress An Ethereum address.
    * @param {number} nonce Transaction nonce.
-   * @param {GasParams} [gasParams]
+   * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TxmApi
@@ -14462,7 +14591,7 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
     chain: ChainName,
     walletAddress: string,
     nonce: number,
-    gasParams?: GasParams,
+    gasParams: GasParams,
     options?: RawAxiosRequestConfig
   ) {
     return TxmApiFp(this.configuration)
@@ -14554,14 +14683,16 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
     /**
      * Create a webhook.
      * @summary Create webhook
-     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {BaseWebhookEndpoint} baseWebhookEndpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createWebhook: async (
-      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      baseWebhookEndpoint: BaseWebhookEndpoint,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
+      // verify required parameter 'baseWebhookEndpoint' is not null or undefined
+      assertParamExists('createWebhook', 'baseWebhookEndpoint', baseWebhookEndpoint);
       const localVarPath = `/webhooks`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14773,17 +14904,19 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
      * Update a webhook endpoint.
      * @summary Update webhook
      * @param {number} webhookID
-     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {BaseWebhookEndpoint} baseWebhookEndpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateWebhook: async (
       webhookID: number,
-      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      baseWebhookEndpoint: BaseWebhookEndpoint,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'webhookID' is not null or undefined
       assertParamExists('updateWebhook', 'webhookID', webhookID);
+      // verify required parameter 'baseWebhookEndpoint' is not null or undefined
+      assertParamExists('updateWebhook', 'baseWebhookEndpoint', baseWebhookEndpoint);
       const localVarPath = `/webhooks/{webhookID}`.replace(`{${'webhookID'}}`, encodeURIComponent(String(webhookID)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14871,12 +15004,12 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
     /**
      * Create a webhook.
      * @summary Create webhook
-     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {BaseWebhookEndpoint} baseWebhookEndpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createWebhook(
-      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      baseWebhookEndpoint: BaseWebhookEndpoint,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createWebhook(baseWebhookEndpoint, options);
@@ -14993,13 +15126,13 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
      * Update a webhook endpoint.
      * @summary Update webhook
      * @param {number} webhookID
-     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {BaseWebhookEndpoint} baseWebhookEndpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async updateWebhook(
       webhookID: number,
-      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      baseWebhookEndpoint: BaseWebhookEndpoint,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebhook200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.updateWebhook(webhookID, baseWebhookEndpoint, options);
@@ -15049,12 +15182,12 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
     /**
      * Create a webhook.
      * @summary Create webhook
-     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {BaseWebhookEndpoint} baseWebhookEndpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createWebhook(
-      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      baseWebhookEndpoint: BaseWebhookEndpoint,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<CreateWebhook200Response> {
       return localVarFp.createWebhook(baseWebhookEndpoint, options).then((request) => request(axios, basePath));
@@ -15117,13 +15250,13 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
      * Update a webhook endpoint.
      * @summary Update webhook
      * @param {number} webhookID
-     * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+     * @param {BaseWebhookEndpoint} baseWebhookEndpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateWebhook(
       webhookID: number,
-      baseWebhookEndpoint?: BaseWebhookEndpoint,
+      baseWebhookEndpoint: BaseWebhookEndpoint,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<CreateWebhook200Response> {
       return localVarFp
@@ -15161,13 +15294,13 @@ export interface WebhooksApiInterface {
   /**
    * Create a webhook.
    * @summary Create webhook
-   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof WebhooksApiInterface
    */
   createWebhook(
-    baseWebhookEndpoint?: BaseWebhookEndpoint,
+    baseWebhookEndpoint: BaseWebhookEndpoint,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<CreateWebhook200Response>;
 
@@ -15223,14 +15356,14 @@ export interface WebhooksApiInterface {
    * Update a webhook endpoint.
    * @summary Update webhook
    * @param {number} webhookID
-   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof WebhooksApiInterface
    */
   updateWebhook(
     webhookID: number,
-    baseWebhookEndpoint?: BaseWebhookEndpoint,
+    baseWebhookEndpoint: BaseWebhookEndpoint,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<CreateWebhook200Response>;
 }
@@ -15272,12 +15405,12 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
   /**
    * Create a webhook.
    * @summary Create webhook
-   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public createWebhook(baseWebhookEndpoint?: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
+  public createWebhook(baseWebhookEndpoint: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .createWebhook(baseWebhookEndpoint, options)
       .then((request) => request(this.axios, this.basePath));
@@ -15346,12 +15479,12 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * Update a webhook endpoint.
    * @summary Update webhook
    * @param {number} webhookID
-   * @param {BaseWebhookEndpoint} [baseWebhookEndpoint]
+   * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof WebhooksApi
    */
-  public updateWebhook(webhookID: number, baseWebhookEndpoint?: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
+  public updateWebhook(webhookID: number, baseWebhookEndpoint: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
       .updateWebhook(webhookID, baseWebhookEndpoint, options)
       .then((request) => request(this.axios, this.basePath));
