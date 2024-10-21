@@ -1585,6 +1585,12 @@ export interface ContractLookup {
    * @memberof ContractLookup
    */
   verifiedLink?: string;
+  /**
+   * Indicates whether the contract is a proxy contract.
+   * @type {boolean}
+   * @memberof ContractLookup
+   */
+  proxy: boolean;
 }
 /**
  *
