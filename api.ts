@@ -1548,7 +1548,7 @@ export interface ContractLookup {
    * @type {string}
    * @memberof ContractLookup
    */
-  bytecode: string;
+  bytecode?: string;
   /**
    * The contract\'s source code.
    * @type {string}
