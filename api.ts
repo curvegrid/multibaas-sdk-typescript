@@ -2272,7 +2272,8 @@ export const EventQueryFieldAggregatorEnum = {
   Last: 'last',
   First: 'first',
   Min: 'min',
-  Max: 'max'
+  Max: 'max',
+  Null: 'null'
 } as const;
 
 export type EventQueryFieldAggregatorEnum =
