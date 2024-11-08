@@ -2272,8 +2272,7 @@ export const EventQueryFieldAggregatorEnum = {
   Last: 'last',
   First: 'first',
   Min: 'min',
-  Max: 'max',
-  Null: 'null'
+  Max: 'max'
 } as const;
 
 export type EventQueryFieldAggregatorEnum =
@@ -3761,6 +3760,19 @@ export interface SignData200Response {
   result: HSMSignResponse;
 }
 /**
+ * A transaction that was signed externally and submitted.
+ * @export
+ * @interface SignedTransactionResponse
+ */
+export interface SignedTransactionResponse {
+  /**
+   *
+   * @type {Transaction}
+   * @memberof SignedTransactionResponse
+   */
+  tx: Transaction;
+}
+/**
  * The object used to receive a pre-signed raw transaction.
  * @export
  * @interface SignedTransactionSubmission
@@ -3869,6 +3881,31 @@ export interface StandaloneWallet {
    * @memberof StandaloneWallet
    */
   publicAddress: string;
+}
+/**
+ *
+ * @export
+ * @interface SubmitSignedTransaction200Response
+ */
+export interface SubmitSignedTransaction200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof SubmitSignedTransaction200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof SubmitSignedTransaction200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {SignedTransactionResponse}
+   * @memberof SubmitSignedTransaction200Response
+   */
+  result: SignedTransactionResponse;
 }
 /**
  * A transaction from the Ethereum Blockchain.
@@ -8456,7 +8493,7 @@ export const ChainsApiFp = function (configuration?: Configuration) {
       chain: ChainName,
       signedTransactionSubmission: SignedTransactionSubmission,
       options?: RawAxiosRequestConfig
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BaseResponse>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmitSignedTransaction200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.submitSignedTransaction(
         chain,
         signedTransactionSubmission,
@@ -8577,7 +8614,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
       chain: ChainName,
       signedTransactionSubmission: SignedTransactionSubmission,
       options?: RawAxiosRequestConfig
-    ): AxiosPromise<BaseResponse> {
+    ): AxiosPromise<SubmitSignedTransaction200Response> {
       return localVarFp
         .submitSignedTransaction(chain, signedTransactionSubmission, options)
         .then((request) => request(axios, basePath));
@@ -8674,7 +8711,7 @@ export interface ChainsApiInterface {
     chain: ChainName,
     signedTransactionSubmission: SignedTransactionSubmission,
     options?: RawAxiosRequestConfig
-  ): AxiosPromise<BaseResponse>;
+  ): AxiosPromise<SubmitSignedTransaction200Response>;
 
   /**
    * Returns a transaction for sending the native token between addresses.
