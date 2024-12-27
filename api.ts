@@ -1272,12 +1272,6 @@ export interface ContractABIMethod {
    */
   notes: string;
   /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethod
-   */
-  returns: string;
-  /**
    * The function description.
    * @type {string}
    * @memberof ContractABIMethod
@@ -1344,12 +1338,6 @@ export interface ContractABIMethod1 {
    * @memberof ContractABIMethod1
    */
   notes: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethod1
-   */
-  returns: string;
   /**
    * The function description.
    * @type {string}
@@ -2003,6 +1991,115 @@ export interface DeployContractTransaction {
    * @memberof DeployContractTransaction
    */
   label?: string;
+}
+/**
+ * The domain fields for EIP-712. All fields are optional per the specification.
+ * @export
+ * @interface EIP712Domain
+ */
+export interface EIP712Domain {
+  /**
+   * Human-readable name of the signing domain.
+   * @type {string}
+   * @memberof EIP712Domain
+   */
+  name?: string;
+  /**
+   * Current major version of the signing domain.
+   * @type {string}
+   * @memberof EIP712Domain
+   */
+  version?: string;
+  /**
+   *
+   * @type {EIP712DomainChainId}
+   * @memberof EIP712Domain
+   */
+  chainId?: EIP712DomainChainId;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof EIP712Domain
+   */
+  verifyingContract?: string;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof EIP712Domain
+   */
+  salt?: string;
+}
+/**
+ * @type EIP712DomainChainId
+ * The EIP-155 chain ID of the application using the typed data.
+ * @export
+ */
+export type EIP712DomainChainId = number | string;
+
+/**
+ *
+ * @export
+ * @interface EIP712TypeEntry
+ */
+export interface EIP712TypeEntry {
+  /**
+   *
+   * @type {string}
+   * @memberof EIP712TypeEntry
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof EIP712TypeEntry
+   */
+  type: string;
+}
+/**
+ * EIP-712 structured typed data object.
+ * @export
+ * @interface EIP712TypedData
+ */
+export interface EIP712TypedData {
+  /**
+   *
+   * @type {EIP712Types}
+   * @memberof EIP712TypedData
+   */
+  types: EIP712Types;
+  /**
+   * The root type of the message object. Must correspond to a key in the `types` object.
+   * @type {string}
+   * @memberof EIP712TypedData
+   */
+  primaryType: string;
+  /**
+   *
+   * @type {EIP712Domain}
+   * @memberof EIP712TypedData
+   */
+  domain: EIP712Domain;
+  /**
+   * The actual data, conforming to the `primaryType` definition in `types`.
+   * @type {object}
+   * @memberof EIP712TypedData
+   */
+  message: object;
+}
+/**
+ * A mapping of type names to arrays of fields.
+ * @export
+ * @interface EIP712Types
+ */
+export interface EIP712Types {
+  [key: string]: Array<EIP712TypeEntry> | any;
+
+  /**
+   *
+   * @type {Array<EIP712TypeEntry>}
+   * @memberof EIP712Types
+   */
+  EIP712Domain: Array<EIP712TypeEntry>;
 }
 /**
  * An event returned by the API call.
@@ -2801,42 +2898,78 @@ export interface HSMData {
   wallets: Array<AzureHardwareWallet>;
 }
 /**
- * Request body representing a sign-data request.
+ * @type HSMSignRequest
  * @export
- * @interface HSMSignRequest
  */
-export interface HSMSignRequest {
+export type HSMSignRequest =
+  | ({ method: 'eth_signTypedData_v4' } & HSMSignRequestTypedData)
+  | ({ method: 'personal_sign' } & HSMSignRequestPersonalSign)
+  | ({ method: 'HSMSignRequestPersonalSign' } & HSMSignRequestPersonalSign)
+  | ({ method: 'HSMSignRequestTypedData' } & HSMSignRequestTypedData);
+
+/**
+ * Request to sign a message using a cloud wallet.
+ * @export
+ * @interface HSMSignRequestPersonalSign
+ */
+export interface HSMSignRequestPersonalSign {
+  /**
+   * The signing method to use.
+   * @type {string}
+   * @memberof HSMSignRequestPersonalSign
+   */
+  method: string;
   /**
    * An ethereum address.
    * @type {string}
-   * @memberof HSMSignRequest
+   * @memberof HSMSignRequestPersonalSign
    */
   address: string;
   /**
-   * Is the data field an encapsulated EIP-712 typed message?
-   * @type {boolean}
-   * @memberof HSMSignRequest
-   */
-  isTyped?: boolean;
-  /**
-   * Data to sign
+   * A hex string.
    * @type {string}
-   * @memberof HSMSignRequest
+   * @memberof HSMSignRequestPersonalSign
    */
   data: string;
   /**
    *
-   * @type {HSMSignRequestChainId}
-   * @memberof HSMSignRequest
+   * @type {HSMSignRequestPersonalSignChainId}
+   * @memberof HSMSignRequestPersonalSign
    */
-  chainId?: HSMSignRequestChainId;
+  chainId?: HSMSignRequestPersonalSignChainId;
 }
 /**
- * @type HSMSignRequestChainId
+ * @type HSMSignRequestPersonalSignChainId
+ * Optionally lock the message to a specific chain by encoding the chain ID in the signature per EIP-155.
  * @export
  */
-export type HSMSignRequestChainId = number | string;
+export type HSMSignRequestPersonalSignChainId = number | string;
 
+/**
+ * Request to sign typed data using a cloud wallet.
+ * @export
+ * @interface HSMSignRequestTypedData
+ */
+export interface HSMSignRequestTypedData {
+  /**
+   * The signing method to use.
+   * @type {string}
+   * @memberof HSMSignRequestTypedData
+   */
+  method: string;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof HSMSignRequestTypedData
+   */
+  address: string;
+  /**
+   *
+   * @type {EIP712TypedData}
+   * @memberof HSMSignRequestTypedData
+   */
+  data: EIP712TypedData;
+}
 /**
  * Response body representing a sign-data response.
  * @export
