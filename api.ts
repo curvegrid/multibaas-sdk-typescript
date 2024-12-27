@@ -1114,6 +1114,12 @@ export interface ContractABIErrorArgument {
   type: ContractABIType;
   /**
    *
+   * @type {string}
+   * @memberof ContractABIErrorArgument
+   */
+  typeName: string;
+  /**
+   *
    * @type {boolean}
    * @memberof ContractABIErrorArgument
    */
@@ -1192,6 +1198,12 @@ export interface ContractABIEventArgument {
    * @memberof ContractABIEventArgument
    */
   type: ContractABIType;
+  /**
+   *
+   * @type {string}
+   * @memberof ContractABIEventArgument
+   */
+  typeName: string;
   /**
    *
    * @type {boolean}
@@ -1356,13 +1368,19 @@ export interface ContractABIMethodArgument {
    * @type {string}
    * @memberof ContractABIMethodArgument
    */
-  name?: string;
+  name: string;
   /**
    *
    * @type {ContractABIType}
    * @memberof ContractABIMethodArgument
    */
-  type?: ContractABIType;
+  type: ContractABIType;
+  /**
+   *
+   * @type {string}
+   * @memberof ContractABIMethodArgument
+   */
+  typeName: string;
   /**
    *
    * @type {ContractABITypeConversion}
@@ -1374,7 +1392,7 @@ export interface ContractABIMethodArgument {
    * @type {string}
    * @memberof ContractABIMethodArgument
    */
-  notes?: string;
+  notes: string;
 }
 /**
  * A contract function or event argument type.
