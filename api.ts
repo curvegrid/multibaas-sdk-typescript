@@ -164,6 +164,25 @@ export interface AcceptInviteRequest {
   idToken?: string;
 }
 /**
+ * An access tuple representing an address and its storage keys.
+ * @export
+ * @interface AccessTuple
+ */
+export interface AccessTuple {
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof AccessTuple
+   */
+  address: string | null;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof AccessTuple
+   */
+  storageKeys: Array<string>;
+}
+/**
  * Add key request data.
  * @export
  * @interface AddKey
@@ -719,12 +738,6 @@ export interface BaseWebhookEndpoint {
  */
 export interface Block {
   /**
-   *
-   * @type {string}
-   * @memberof Block
-   */
-  blockchain: string;
-  /**
    * The keccak256 hash as a hex string of 256 bits.
    * @type {string}
    * @memberof Block
@@ -831,7 +844,7 @@ export interface Block {
    * @type {string}
    * @memberof Block
    */
-  baseFeePerGas: string;
+  baseFeePerGas?: string;
 }
 /**
  * CORS Origin
@@ -3873,6 +3886,49 @@ export interface SetAddress201Response {
   result: Address;
 }
 /**
+ * Authorization data for setCode operations.
+ * @export
+ * @interface SetCodeAuthorization
+ */
+export interface SetCodeAuthorization {
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof SetCodeAuthorization
+   */
+  chainId: string;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof SetCodeAuthorization
+   */
+  address: string;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof SetCodeAuthorization
+   */
+  nonce: string;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof SetCodeAuthorization
+   */
+  yParity: string;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof SetCodeAuthorization
+   */
+  r: string;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof SetCodeAuthorization
+   */
+  s: string;
+}
+/**
  * Request body representing a set local nonce request.
  * @export
  * @interface SetNonceRequest
@@ -4071,11 +4127,29 @@ export interface Transaction {
    */
   type: string;
   /**
+   * A hex string or null.
+   * @type {string}
+   * @memberof Transaction
+   */
+  chainId?: string | null;
+  /**
    * A hex string.
    * @type {string}
    * @memberof Transaction
    */
   nonce: string;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof Transaction
+   */
+  to: string | null;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof Transaction
+   */
+  gas: string;
   /**
    * A hex string or null.
    * @type {string}
@@ -4087,25 +4161,19 @@ export interface Transaction {
    * @type {string}
    * @memberof Transaction
    */
+  maxPriorityFeePerGas?: string | null;
+  /**
+   * A hex string or null.
+   * @type {string}
+   * @memberof Transaction
+   */
   maxFeePerGas?: string | null;
   /**
    * A hex string or null.
    * @type {string}
    * @memberof Transaction
    */
-  maxPriorityFeePerGas?: string | null;
-  /**
-   * A hex string.
-   * @type {string}
-   * @memberof Transaction
-   */
-  gas: string;
-  /**
-   * An ethereum address.
-   * @type {string}
-   * @memberof Transaction
-   */
-  to: string | null;
+  maxFeePerBlobGas?: string | null;
   /**
    * A hex string or null.
    * @type {string}
@@ -4118,6 +4186,24 @@ export interface Transaction {
    * @memberof Transaction
    */
   input: string;
+  /**
+   *
+   * @type {Array<AccessTuple>}
+   * @memberof Transaction
+   */
+  accessList?: Array<AccessTuple> | null;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof Transaction
+   */
+  blobVersionedHashes?: Array<string> | null;
+  /**
+   *
+   * @type {Array<SetCodeAuthorization>}
+   * @memberof Transaction
+   */
+  authorizationList?: Array<SetCodeAuthorization> | null;
   /**
    * A hex string.
    * @type {string}
@@ -4137,11 +4223,29 @@ export interface Transaction {
    */
   s: string;
   /**
-   * A hex string.
+   * A hex string or null.
    * @type {string}
    * @memberof Transaction
    */
-  chainId?: string;
+  yParity?: string | null;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof Transaction
+   */
+  blobs?: Array<string> | null;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof Transaction
+   */
+  commitments?: Array<string> | null;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof Transaction
+   */
+  proofs?: Array<string> | null;
   /**
    * The keccak256 hash as a hex string of 256 bits.
    * @type {string}
