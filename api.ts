@@ -602,92 +602,6 @@ export interface BaseResponse {
   message: string;
 }
 /**
- * A transaction to be signed.
- * @export
- * @interface BaseTransactionToSign
- */
-export interface BaseTransactionToSign {
-  /**
-   *
-   * @type {BaseTransactionToSignTx}
-   * @memberof BaseTransactionToSign
-   */
-  tx: BaseTransactionToSignTx;
-}
-/**
- * An Ethereum transaction.
- * @export
- * @interface BaseTransactionToSignTx
- */
-export interface BaseTransactionToSignTx {
-  /**
-   * Sender account nonce of the transaction
-   * @type {number}
-   * @memberof BaseTransactionToSignTx
-   */
-  nonce?: number;
-  /**
-   * Gas price of the transaction
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  gasPrice?: string;
-  /**
-   * Fee cap per gas of the transaction
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  gasFeeCap?: string;
-  /**
-   * GasTipCap per gas of the transaction
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  gasTipCap?: string;
-  /**
-   * Gas limit of the transaction
-   * @type {number}
-   * @memberof BaseTransactionToSignTx
-   */
-  gas: number;
-  /**
-   * An ethereum address.
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  from: string;
-  /**
-   * An ethereum address.
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  to?: string | null;
-  /**
-   * Amount (in wei) to send with the transaction.
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  value: string;
-  /**
-   * A hex string.
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  data: string;
-  /**
-   * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof BaseTransactionToSignTx
-   */
-  hash?: string;
-  /**
-   * Transaction type
-   * @type {number}
-   * @memberof BaseTransactionToSignTx
-   */
-  type: number;
-}
-/**
  * A user.
  * @export
  * @interface BaseUser
@@ -947,6 +861,92 @@ export interface ChainStatus {
    * @memberof ChainStatus
    */
   baseFee?: string;
+}
+/**
+ * A Cloud Wallet transaction to be signed.
+ * @export
+ * @interface CloudWalletTXToSign
+ */
+export interface CloudWalletTXToSign {
+  /**
+   *
+   * @type {CloudWalletTXToSignTx}
+   * @memberof CloudWalletTXToSign
+   */
+  tx: CloudWalletTXToSignTx;
+}
+/**
+ * An Ethereum transaction.
+ * @export
+ * @interface CloudWalletTXToSignTx
+ */
+export interface CloudWalletTXToSignTx {
+  /**
+   * Sender account nonce of the transaction
+   * @type {number}
+   * @memberof CloudWalletTXToSignTx
+   */
+  nonce?: number;
+  /**
+   * Gas price of the transaction
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  gasPrice?: string;
+  /**
+   * Fee cap per gas of the transaction
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  gasFeeCap?: string;
+  /**
+   * GasTipCap per gas of the transaction
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  gasTipCap?: string;
+  /**
+   * Gas limit of the transaction
+   * @type {number}
+   * @memberof CloudWalletTXToSignTx
+   */
+  gas: number;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  from: string;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  to?: string | null;
+  /**
+   * Amount (in wei) to send with the transaction.
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  value: string;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  data: string;
+  /**
+   * The keccak256 hash as a hex string of 256 bits.
+   * @type {string}
+   * @memberof CloudWalletTXToSignTx
+   */
+  hash?: string;
+  /**
+   * Transaction type
+   * @type {number}
+   * @memberof CloudWalletTXToSignTx
+   */
+  type: number;
 }
 /**
  * A returned contract.
@@ -2000,10 +2000,10 @@ export interface DeployContract200Response {
 export interface DeployContractTransaction {
   /**
    *
-   * @type {BaseTransactionToSignTx}
+   * @type {TransactionToSignTx}
    * @memberof DeployContractTransaction
    */
-  tx: BaseTransactionToSignTx;
+  tx: TransactionToSignTx;
   /**
    *
    * @type {boolean}
@@ -4486,10 +4486,10 @@ export type TransactionStatus = typeof TransactionStatus[keyof typeof Transactio
 export interface TransactionToSign {
   /**
    *
-   * @type {BaseTransactionToSignTx}
+   * @type {TransactionToSignTx}
    * @memberof TransactionToSign
    */
-  tx: BaseTransactionToSignTx;
+  tx: TransactionToSignTx;
   /**
    *
    * @type {boolean}
@@ -4505,16 +4505,89 @@ export interface TransactionToSign {
 export interface TransactionToSignResponse extends PostMethodResponse {
   /**
    *
-   * @type {BaseTransactionToSignTx}
+   * @type {TransactionToSignTx}
    * @memberof TransactionToSignResponse
    */
-  tx: BaseTransactionToSignTx;
+  tx: TransactionToSignTx;
   /**
    *
    * @type {boolean}
    * @memberof TransactionToSignResponse
    */
   submitted: boolean;
+}
+/**
+ * An Ethereum transaction.
+ * @export
+ * @interface TransactionToSignTx
+ */
+export interface TransactionToSignTx {
+  /**
+   * Sender account nonce of the transaction
+   * @type {number}
+   * @memberof TransactionToSignTx
+   */
+  nonce: number;
+  /**
+   * Gas price of the transaction
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  gasPrice?: string;
+  /**
+   * Fee cap per gas of the transaction
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  gasFeeCap?: string;
+  /**
+   * GasTipCap per gas of the transaction
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  gasTipCap?: string;
+  /**
+   * Gas limit of the transaction
+   * @type {number}
+   * @memberof TransactionToSignTx
+   */
+  gas: number;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  from: string;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  to?: string | null;
+  /**
+   * Amount (in wei) to send with the transaction.
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  value: string;
+  /**
+   * A hex string.
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  data: string;
+  /**
+   * The keccak256 hash as a hex string of 256 bits.
+   * @type {string}
+   * @memberof TransactionToSignTx
+   */
+  hash?: string;
+  /**
+   * Transaction type
+   * @type {number}
+   * @memberof TransactionToSignTx
+   */
+  type: number;
 }
 /**
  *
@@ -13387,19 +13460,19 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
      * Signs and submits the given transaction using an HSM address.
      * @summary Sign and submit transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {BaseTransactionToSign} baseTransactionToSign
+     * @param {CloudWalletTXToSign} cloudWalletTXToSign
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     signAndSubmitTransaction: async (
       chain: ChainName,
-      baseTransactionToSign: BaseTransactionToSign,
+      cloudWalletTXToSign: CloudWalletTXToSign,
       options: RawAxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'chain' is not null or undefined
       assertParamExists('signAndSubmitTransaction', 'chain', chain);
-      // verify required parameter 'baseTransactionToSign' is not null or undefined
-      assertParamExists('signAndSubmitTransaction', 'baseTransactionToSign', baseTransactionToSign);
+      // verify required parameter 'cloudWalletTXToSign' is not null or undefined
+      assertParamExists('signAndSubmitTransaction', 'cloudWalletTXToSign', cloudWalletTXToSign);
       const localVarPath = `/chains/{chain}/hsm/submit`.replace(`{${'chain'}}`, encodeURIComponent(String(chain)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13423,7 +13496,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(baseTransactionToSign, localVarRequestOptions, configuration);
+      localVarRequestOptions.data = serializeDataIfNeeded(cloudWalletTXToSign, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -13705,18 +13778,18 @@ export const HsmApiFp = function (configuration?: Configuration) {
      * Signs and submits the given transaction using an HSM address.
      * @summary Sign and submit transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {BaseTransactionToSign} baseTransactionToSign
+     * @param {CloudWalletTXToSign} cloudWalletTXToSign
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async signAndSubmitTransaction(
       chain: ChainName,
-      baseTransactionToSign: BaseTransactionToSign,
+      cloudWalletTXToSign: CloudWalletTXToSign,
       options?: RawAxiosRequestConfig
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferEth200Response>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signAndSubmitTransaction(
         chain,
-        baseTransactionToSign,
+        cloudWalletTXToSign,
         options
       );
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -13876,17 +13949,17 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
      * Signs and submits the given transaction using an HSM address.
      * @summary Sign and submit transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {BaseTransactionToSign} baseTransactionToSign
+     * @param {CloudWalletTXToSign} cloudWalletTXToSign
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     signAndSubmitTransaction(
       chain: ChainName,
-      baseTransactionToSign: BaseTransactionToSign,
+      cloudWalletTXToSign: CloudWalletTXToSign,
       options?: RawAxiosRequestConfig
     ): AxiosPromise<TransferEth200Response> {
       return localVarFp
-        .signAndSubmitTransaction(chain, baseTransactionToSign, options)
+        .signAndSubmitTransaction(chain, cloudWalletTXToSign, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -14020,14 +14093,14 @@ export interface HsmApiInterface {
    * Signs and submits the given transaction using an HSM address.
    * @summary Sign and submit transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {BaseTransactionToSign} baseTransactionToSign
+   * @param {CloudWalletTXToSign} cloudWalletTXToSign
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApiInterface
    */
   signAndSubmitTransaction(
     chain: ChainName,
-    baseTransactionToSign: BaseTransactionToSign,
+    cloudWalletTXToSign: CloudWalletTXToSign,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<TransferEth200Response>;
 
@@ -14193,18 +14266,18 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * Signs and submits the given transaction using an HSM address.
    * @summary Sign and submit transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {BaseTransactionToSign} baseTransactionToSign
+   * @param {CloudWalletTXToSign} cloudWalletTXToSign
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HsmApi
    */
   public signAndSubmitTransaction(
     chain: ChainName,
-    baseTransactionToSign: BaseTransactionToSign,
+    cloudWalletTXToSign: CloudWalletTXToSign,
     options?: RawAxiosRequestConfig
   ) {
     return HsmApiFp(this.configuration)
-      .signAndSubmitTransaction(chain, baseTransactionToSign, options)
+      .signAndSubmitTransaction(chain, cloudWalletTXToSign, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
