@@ -18,6 +18,7 @@ export class APIError extends Error {
       stack = originalError.stack;
     } else if (originalError instanceof Error) {
       message = originalError.message;
+      stack = originalError.stack;
     }
 
     super(message);
@@ -34,5 +35,5 @@ export const axiosInstance = axios.create({});
 // Wrap all SDK calls to reject with an APIError
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(new APIError(error)) 
+  (error) => Promise.reject(new APIError(error))
 );
