@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 
-export default class APIError extends Error {
+export class APIError extends Error {
   status: number | undefined;
 
   code: string | undefined;
