@@ -30,6 +30,7 @@
   },
   "files": [
     "dist",
+    "exports.js",
     "LICENSE",
     "README.md"
   ]
