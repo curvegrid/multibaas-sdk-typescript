@@ -16,6 +16,18 @@
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./axios": {
+      "require": "./dist/axios.js",
+      "import": "./dist/esm/axios.js",
+      "types": "./dist/axios.d.ts"
+    }
+  },
   "sideEffects": false,
   "scripts": {
     "build": "tsc && tsc -p tsconfig.esm.json",
@@ -30,8 +42,8 @@
   },
   "files": [
     "dist",
-    "exports.js",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "axios.ts"
   ]
 }
