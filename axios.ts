@@ -1,16 +1,16 @@
-import { AxiosError, isAxiosError } from 'axios';
+import { AxiosError, isAxiosError } from "axios";
 
 export class APIError extends Error {
   status: number | undefined;
   code: string | undefined;
-  cause: unknown;
+  cause: AxiosError;
 
   constructor(originalError: AxiosError<{ message?: string }>) {
     const message =
       originalError.response?.data.message || originalError.message;
 
     super(message);
-    this.name = 'APIError';
+    this.name = "APIError";
     this.stack = originalError.stack;
 
     this.status = originalError.response?.status;
