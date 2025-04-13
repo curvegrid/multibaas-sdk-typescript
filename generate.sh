@@ -16,8 +16,8 @@ if [[ "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
 fi
 
 # preserve package.json file
-mkdir no-overwrite
-cp package.json no-overwrite/package.json
+TMP_DIR=$(mktemp -d)
+cp package.json "$TMP_DIR/package.json"
 
 # Generate the SDK
 npx @openapitools/openapi-generator-cli batch \
@@ -29,5 +29,5 @@ npm run build
 npx prettier@2.7.1 --trailing-comma none --print-width=120 --single-quote './**/*.ts' --write
 
 # copy package.json file
-mv no-overwrite/package.json package.json
-rm -rf no-overwrite
+mv "$TMP_DIR/package.json" package.json
+rm -rf "$TMP_DIR"
