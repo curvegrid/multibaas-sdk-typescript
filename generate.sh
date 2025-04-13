@@ -17,7 +17,6 @@ fi
 
 # Generate the SDK
 npx @openapitools/openapi-generator-cli batch \
-    --clean \
     openapi-generator.yaml
 
 npm install
