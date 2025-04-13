@@ -15,10 +15,19 @@ if [[ "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
     perl -pi -e "s/npmVersion: [0-9]+\.[0-9]+\.[0-9]+(-.+)?/npmVersion: ${VERSION}/g" openapi-generator.yaml
 fi
 
+# preserve package.json file
+mkdir no-overwrite
+cp package.json no-overwrite/package.json
+
 # Generate the SDK
 npx @openapitools/openapi-generator-cli batch \
-    openapi-generator.yaml
+    openapi-generator.yaml \
+    --clean \ 
 
 npm install
 npm run build
 npx prettier@2.7.1 --trailing-comma none --print-width=120 --single-quote './**/*.ts' --write
+
+# copy package.json file
+mv no-overwrite/package.json package.json
+rm -rf no-overwrite
