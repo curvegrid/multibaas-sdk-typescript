@@ -17,12 +17,12 @@ fi
 
 # Generate the SDK
 npx @openapitools/openapi-generator-cli batch \
-    openapi-generator.yaml \
-    --clean \ 
+    --clean \
+    openapi-generator.yaml
+
+# Workaround to expose axios for external usage
+echo "export * from './axios';" >> index.ts
 
 npm install
 npm run build
 npx prettier@2.7.1 --trailing-comma none --print-width=120 --single-quote './**/*.ts' --write
-
-# Workaround to expose axios for external usage
-echo "export * from './axios';" >> index.ts
