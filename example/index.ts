@@ -1,5 +1,6 @@
 import * as MultiBaas from '@curvegrid/multibaas-sdk-typescript';
-import { isAxiosError } from 'axios';
+import { errorInterceptor } from '@curvegrid/multibaas-sdk-typescript';
+import axios, { isAxiosError } from 'axios';
 
 // chainIDToERC20Addr maps chain IDs to random ERC20 contract addresses for the purpose of this example
 const chainIDToERC20Addr = new Map<number, string>([
@@ -68,7 +69,25 @@ if (resp2.data.result.kind === 'MethodCallResponse') {
 
 // Intentionally calling a contract method that doesn't exist to trigger an error
 try {
-  const resp3 = await contractsApi.callContractFunction(
+  await contractsApi.callContractFunction(chain, contractAddr, contractLabel, 'thisMethodDoNotExist', payload);
+} catch (e) {
+  if (isAxiosError(e)) {
+    console.log(`Example 3: The callContractFunction method correctly threw an error: ${e.response.data.message}`);
+  }
+}
+
+// Use interceptors to handle errors and message
+const customAxios = axios.create({});
+
+customAxios.interceptors.response.use(
+  (response) => response,
+  (error) => errorInterceptor(error)
+);
+
+const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxios);
+
+try {
+  await interceptedContractsApi.callContractFunction(
     chain,
     contractAddr,
     contractLabel,
@@ -76,6 +95,7 @@ try {
     payload
   );
 } catch (e) {
+  console.log(e.name);
   if (isAxiosError(e)) {
     console.log(`Example 3: The callContractFunction method correctly threw an error: ${e.response.data.message}`);
   }
