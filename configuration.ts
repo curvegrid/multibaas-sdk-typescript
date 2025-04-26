@@ -12,6 +12,76 @@
  * Do not edit the class manually.
  */
 
+import axios, { AxiosInstance } from 'axios';
+
+/**
+ * Custom API Error class for enhanced error handling
+ * @export
+ * @class CustomApiError
+ * @extends {Error}
+ */
+export class CustomApiError extends Error {
+  public readonly status: number;
+  public readonly response: any;
+  public readonly responseData: any;
+
+  constructor(message: string, status: number, responseData?: any, response?: any) {
+    super(message);
+    this.name = 'CustomApiError';
+    this.status = status;
+    this.response = response;
+    this.responseData = responseData;
+
+    // This is needed for instanceof to work correctly in TypeScript
+    Object.setPrototypeOf(this, CustomApiError.prototype);
+  }
+
+  /**
+   * Get the error code from the response
+   * @returns {string | undefined} The error code
+   */
+  public getErrorCode(): string | undefined {
+    return this.responseData?.error_code;
+  }
+
+  /**
+   * Get the error message from the response
+   * @returns {string | undefined} The error message
+   */
+  public getErrorMessage(): string | undefined {
+    return this.responseData?.message;
+  }
+
+  /**
+   * Get additional error details from the response
+   * @returns {any} The error details
+   */
+  public getDetails(): any {
+    return this.responseData?.details;
+  }
+
+  /**
+   * Check if the error is an instance of CustomApiError
+   * @param error - The error to check
+   * @returns {boolean} True if the error is a CustomApiError
+   */
+  static isCustomApiError(error: any): boolean {
+    return error instanceof CustomApiError;
+  }
+
+  /**
+   * Create a CustomApiError from an Axios error
+   * @param error - The Axios error
+   * @returns {CustomApiError} A new CustomApiError instance
+   */
+  static fromAxiosError(error: any): CustomApiError {
+    if (axios.isAxiosError(error)) {
+      return new CustomApiError(error.message, error.response?.status || 500, error.response?.data, error.response);
+    }
+    return new CustomApiError(error.message || 'Unknown error', 500);
+  }
+}
+
 export interface ConfigurationParameters {
   apiKey?: string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>);
   username?: string;
@@ -25,6 +95,7 @@ export interface ConfigurationParameters {
   serverIndex?: number;
   baseOptions?: any;
   formDataCtor?: new () => any;
+  timeout?: number;
 }
 
 export class Configuration {
@@ -89,6 +160,18 @@ export class Configuration {
    */
   formDataCtor?: new () => any;
 
+  /**
+   * Request timeout in milliseconds
+   * @type {number}
+   */
+  timeout?: number;
+
+  /**
+   * Isolated Axios instance for this SDK
+   * @private
+   */
+  private axiosInstance: AxiosInstance;
+
   constructor(param: ConfigurationParameters = {}) {
     this.apiKey = param.apiKey;
     this.username = param.username;
@@ -103,6 +186,64 @@ export class Configuration {
       }
     };
     this.formDataCtor = param.formDataCtor;
+    this.timeout = param.timeout || 60000; // default to 60 sec
+
+    // Setup initial headers with authentication if provided
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
+
+    // If we have an access token, add it to the default headers
+    if (this.accessToken && typeof this.accessToken === 'string') {
+      headers['Authorization'] = `Bearer ${this.accessToken}`;
+    }
+
+    // Validate basePath if provided
+    if (this.basePath) {
+      try {
+        // Test if the basePath is a valid URL
+        new URL(this.basePath);
+      } catch (error) {
+        throw new Error(`Invalid basePath: ${this.basePath}. Please provide a valid URL.`);
+      }
+    }
+
+    // Create an isolated Axios instance for this SDK
+    this.axiosInstance = axios.create({
+      baseURL: this.basePath,
+      timeout: this.timeout,
+      headers: headers
+    });
+
+    // Add response interceptor for error handling
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (axios.isAxiosError(error) && error.response) {
+          return Promise.reject(
+            new CustomApiError(error.message, error.response.status, error.response.data, error.response)
+          );
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // Setup dynamic authentication if accessToken is a function
+    if (this.accessToken && typeof this.accessToken !== 'string') {
+      this.axiosInstance.interceptors.request.use(async (config) => {
+        try {
+          const token = typeof this.accessToken === 'function' ? await this.accessToken() : await this.accessToken;
+
+          // Set Authorization header
+          if (config.headers) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
+          return config;
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      });
+    }
   }
 
   /**
@@ -118,5 +259,13 @@ export class Configuration {
   public isJsonMime(mime: string): boolean {
     const jsonMime: RegExp = new RegExp('^(application/json|[^;/ \t]+/[^;/ \t]+[+]json)[ \t]*(;.*)?$', 'i');
     return mime !== null && (jsonMime.test(mime) || mime.toLowerCase() === 'application/json-patch+json');
+  }
+
+  /**
+   * Get the Axios instance for this SDK
+   * @returns {AxiosInstance} The Axios instance
+   */
+  public getAxiosInstance(): AxiosInstance {
+    return this.axiosInstance;
   }
 }

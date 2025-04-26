@@ -1,5 +1,8 @@
+import * as dotenv from 'dotenv';
 import * as MultiBaas from '@curvegrid/multibaas-sdk-typescript';
 import { isAxiosError } from 'axios';
+
+dotenv.config();
 
 // chainIDToERC20Addr maps chain IDs to random ERC20 contract addresses for the purpose of this example
 const chainIDToERC20Addr = new Map<number, string>([
