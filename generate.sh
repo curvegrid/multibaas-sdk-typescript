@@ -1,7 +1,7 @@
 #!/bin/bash -e
 # Copyright (c) 2022 Curvegrid Inc.
 
-# Generate the Python Multibaas SDK
+# Generate the Typescript Multibaas SDK
 cd "$(dirname "$0")"
 
 # Set the openapi-generator version
@@ -20,6 +20,14 @@ npx @openapitools/openapi-generator-cli batch \
     --clean \
     openapi-generator.yaml
 
+# After OpenAPI generation, update package.json to restore our custom values
+jq '.description = "MultiBaas SDK for TypeScript / JavaScript" | 
+    .author = "Curvegrid" | 
+    .keywords = ["curvegrid", "multibaas", "@curvegrid/multibaas-sdk"]' package.json > package.json.tmp && mv package.json.tmp package.json
+
+jq '.exclude = [ "dist", "node_modules", "templates", "example"]' tsconfig.json > tsconfig.json.tmp && mv tsconfig.json.tmp tsconfig.json
+
 npm install
 npm run build
+
 npx prettier@2.7.1 --trailing-comma none --print-width=120 --single-quote './**/*.ts' --write
