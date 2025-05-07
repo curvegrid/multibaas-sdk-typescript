@@ -11,11 +11,12 @@
   "author": "Curvegrid",
   "license": "MIT",
   "dependencies": {
-    "@curvegrid/multibaas-sdk-typescript": "file:..",
-    "axios": "^1.2.2"
+    "@curvegrid/multibaas-sdk": "file:..",
+    "axios": "^1.6.1",
+    "dotenv": "^16.5.0"
   },
   "devDependencies": {
-    "typescript": "^4.9.4",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0"
   }
 }

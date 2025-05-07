@@ -1,6 +1,9 @@
-import * as MultiBaas from '@curvegrid/multibaas-sdk-typescript';
-import { errorInterceptor } from '@curvegrid/multibaas-sdk-typescript';
+import dotenv from 'dotenv';
+import * as MultiBaas from '@curvegrid/multibaas-sdk';
+import { errorInterceptor, AxiosInstance } from '@curvegrid/multibaas-sdk';
 import axios, { isAxiosError } from 'axios';
+
+dotenv.config();
 
 // chainIDToERC20Addr maps chain IDs to random ERC20 contract addresses for the purpose of this example
 const chainIDToERC20Addr = new Map<number, string>([
@@ -84,7 +87,7 @@ customAxios.interceptors.response.use(
   (error) => errorInterceptor(error)
 );
 
-const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxios);
+const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxios as AxiosInstance);
 
 try {
   await interceptedContractsApi.callContractFunction(
@@ -95,7 +98,7 @@ try {
     payload
   );
 } catch (e) {
-  console.log(e.name);
+  console.log(e.name, e.message);
   if (isAxiosError(e)) {
     console.log(`Example 3: The callContractFunction method correctly threw an error: ${e.response.data.message}`);
   }

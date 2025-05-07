@@ -1,5 +1,5 @@
 import { AxiosError, isAxiosError } from 'axios';
-
+export { AxiosInstance } from 'axios';
 /**
  * MultiBaas error response.
  *
