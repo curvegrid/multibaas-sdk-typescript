@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import * as MultiBaas from '@curvegrid/multibaas-sdk';
-import { errorInterceptor, AxiosInstance } from '@curvegrid/multibaas-sdk';
+import { errorInterceptor, AxiosInstance, APIError } from '@curvegrid/multibaas-sdk';
 import axios, { isAxiosError } from 'axios';
 
 dotenv.config();
@@ -79,6 +79,8 @@ try {
   }
 }
 
+/* Example 4: handling errors with errorInterceptor */
+
 // Use interceptors to handle errors and message
 const customAxios = axios.create({});
 
@@ -98,8 +100,8 @@ try {
     payload
   );
 } catch (e) {
-  console.log(e.name, e.message);
-  if (isAxiosError(e)) {
-    console.log(`Example 3: The callContractFunction method correctly threw an error: ${e.response.data.message}`);
+  if (e instanceof APIError) {
+    console.log(`Example 4: The error instance is now ${e.name} instead of AxiosError`);
+    console.log(`Status: ${e.status}, Code: ${e.code}, Message: ${e.message}`);
   }
 }
