@@ -1032,7 +1032,7 @@ export interface ContractABI {
    * @type {ContractABIMethod1}
    * @memberof ContractABI
    */
-  constructor: ContractABIMethod1 | null;
+  constructor: ContractABIMethod1;
   /**
    *
    * @type {{ [key: string]: ContractABIMethod; }}
@@ -1056,13 +1056,13 @@ export interface ContractABI {
    * @type {ContractABIMethod}
    * @memberof ContractABI
    */
-  fallback: ContractABIMethod | null;
+  fallback: ContractABIMethod;
   /**
    *
    * @type {ContractABIMethod}
    * @memberof ContractABI
    */
-  receive: ContractABIMethod | null;
+  receive: ContractABIMethod;
 }
 /**
  * A contract error.
@@ -1228,7 +1228,7 @@ export interface ContractABIEventArgument {
    * @type {ContractABITypeConversion}
    * @memberof ContractABIEventArgument
    */
-  typeConversion: ContractABITypeConversion | null;
+  typeConversion: ContractABITypeConversion;
   /**
    * The developer documentation.
    * @type {string}
@@ -1399,7 +1399,7 @@ export interface ContractABIMethodArgument {
    * @type {ContractABITypeConversion}
    * @memberof ContractABIMethodArgument
    */
-  typeConversion: ContractABITypeConversion | null;
+  typeConversion: ContractABITypeConversion;
   /**
    *
    * @type {string}
@@ -1740,7 +1740,7 @@ export interface ContractParameter {
    * @type {ContractABITypeConversion}
    * @memberof ContractParameter
    */
-  typeConversion: ContractABITypeConversion | null;
+  typeConversion: ContractABITypeConversion;
 }
 /**
  *
@@ -2170,7 +2170,7 @@ export interface EventField {
    */
   name: string;
   /**
-   * The input value.
+   *
    * @type {any}
    * @memberof EventField
    */
@@ -2476,10 +2476,10 @@ export type EventQueryFilterOperatorEnum =
 export interface EventQueryResults {
   /**
    *
-   * @type {Array<{ [key: string]: any; }>}
+   * @type {Array<object>}
    * @memberof EventQueryResults
    */
-  rows: Array<{ [key: string]: any }>;
+  rows: Array<object>;
 }
 /**
  * Type conversion options for each of the inputs of an event.
@@ -3557,7 +3557,7 @@ export interface MethodArg {
    */
   name: string;
   /**
-   * The input value.
+   *
    * @type {any}
    * @memberof MethodArg
    */
@@ -3582,7 +3582,7 @@ export interface MethodCallPreviewResponse extends PostMethodResponse {
    */
   input: Array<any>;
   /**
-   * The function call output.
+   *
    * @type {any}
    * @memberof MethodCallPreviewResponse
    */
@@ -3595,7 +3595,7 @@ export interface MethodCallPreviewResponse extends PostMethodResponse {
  */
 export interface MethodCallResponse extends PostMethodResponse {
   /**
-   * The function call output.
+   *
    * @type {any}
    * @memberof MethodCallResponse
    */
@@ -4144,6 +4144,12 @@ export interface Transaction {
    * @memberof Transaction
    */
   to: string | null;
+  /**
+   * An ethereum address.
+   * @type {string}
+   * @memberof Transaction
+   */
+  from?: string | null;
   /**
    * A hex string.
    * @type {string}
@@ -8496,7 +8502,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * Returns a transaction.
      * @summary Get transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} hash Transaction hash.
+     * @param {string} hash A transaction hash.
      * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8548,7 +8554,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
      * Returns the receipt of a transaction that\'s been successfully added to the blockchain.
      * @summary Get transaction receipt
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} hash Transaction hash.
+     * @param {string} hash A transaction hash.
      * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8759,7 +8765,7 @@ export const ChainsApiFp = function (configuration?: Configuration) {
      * Returns a transaction.
      * @summary Get transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} hash Transaction hash.
+     * @param {string} hash A transaction hash.
      * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8786,7 +8792,7 @@ export const ChainsApiFp = function (configuration?: Configuration) {
      * Returns the receipt of a transaction that\'s been successfully added to the blockchain.
      * @summary Get transaction receipt
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} hash Transaction hash.
+     * @param {string} hash A transaction hash.
      * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8898,7 +8904,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * Returns a transaction.
      * @summary Get transaction
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} hash Transaction hash.
+     * @param {string} hash A transaction hash.
      * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8915,7 +8921,7 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
      * Returns the receipt of a transaction that\'s been successfully added to the blockchain.
      * @summary Get transaction receipt
      * @param {ChainName} chain The blockchain chain label.
-     * @param {string} hash Transaction hash.
+     * @param {string} hash A transaction hash.
      * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8996,7 +9002,7 @@ export interface ChainsApiInterface {
    * Returns a transaction.
    * @summary Get transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} hash Transaction hash.
+   * @param {string} hash A transaction hash.
    * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9013,7 +9019,7 @@ export interface ChainsApiInterface {
    * Returns the receipt of a transaction that\'s been successfully added to the blockchain.
    * @summary Get transaction receipt
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} hash Transaction hash.
+   * @param {string} hash A transaction hash.
    * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9097,7 +9103,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * Returns a transaction.
    * @summary Get transaction
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} hash Transaction hash.
+   * @param {string} hash A transaction hash.
    * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9118,7 +9124,7 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * Returns the receipt of a transaction that\'s been successfully added to the blockchain.
    * @summary Get transaction receipt
    * @param {ChainName} chain The blockchain chain label.
-   * @param {string} hash Transaction hash.
+   * @param {string} hash A transaction hash.
    * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}

@@ -7,7 +7,7 @@ The result of a preview function arguments call.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **input** | **Array&lt;any&gt;** | The function call inputs. | [default to undefined]
-**output** | **any** | The function call output. | [default to undefined]
+**output** | **any** |  | [default to undefined]
 
 ## Example
 
