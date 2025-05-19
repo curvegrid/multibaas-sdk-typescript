@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import * as MultiBaas from '@curvegrid/multibaas-sdk';
-import { errorInterceptor, AxiosInstance, APIError } from '@curvegrid/multibaas-sdk';
+import { errorInterceptor, APIError } from '@curvegrid/multibaas-sdk';
 import axios, { isAxiosError } from 'axios';
 
 dotenv.config();
@@ -89,7 +89,7 @@ customAxios.interceptors.response.use(
   (error) => errorInterceptor(error)
 );
 
-const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxios as AxiosInstance);
+const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxios);
 
 try {
   await interceptedContractsApi.callContractFunction(

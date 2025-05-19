@@ -27,10 +27,19 @@ echo "export * from './axios';" >> index.ts
 jq '.description = "MultiBaas SDK for TypeScript / JavaScript" | 
     .author = "Curvegrid" | 
     .keywords = ["curvegrid", "multibaas", "@curvegrid/multibaas-sdk"]' package.json > package.json.tmp && mv package.json.tmp package.json
-
+jq '
+  (.peerDependencies   //= {})                                # ensure object
+  | (.devDependencies  //= {})                                # ensure object
+  | .peerDependencies.axios = ">=1.7.0 <2"                    # peer range
+  | .devDependencies.axios  = "^1.7.0"                        # build / tests
+  | .dependencies      |= (del(.axios))                       # nuke 1.6.x
+' package.json > package.json.tmp && mv package.json.tmp package.json
 jq '.exclude = [ "dist", "node_modules", "templates", "example"]' tsconfig.json > tsconfig.json.tmp && mv tsconfig.json.tmp tsconfig.json
 
 npm install
 npm run build
+jq 'del(.scripts.build, .scripts.prepare)' \
+   package.json > package.json.tmp && mv package.json.tmp package.json
+npm prune --omit=dev     # <-- removes devDependencies/axios 1.7.x   **NEW**
 
 npx prettier@2.7.1 --trailing-comma none --print-width=120 --single-quote './**/*.ts' --write
