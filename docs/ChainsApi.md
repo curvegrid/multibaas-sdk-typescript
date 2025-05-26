@@ -137,7 +137,7 @@ const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
 let chain: ChainName; //The blockchain chain label. (default to undefined)
-let hash: string; //Transaction hash. (default to undefined)
+let hash: string; //A transaction hash. (default to undefined)
 let include: 'contract'; //Include contract and method call details, if available. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.getTransaction(
@@ -152,7 +152,7 @@ const { status, data } = await apiInstance.getTransaction(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
-| **hash** | [**string**] | Transaction hash. | defaults to undefined|
+| **hash** | [**string**] | A transaction hash. | defaults to undefined|
 | **include** | [**&#39;contract&#39;**]**Array<&#39;contract&#39;>** | Include contract and method call details, if available. | (optional) defaults to undefined|
 
 
@@ -196,7 +196,7 @@ const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
 let chain: ChainName; //The blockchain chain label. (default to undefined)
-let hash: string; //Transaction hash. (default to undefined)
+let hash: string; //A transaction hash. (default to undefined)
 let include: 'contract'; //Include contract and event details, if available. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.getTransactionReceipt(
@@ -211,7 +211,7 @@ const { status, data } = await apiInstance.getTransactionReceipt(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
-| **hash** | [**string**] | Transaction hash. | defaults to undefined|
+| **hash** | [**string**] | A transaction hash. | defaults to undefined|
 | **include** | [**&#39;contract&#39;**]**Array<&#39;contract&#39;>** | Include contract and event details, if available. | (optional) defaults to undefined|
 
 
