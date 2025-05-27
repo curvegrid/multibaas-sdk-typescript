@@ -17,7 +17,10 @@
   "typings": "./dist/index.d.ts",
   "module": "./dist/esm/index.js",
   "sideEffects": false,
-  "scripts": {},
+  "scripts": {
+    "build": "tsc && tsc -p tsconfig.esm.json",
+    "prepare": "npm run build"
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/node": "12.11.5 - 12.20.42",

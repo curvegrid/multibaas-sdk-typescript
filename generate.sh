@@ -20,7 +20,7 @@ npx @openapitools/openapi-generator-cli batch \
     --clean \
     openapi-generator.yaml
 
-# Workaround to expose axios for external usage
+# Add a custom Axios interceptor and Error Type
 echo "export * from './axios';" >> index.ts
 
 # After OpenAPI generation, update package.json to restore our custom values
@@ -38,8 +38,6 @@ jq '.exclude = [ "dist", "node_modules", "templates", "example"]' tsconfig.json 
 
 npm install
 npm run build
-jq 'del(.scripts.build, .scripts.prepare)' \
-   package.json > package.json.tmp && mv package.json.tmp package.json
-npm prune --omit=dev     # <-- removes devDependencies/axios 1.7.x   **NEW**
+npm prune --omit=dev # Remove dev dependencies to simulate a production-like environment locally in the example
 
 npx prettier@2.7.1 --trailing-comma none --print-width=120 --single-quote './**/*.ts' --write
