@@ -6,7 +6,7 @@ The result of a function call.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**output** | **any** | The function call output. | [default to undefined]
+**output** | **any** |  | [default to undefined]
 
 ## Example
 
