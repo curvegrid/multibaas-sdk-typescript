@@ -11,7 +11,7 @@
   "author": "Curvegrid",
   "license": "MIT",
   "dependencies": {
-    "@curvegrid/multibaas-sdk-typescript": "file:..",
+    "@curvegrid/multibaas-sdk": "file:..",
     "axios": "^1.2.2",
     "dotenv": "^16.5.0"
   },

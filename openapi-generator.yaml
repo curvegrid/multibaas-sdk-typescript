@@ -4,6 +4,7 @@ generatorName: typescript-axios
 gitUserId: curvegrid
 gitRepoId: multibaas-sdk-typescript
 licenseName: MIT
+templateDir: ./templates
 additionalProperties:
   npmName: "@curvegrid/multibaas-sdk"
   npmVersion: 1.0.4

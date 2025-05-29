@@ -1,8 +1,44 @@
-import * as dotenv from 'dotenv';
-import * as MultiBaas from '@curvegrid/multibaas-sdk-typescript';
-import { isAxiosError } from 'axios';
+import dotenv from 'dotenv';
+import * as MultiBaas from '@curvegrid/multibaas-sdk';
+import axios, { isAxiosError, type AxiosError } from 'axios';
 
 dotenv.config();
+
+interface ErrorResponse {
+  status: number;
+  message: string;
+}
+
+export class APIError extends Error {
+  status: number | undefined;
+  code: string | undefined;
+  cause: AxiosError;
+
+  constructor(originalError: AxiosError<ErrorResponse>) {
+    const { status, message } = originalError.response.data;
+    super(message);
+    this.name = 'APIError';
+    this.stack = originalError.stack;
+
+    this.status = status;
+    this.code = originalError.code;
+    this.cause = originalError;
+  }
+}
+
+export function errorInterceptor(error: unknown) {
+  if (isAxiosError<ErrorResponse>(error)) {
+    return Promise.reject(new APIError(error));
+  }
+  return Promise.reject(error);
+}
+
+export function errorInterceptorBuiltin(error: unknown) {
+  if (isAxiosError<ErrorResponse>(error)) {
+    return Promise.reject(new Error(error.message));
+  }
+  return Promise.reject(error);
+}
 
 // chainIDToERC20Addr maps chain IDs to random ERC20 contract addresses for the purpose of this example
 const chainIDToERC20Addr = new Map<number, string>([
@@ -71,7 +107,28 @@ if (resp2.data.result.kind === 'MethodCallResponse') {
 
 // Intentionally calling a contract method that doesn't exist to trigger an error
 try {
-  const resp3 = await contractsApi.callContractFunction(
+  await contractsApi.callContractFunction(chain, contractAddr, contractLabel, 'thisMethodDoNotExist', payload);
+} catch (e) {
+  if (isAxiosError(e)) {
+    console.log(`Example 3: The callContractFunction method correctly threw an error: ${e.response.data.message}`);
+  }
+}
+
+/* Example 4: handling errors with errorInterceptor */
+
+// Use interceptors to handle errors and message
+
+const customAxios = axios.create({});
+
+customAxios.interceptors.response.use(
+  (response) => response,
+  (error) => errorInterceptor(error)
+);
+
+const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxios);
+
+try {
+  await interceptedContractsApi.callContractFunction(
     chain,
     contractAddr,
     contractLabel,
@@ -79,7 +136,29 @@ try {
     payload
   );
 } catch (e) {
-  if (isAxiosError(e)) {
-    console.log(`Example 3: The callContractFunction method correctly threw an error: ${e.response.data.message}`);
+  if (e instanceof APIError) {
+    console.log(`Example 4: The error instance is now ${e.name} instead of AxiosError`);
+  }
+}
+
+const customAxiosAll = axios.create({});
+
+customAxiosAll.interceptors.response.use(
+  (response) => response,
+  (error) => errorInterceptorBuiltin(error)
+);
+const customMb = new MultiBaas.Configuration({
+  basePath: basePath.toString(),
+  accessToken: process.env.MB_API_KEY,
+  axios: customAxiosAll
+});
+
+try {
+  const adminApi = new MultiBaas.AdminApi(customMb);
+  const resp5 = await adminApi.deleteUser(100000);
+  console.log('response successfully received:', resp5.data);
+} catch (e) {
+  if (e instanceof Error) {
+    console.log(`Example 5: The error instance is now ${e.name} instead of AxiosError for all the MultiBaas API calls`);
   }
 }
