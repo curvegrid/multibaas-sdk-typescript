@@ -1032,7 +1032,7 @@ export interface ContractABI {
    * @type {ContractABIMethod1}
    * @memberof ContractABI
    */
-  constructor: ContractABIMethod1;
+  constructor: ContractABIMethod1 | null;
   /**
    *
    * @type {{ [key: string]: ContractABIMethod; }}
@@ -1056,13 +1056,13 @@ export interface ContractABI {
    * @type {ContractABIMethod}
    * @memberof ContractABI
    */
-  fallback: ContractABIMethod;
+  fallback: ContractABIMethod | null;
   /**
    *
    * @type {ContractABIMethod}
    * @memberof ContractABI
    */
-  receive: ContractABIMethod;
+  receive: ContractABIMethod | null;
 }
 /**
  * A contract error.
@@ -1228,7 +1228,7 @@ export interface ContractABIEventArgument {
    * @type {ContractABITypeConversion}
    * @memberof ContractABIEventArgument
    */
-  typeConversion: ContractABITypeConversion;
+  typeConversion: ContractABITypeConversion | null;
   /**
    * The developer documentation.
    * @type {string}
@@ -1399,7 +1399,7 @@ export interface ContractABIMethodArgument {
    * @type {ContractABITypeConversion}
    * @memberof ContractABIMethodArgument
    */
-  typeConversion: ContractABITypeConversion;
+  typeConversion: ContractABITypeConversion | null;
   /**
    *
    * @type {string}
@@ -1740,7 +1740,7 @@ export interface ContractParameter {
    * @type {ContractABITypeConversion}
    * @memberof ContractParameter
    */
-  typeConversion: ContractABITypeConversion;
+  typeConversion: ContractABITypeConversion | null;
 }
 /**
  *
@@ -2170,7 +2170,7 @@ export interface EventField {
    */
   name: string;
   /**
-   *
+   * The input value.
    * @type {any}
    * @memberof EventField
    */
@@ -2476,10 +2476,10 @@ export type EventQueryFilterOperatorEnum =
 export interface EventQueryResults {
   /**
    *
-   * @type {Array<object>}
+   * @type {Array<{ [key: string]: any; }>}
    * @memberof EventQueryResults
    */
-  rows: Array<object>;
+  rows: Array<{ [key: string]: any }>;
 }
 /**
  * Type conversion options for each of the inputs of an event.
@@ -3557,7 +3557,7 @@ export interface MethodArg {
    */
   name: string;
   /**
-   *
+   * The input value.
    * @type {any}
    * @memberof MethodArg
    */
@@ -3582,7 +3582,7 @@ export interface MethodCallPreviewResponse extends PostMethodResponse {
    */
   input: Array<any>;
   /**
-   *
+   * The function call output.
    * @type {any}
    * @memberof MethodCallPreviewResponse
    */
@@ -3595,7 +3595,7 @@ export interface MethodCallPreviewResponse extends PostMethodResponse {
  */
 export interface MethodCallResponse extends PostMethodResponse {
   /**
-   *
+   * The function call output.
    * @type {any}
    * @memberof MethodCallResponse
    */

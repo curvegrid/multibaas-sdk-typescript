@@ -7,7 +7,7 @@ Holds a field in the event\'s data.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **string** | The input name. | [default to undefined]
-**value** | **any** |  | [default to undefined]
+**value** | **any** | The input value. | [default to undefined]
 **hashed** | **boolean** | Has the value been hashed into a keccak256 string? | [default to undefined]
 **type** | **string** | The type of the argument. | [default to undefined]
 

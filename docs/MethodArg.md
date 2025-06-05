@@ -7,7 +7,7 @@ An argument passed to a method call.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **string** | The input name. | [default to undefined]
-**value** | **any** |  | [default to undefined]
+**value** | **any** | The input value. | [default to undefined]
 **type** | **string** | The type of the argument. | [default to undefined]
 
 ## Example
