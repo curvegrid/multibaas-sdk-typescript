@@ -44,6 +44,11 @@ jobs:
         with:
           node-version: "${{ env.NODE_VER }}"
           registry-url: https://registry.npmjs.org/
+      - name: Setup Java #For local testing using `act workflow_dispatch` 
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
       - name: Generate SDK to check for changes
         run: ./generate.sh
       - name: Check for changes
@@ -54,6 +59,22 @@ jobs:
           fi
       - name: Generate SDK with new package version
         run: ./generate.sh ${{ github.event.inputs.version }}
+      - name: Pack SDK for testing
+        id: pack
+        run: |
+          TARBALL=$(npm pack)
+          echo "tarball=$TARBALL" >> $GITHUB_OUTPUT
+
+      - name: Install deps & run example tests
+        working-directory: example
+        env:
+          MB_BASE_URL:  ${{ secrets.MB_BASE_URL }}
+          MB_API_KEY:   ${{ secrets.MB_API_KEY }}
+        run: |
+          # Update package.json to use the tarball instead of file:..
+          jq '.dependencies."@curvegrid/multibaas-sdk" = "../${{ steps.pack.outputs.tarball }}"' package.json > package.json.tmp && mv package.json.tmp package.json
+          npm install
+          npm run start
       - name: Setup Git Configurations
         run: |
           git config --global user.name "GitHub Actions Bot"

@@ -26,14 +26,14 @@ export class APIError extends Error {
   }
 }
 
-export function errorInterceptor(error: unknown) {
+export function errorInterceptorForContractApi(error: unknown) {
   if (isAxiosError<ErrorResponse>(error)) {
     return Promise.reject(new APIError(error));
   }
   return Promise.reject(error);
 }
 
-export function errorInterceptorBuiltin(error: unknown) {
+export function errorInterceptorForAll(error: unknown) {
   if (isAxiosError<ErrorResponse>(error)) {
     return Promise.reject(new Error(error.message));
   }
@@ -118,14 +118,14 @@ try {
 
 // Use interceptors to handle errors and message
 
-const customAxios = axios.create({});
+const customAxiosForContractApi = axios.create({});
 
-customAxios.interceptors.response.use(
+customAxiosForContractApi.interceptors.response.use(
   (response) => response,
-  (error) => errorInterceptor(error)
+  (error) => errorInterceptorForContractApi(error)
 );
 
-const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxios);
+const interceptedContractsApi = new MultiBaas.ContractsApi(config, undefined, customAxiosForContractApi);
 
 try {
   await interceptedContractsApi.callContractFunction(
@@ -141,16 +141,16 @@ try {
   }
 }
 
-const customAxiosAll = axios.create({});
+const customAxiosForAll = axios.create({});
 
-customAxiosAll.interceptors.response.use(
+customAxiosForAll.interceptors.response.use(
   (response) => response,
-  (error) => errorInterceptorBuiltin(error)
+  (error) => errorInterceptorForAll(error)
 );
 const customMb = new MultiBaas.Configuration({
   basePath: basePath.toString(),
   accessToken: process.env.MB_API_KEY,
-  axios: customAxiosAll
+  axios: customAxiosForAll
 });
 
 try {

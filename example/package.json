@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@curvegrid/multibaas-sdk": "file:..",
-    "axios": "^1.2.2",
+    "axios": "^1.7.0",
     "dotenv": "^16.5.0"
   },
   "devDependencies": {
