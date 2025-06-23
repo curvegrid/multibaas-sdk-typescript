@@ -25,7 +25,16 @@ jq '.description = "MultiBaas SDK for TypeScript / JavaScript" |
     .author = "Curvegrid" | 
     .keywords = ["curvegrid", "multibaas", "@curvegrid/multibaas-sdk"]' package.json > package.json.tmp && mv package.json.tmp package.json
 
-jq '.exclude = [ "dist", "node_modules", "templates", "example"]' tsconfig.json > tsconfig.json.tmp && mv tsconfig.json.tmp tsconfig.json
+# Add exports field for dual CommonJS/ESM support
+jq '.exports = {
+  ".": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  }
+}' package.json > package.json.tmp && mv package.json.tmp package.json
+
+jq '.exclude = [ "dist", "node_modules", "templates", "example-esm", "example-commonjs"]' tsconfig.json > tsconfig.json.tmp && mv tsconfig.json.tmp tsconfig.json
 
 npm install
 npm run build

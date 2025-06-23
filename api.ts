@@ -244,12 +244,6 @@ export interface Address {
    */
   chain: string;
   /**
-   *
-   * @type {Array<string>}
-   * @memberof Address
-   */
-  modules: Array<string>;
-  /**
    * The next transaction nonce for this address (obtained from the blockchain node).
    * @type {number}
    * @memberof Address
@@ -3361,6 +3355,31 @@ export interface ListHsmWallets200Response {
 /**
  *
  * @export
+ * @interface ListInvites200Response
+ */
+export interface ListInvites200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof ListInvites200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof ListInvites200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Array<Invite>}
+   * @memberof ListInvites200Response
+   */
+  result: Array<Invite>;
+}
+/**
+ *
+ * @export
  * @interface ListUserSigners200Response
  */
 export interface ListUserSigners200Response {
@@ -3658,7 +3677,7 @@ export interface PostMethodArgs {
    */
   args?: Array<any>;
   /**
-   * An ethereum address.
+   * An Ethereum address (0x prefixed hex) or an address alias.
    * @type {string}
    * @memberof PostMethodArgs
    */
@@ -3694,7 +3713,7 @@ export interface PostMethodArgs {
    */
   gas?: number;
   /**
-   * An ethereum address.
+   * An Ethereum address (0x prefixed hex) or an address alias.
    * @type {string}
    * @memberof PostMethodArgs
    */
@@ -3724,7 +3743,7 @@ export interface PostMethodArgs {
    */
   preEIP1559?: boolean;
   /**
-   * An ethereum address.
+   * An Ethereum address (0x prefixed hex) or an address alias.
    * @type {string}
    * @memberof PostMethodArgs
    */
@@ -5978,6 +5997,40 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       };
     },
     /**
+     * Returns all the user invites.
+     * @summary List invites
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listInvites: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/invites`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Returns all the signers for a user.
      * @summary List user signers
      * @param {number} userID
@@ -6929,6 +6982,27 @@ export const AdminApiFp = function (configuration?: Configuration) {
         )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
+     * Returns all the user invites.
+     * @summary List invites
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listInvites(
+      options?: RawAxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListInvites200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listInvites(options);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.listInvites']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
+    },
+    /**
      * Returns all the signers for a user.
      * @summary List user signers
      * @param {number} userID
@@ -7456,6 +7530,15 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       return localVarFp.listGroups(userID, apiKeyID, assignable, options).then((request) => request(axios, basePath));
     },
     /**
+     * Returns all the user invites.
+     * @summary List invites
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listInvites(options?: RawAxiosRequestConfig): AxiosPromise<ListInvites200Response> {
+      return localVarFp.listInvites(options).then((request) => request(axios, basePath));
+    },
+    /**
      * Returns all the signers for a user.
      * @summary List user signers
      * @param {number} userID
@@ -7817,6 +7900,15 @@ export interface AdminApiInterface {
     assignable?: boolean,
     options?: RawAxiosRequestConfig
   ): AxiosPromise<ListGroups200Response>;
+
+  /**
+   * Returns all the user invites.
+   * @summary List invites
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  listInvites(options?: RawAxiosRequestConfig): AxiosPromise<ListInvites200Response>;
 
   /**
    * Returns all the signers for a user.
@@ -8205,6 +8297,19 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public listGroups(userID?: number, apiKeyID?: number, assignable?: boolean, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .listGroups(userID, apiKeyID, assignable, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Returns all the user invites.
+   * @summary List invites
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public listInvites(options?: RawAxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .listInvites(options)
       .then((request) => request(this.axios, this.basePath));
   }
 

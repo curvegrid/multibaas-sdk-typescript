@@ -70,6 +70,7 @@ Class | Method | HTTP request | Description
 *AdminApi* | [**listAuditLogs**](docs/AdminApi.md#listauditlogs) | **GET** /systemactivities | List audit logs
 *AdminApi* | [**listCorsOrigins**](docs/AdminApi.md#listcorsorigins) | **GET** /cors | List CORS origins
 *AdminApi* | [**listGroups**](docs/AdminApi.md#listgroups) | **GET** /groups | List groups
+*AdminApi* | [**listInvites**](docs/AdminApi.md#listinvites) | **GET** /invites | List invites
 *AdminApi* | [**listUserSigners**](docs/AdminApi.md#listusersigners) | **GET** /users/{userID}/signers | List user signers
 *AdminApi* | [**listUsers**](docs/AdminApi.md#listusers) | **GET** /users | List users
 *AdminApi* | [**removeCorsOrigin**](docs/AdminApi.md#removecorsorigin) | **DELETE** /cors/{originID} | Remove CORS Origin
@@ -251,6 +252,7 @@ Class | Method | HTTP request | Description
  - [ListGroups200Response](docs/ListGroups200Response.md)
  - [ListHsm200Response](docs/ListHsm200Response.md)
  - [ListHsmWallets200Response](docs/ListHsmWallets200Response.md)
+ - [ListInvites200Response](docs/ListInvites200Response.md)
  - [ListUserSigners200Response](docs/ListUserSigners200Response.md)
  - [ListUsers200Response](docs/ListUsers200Response.md)
  - [ListWalletTransactions200Response](docs/ListWalletTransactions200Response.md)

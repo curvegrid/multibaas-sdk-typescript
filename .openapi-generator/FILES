@@ -120,6 +120,7 @@ docs/ListEvents200Response.md
 docs/ListGroups200Response.md
 docs/ListHsm200Response.md
 docs/ListHsmWallets200Response.md
+docs/ListInvites200Response.md
 docs/ListUserSigners200Response.md
 docs/ListUsers200Response.md
 docs/ListWalletTransactions200Response.md
