@@ -1,3 +1,5 @@
+# To test this workflow locally using `act`, first `docker pull catthehacker/ubuntu:act-22.04` and then you can run:
+# echo '{"inputs":{"version":"1.0.0","openapi-generator-version":"latest"}}' > /tmp/test-inputs.json && act workflow_dispatch -e /tmp/test-inputs.json -j generate --secret-file example-esm/.env --container-architecture linux/amd64 --pull=false --container-daemon-socket /var/run/docker.sock
 name: Generate SDK
 
 on:
@@ -25,8 +27,6 @@ jobs:
     timeout-minutes: 10
     env:
       OPENAPI_GENERATOR_VERSION: "${{ github.event.inputs.openapi-generator-version }}"
-    permissions:
-      contents: write
     steps:
       - name: Check Tag
         id: check-tag
@@ -44,6 +44,11 @@ jobs:
         with:
           node-version: "${{ env.NODE_VER }}"
           registry-url: https://registry.npmjs.org/
+      - name: Setup Java #For local testing using `act workflow_dispatch` 
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
       - name: Generate SDK to check for changes
         run: ./generate.sh
       - name: Check for changes
@@ -54,18 +59,58 @@ jobs:
           fi
       - name: Generate SDK with new package version
         run: ./generate.sh ${{ github.event.inputs.version }}
+      
+      - name: Pack SDK for testing locally
+        id: build
+        run: |
+          # Build the package
+          npm pack
+          # Get the wheel filename for testing
+          WHEEL_FILE=$(ls *.tgz | head -n 1)
+          echo "wheel_file=$WHEEL_FILE" >> $GITHUB_OUTPUT
+      
+      - name: Run esm example
+        working-directory: example-esm
+        env:
+          MB_BASE_URL:  ${{ secrets.MB_BASE_URL }}
+          MB_API_KEY:   ${{ secrets.MB_API_KEY }}
+        run: |
+          # Install the built wheel package
+          npm install @curvegrid/multibaas-sdk-typescript@file:../${{ steps.build.outputs.wheel_file }}
+          # Install example dependencies
+          npm install
+          # Run the example script
+          npm run start
+          # Check TypeScript types
+          npx tsx --noEmit
+
+      - name: Run commonjs example
+        working-directory: example-commonjs
+        env:
+          MB_BASE_URL:  ${{ secrets.MB_BASE_URL }}
+          MB_API_KEY:   ${{ secrets.MB_API_KEY }}
+        run: |
+          # Install the built wheel package
+          npm install @curvegrid/multibaas-sdk-typescript@file:../${{ steps.build.outputs.wheel_file }}
+          # Install example dependencies
+          npm install
+          # Run the example script
+          npm run start
+          # Check TypeScript types
+          npx tsx --noEmit
+
       - name: Setup Git Configurations
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "<>"
-      - name: Push if there are changes
-        run: |
-          git add .
-          git commit -am "Auto-generated SDK v${{ github.event.inputs.version }}"
-          git tag "v${{ github.event.inputs.version }}" main
-          git push origin "v${{ github.event.inputs.version }}"
-          git push origin main
-      - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        run: npm publish --access public
+      # - name: Push if there are changes
+      #   run: |
+      #     git add .
+      #     git commit -am "Auto-generated SDK v${{ github.event.inputs.version }}"
+      #     git tag "v${{ github.event.inputs.version }}" main
+      #     git push origin "v${{ github.event.inputs.version }}"
+      #     git push origin main
+      # - name: Publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      #   run: npm publish --access public

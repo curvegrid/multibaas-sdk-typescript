@@ -36,6 +36,12 @@ jq '.exports = {
 
 jq '.exclude = [ "dist", "node_modules", "templates", "example-esm", "example-commonjs"]' tsconfig.json > tsconfig.json.tmp && mv tsconfig.json.tmp tsconfig.json
 
+# Add explicit include array to prevent compiling example directories
+jq '.include = [ "*.ts" ]' tsconfig.json > tsconfig.json.tmp && mv tsconfig.json.tmp tsconfig.json
+
+# Remove prepare script before npm install
+jq 'del(.scripts.prepare)' package.json > package.json.tmp && mv package.json.tmp package.json
+
 npm install
 npm run build
 

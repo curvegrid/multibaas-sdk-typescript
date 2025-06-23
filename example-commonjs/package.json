@@ -5,12 +5,14 @@
   "description": "A MultiBaas SDK CommonJS example",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts"
+    "build": "tsc",
+    "start": "ts-node index.ts",
+    "start-compiled": "node --env-file=.env index.js"
   },
   "author": "Curvegrid",
   "license": "MIT",
   "dependencies": {
-    "@curvegrid/multibaas-sdk-typescript": "file:..",
+    "@curvegrid/multibaas-sdk-typescript": "file:../curvegrid-multibaas-sdk-1.0.5.tgz",
     "axios": "^1.6.1",
     "dotenv": "^16.5.0"
   },

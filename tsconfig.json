@@ -17,5 +17,8 @@
     "templates",
     "example-esm",
     "example-commonjs"
+  ],
+  "include": [
+    "*.ts"
   ]
 }

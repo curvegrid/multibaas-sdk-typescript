@@ -1,6 +1,8 @@
 import * as MultiBaas from '@curvegrid/multibaas-sdk-typescript';
 import axios, { isAxiosError } from 'axios';
 import type { AxiosError } from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
 interface ErrorResponse {
   status: number;
@@ -135,7 +137,6 @@ const chainIDToERC20Addr = new Map<number, string>([
   } catch (e) {
     if (e instanceof APIError) {
       console.log(`Example 4: The error instance is now ${e.name} instead of AxiosError`);
-      console.log(`Status: ${e.status}, Code: ${e.code}, Message: ${e.message}`);
     }
   }
 

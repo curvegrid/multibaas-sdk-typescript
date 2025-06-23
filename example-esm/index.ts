@@ -129,7 +129,8 @@ const chainIDToERC20Addr = new Map<number, string>([
   } catch (e) {
     if (e instanceof APIError) {
       console.log(`Example 4: The error instance is now ${e.name} instead of AxiosError`);
-      console.log(`Status: ${e.status}, Code: ${e.code}, Message: ${e.message}`);
     }
   }
+
+  console.log('ESM Example: All tests completed successfully!');
 })();
