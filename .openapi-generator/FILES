@@ -107,6 +107,7 @@ docs/HSMSignRequestTypedData.md
 docs/HSMSignResponse.md
 docs/HsmApi.md
 docs/Invite.md
+docs/InviteRequest.md
 docs/LinkAddressContractRequest.md
 docs/ListAddresses200Response.md
 docs/ListApiKeys200Response.md
@@ -120,6 +121,7 @@ docs/ListEvents200Response.md
 docs/ListGroups200Response.md
 docs/ListHsm200Response.md
 docs/ListHsmWallets200Response.md
+docs/ListInvites200Response.md
 docs/ListUserSigners200Response.md
 docs/ListUsers200Response.md
 docs/ListWalletTransactions200Response.md

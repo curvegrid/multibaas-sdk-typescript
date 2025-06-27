@@ -1,24 +1,22 @@
-# Invite
+# InviteRequest
 
-A user invitation to MultiBaas.
+An invite request with groups.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | The invite ID. | [default to undefined]
 **email** | **string** | The invitee\&#39;s email address. | [default to undefined]
-**createdAt** | **string** | The time the invite was created. | [default to undefined]
+**groupIDs** | **Array&lt;number&gt;** |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { Invite } from '@curvegrid/multibaas-sdk';
+import { InviteRequest } from '@curvegrid/multibaas-sdk';
 
-const instance: Invite = {
-    id,
+const instance: InviteRequest = {
     email,
-    createdAt,
+    groupIDs,
 };
 ```
 

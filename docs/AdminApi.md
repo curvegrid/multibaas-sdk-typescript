@@ -12,6 +12,7 @@ All URIs are relative to *https://your_deployment.multibaas.com/api/v0*
 |[**checkInvite**](#checkinvite) | **GET** /invites/{inviteID} | Check invite|
 |[**createApiKey**](#createapikey) | **POST** /api_keys | Create API key|
 |[**deleteApiKey**](#deleteapikey) | **DELETE** /api_keys/{apiKeyID} | Delete API key|
+|[**deleteInvite**](#deleteinvite) | **DELETE** /invites/{email}/delete | Delete invite|
 |[**deleteUser**](#deleteuser) | **DELETE** /users/{userID} | Delete user|
 |[**getApiKey**](#getapikey) | **GET** /api_keys/{apiKeyID} | Get API Key|
 |[**inviteUser**](#inviteuser) | **POST** /invites | Invite user|
@@ -19,6 +20,7 @@ All URIs are relative to *https://your_deployment.multibaas.com/api/v0*
 |[**listAuditLogs**](#listauditlogs) | **GET** /systemactivities | List audit logs|
 |[**listCorsOrigins**](#listcorsorigins) | **GET** /cors | List CORS origins|
 |[**listGroups**](#listgroups) | **GET** /groups | List groups|
+|[**listInvites**](#listinvites) | **GET** /invites | List invites|
 |[**listUserSigners**](#listusersigners) | **GET** /users/{userID}/signers | List user signers|
 |[**listUsers**](#listusers) | **GET** /users | List users|
 |[**removeCorsOrigin**](#removecorsorigin) | **DELETE** /cors/{originID} | Remove CORS Origin|
@@ -472,6 +474,59 @@ const { status, data } = await apiInstance.deleteApiKey(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **deleteInvite**
+> deleteInvite()
+
+Deletes a user invite.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from '@curvegrid/multibaas-sdk';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let email: string; // (default to undefined)
+
+const { status, data } = await apiInstance.deleteInvite(
+    email
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **email** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**204** | No Content |  -  |
+|**4XX** | Client error. |  -  |
+|**5XX** | Server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **deleteUser**
 > BaseResponse deleteUser()
 
@@ -579,7 +634,7 @@ const { status, data } = await apiInstance.getApiKey(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **inviteUser**
-> BaseResponse inviteUser(invite)
+> BaseResponse inviteUser(inviteRequest)
 
 Invites a new user.
 
@@ -589,16 +644,16 @@ Invites a new user.
 import {
     AdminApi,
     Configuration,
-    Invite
+    InviteRequest
 } from '@curvegrid/multibaas-sdk';
 
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-let invite: Invite; //
+let inviteRequest: InviteRequest; //
 
 const { status, data } = await apiInstance.inviteUser(
-    invite
+    inviteRequest
 );
 ```
 
@@ -606,7 +661,7 @@ const { status, data } = await apiInstance.inviteUser(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **invite** | **Invite**|  | |
+| **inviteRequest** | **InviteRequest**|  | |
 
 
 ### Return type
@@ -816,6 +871,52 @@ const { status, data } = await apiInstance.listGroups(
 ### Return type
 
 **ListGroups200Response**
+
+### Authorization
+
+[cookie](../README.md#cookie), [bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+|**4XX** | Client error. |  -  |
+|**5XX** | Server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listInvites**
+> ListInvites200Response listInvites()
+
+Returns all the user invites.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from '@curvegrid/multibaas-sdk';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+const { status, data } = await apiInstance.listInvites();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**ListInvites200Response**
 
 ### Authorization
 

@@ -1,4 +1,4 @@
-## @curvegrid/multibaas-sdk@1.0.5
+## @curvegrid/multibaas-sdk@1.0.6
 
 This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
 
@@ -36,7 +36,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install @curvegrid/multibaas-sdk@1.0.5 --save
+npm install @curvegrid/multibaas-sdk@1.0.6 --save
 ```
 
 _unPublished (not recommended):_
@@ -63,6 +63,7 @@ Class | Method | HTTP request | Description
 *AdminApi* | [**checkInvite**](docs/AdminApi.md#checkinvite) | **GET** /invites/{inviteID} | Check invite
 *AdminApi* | [**createApiKey**](docs/AdminApi.md#createapikey) | **POST** /api_keys | Create API key
 *AdminApi* | [**deleteApiKey**](docs/AdminApi.md#deleteapikey) | **DELETE** /api_keys/{apiKeyID} | Delete API key
+*AdminApi* | [**deleteInvite**](docs/AdminApi.md#deleteinvite) | **DELETE** /invites/{email}/delete | Delete invite
 *AdminApi* | [**deleteUser**](docs/AdminApi.md#deleteuser) | **DELETE** /users/{userID} | Delete user
 *AdminApi* | [**getApiKey**](docs/AdminApi.md#getapikey) | **GET** /api_keys/{apiKeyID} | Get API Key
 *AdminApi* | [**inviteUser**](docs/AdminApi.md#inviteuser) | **POST** /invites | Invite user
@@ -70,6 +71,7 @@ Class | Method | HTTP request | Description
 *AdminApi* | [**listAuditLogs**](docs/AdminApi.md#listauditlogs) | **GET** /systemactivities | List audit logs
 *AdminApi* | [**listCorsOrigins**](docs/AdminApi.md#listcorsorigins) | **GET** /cors | List CORS origins
 *AdminApi* | [**listGroups**](docs/AdminApi.md#listgroups) | **GET** /groups | List groups
+*AdminApi* | [**listInvites**](docs/AdminApi.md#listinvites) | **GET** /invites | List invites
 *AdminApi* | [**listUserSigners**](docs/AdminApi.md#listusersigners) | **GET** /users/{userID}/signers | List user signers
 *AdminApi* | [**listUsers**](docs/AdminApi.md#listusers) | **GET** /users | List users
 *AdminApi* | [**removeCorsOrigin**](docs/AdminApi.md#removecorsorigin) | **DELETE** /cors/{originID} | Remove CORS Origin
@@ -238,6 +240,7 @@ Class | Method | HTTP request | Description
  - [HSMSignRequestTypedData](docs/HSMSignRequestTypedData.md)
  - [HSMSignResponse](docs/HSMSignResponse.md)
  - [Invite](docs/Invite.md)
+ - [InviteRequest](docs/InviteRequest.md)
  - [LinkAddressContractRequest](docs/LinkAddressContractRequest.md)
  - [ListAddresses200Response](docs/ListAddresses200Response.md)
  - [ListApiKeys200Response](docs/ListApiKeys200Response.md)
@@ -251,6 +254,7 @@ Class | Method | HTTP request | Description
  - [ListGroups200Response](docs/ListGroups200Response.md)
  - [ListHsm200Response](docs/ListHsm200Response.md)
  - [ListHsmWallets200Response](docs/ListHsmWallets200Response.md)
+ - [ListInvites200Response](docs/ListInvites200Response.md)
  - [ListUserSigners200Response](docs/ListUserSigners200Response.md)
  - [ListUsers200Response](docs/ListUsers200Response.md)
  - [ListWalletTransactions200Response](docs/ListWalletTransactions200Response.md)

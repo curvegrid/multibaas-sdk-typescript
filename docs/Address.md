@@ -10,7 +10,6 @@ Name | Type | Description | Notes
 **address** | **string** | An ethereum address. | [default to undefined]
 **balance** | **string** |  | [optional] [default to undefined]
 **chain** | **string** |  | [default to undefined]
-**modules** | **Array&lt;string&gt;** |  | [default to undefined]
 **nonce** | **number** | The next transaction nonce for this address (obtained from the blockchain node). | [optional] [default to undefined]
 **localNonce** | **number** | The next transaction nonce for this address when using the nonce management feature. | [optional] [default to undefined]
 **codeAt** | **string** |  | [optional] [default to undefined]
@@ -27,7 +26,6 @@ const instance: Address = {
     address,
     balance,
     chain,
-    modules,
     nonce,
     localNonce,
     codeAt,
