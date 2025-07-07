@@ -3750,7 +3750,7 @@ export interface PlanFeature {
    * @type {string}
    * @memberof PlanFeature
    */
-  name: string;
+  name: PlanFeatureNameEnum;
   /**
    * Whether the feature is enabled.
    * @type {boolean}
@@ -3758,6 +3758,18 @@ export interface PlanFeature {
    */
   enabled: boolean;
 }
+
+export const PlanFeatureNameEnum = {
+  EventLoggingFeature: 'event_logging_feature',
+  EventMonitorFeature: 'event_monitor_feature',
+  EventQueriesFeature: 'event_queries_feature',
+  FaucetFeature: 'faucet_feature',
+  HistoricalBlocksFeature: 'historical_blocks_feature',
+  HsmFeature: 'hsm_feature'
+} as const;
+
+export type PlanFeatureNameEnum = typeof PlanFeatureNameEnum[keyof typeof PlanFeatureNameEnum];
+
 /**
  * A limit on plan usage.
  * @export
@@ -3769,7 +3781,7 @@ export interface PlanLimit {
    * @type {string}
    * @memberof PlanLimit
    */
-  name: string;
+  name: PlanLimitNameEnum;
   /**
    * The limit value. Null means unlimited.
    * @type {number}
@@ -3783,6 +3795,24 @@ export interface PlanLimit {
    */
   count?: number;
 }
+
+export const PlanLimitNameEnum = {
+  ApiCallsPerSec: 'api_calls_per_sec',
+  ApiCallsPerDay: 'api_calls_per_day',
+  ApiCallsPerMonth: 'api_calls_per_month',
+  EventsPerSec: 'events_per_sec',
+  Users: 'users',
+  Contracts: 'contracts',
+  LinkedContracts: 'linked_contracts',
+  EventQueryMaxResults: 'event_query_max_results',
+  EventLoggingRetentionHours: 'event_logging_retention_hours',
+  PastLogsMaxConcurrency: 'past_logs_max_concurrency',
+  PastLogsMaxDepth: 'past_logs_max_depth',
+  CloudWallets: 'cloud_wallets'
+} as const;
+
+export type PlanLimitNameEnum = typeof PlanLimitNameEnum[keyof typeof PlanLimitNameEnum];
+
 /**
  * Arguments to be passed into a contract function.
  * @export
