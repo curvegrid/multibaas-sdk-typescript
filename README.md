@@ -1,4 +1,4 @@
-## @curvegrid/multibaas-sdk@1.0.6
+## @curvegrid/multibaas-sdk@1.0.7
 
 This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
 
@@ -36,7 +36,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install @curvegrid/multibaas-sdk@1.0.6 --save
+npm install @curvegrid/multibaas-sdk@1.0.7 --save
 ```
 
 _unPublished (not recommended):_
@@ -66,6 +66,7 @@ Class | Method | HTTP request | Description
 *AdminApi* | [**deleteInvite**](docs/AdminApi.md#deleteinvite) | **DELETE** /invites/{email}/delete | Delete invite
 *AdminApi* | [**deleteUser**](docs/AdminApi.md#deleteuser) | **DELETE** /users/{userID} | Delete user
 *AdminApi* | [**getApiKey**](docs/AdminApi.md#getapikey) | **GET** /api_keys/{apiKeyID} | Get API Key
+*AdminApi* | [**getPlan**](docs/AdminApi.md#getplan) | **GET** /plan | Get plan
 *AdminApi* | [**inviteUser**](docs/AdminApi.md#inviteuser) | **POST** /invites | Invite user
 *AdminApi* | [**listApiKeys**](docs/AdminApi.md#listapikeys) | **GET** /api_keys | List API keys
 *AdminApi* | [**listAuditLogs**](docs/AdminApi.md#listauditlogs) | **GET** /systemactivities | List audit logs
@@ -230,6 +231,7 @@ Class | Method | HTTP request | Description
  - [GetEventQuery200Response](docs/GetEventQuery200Response.md)
  - [GetEventTypeConversions200Response](docs/GetEventTypeConversions200Response.md)
  - [GetFunctionTypeConversions200Response](docs/GetFunctionTypeConversions200Response.md)
+ - [GetPlan200Response](docs/GetPlan200Response.md)
  - [GetTransaction200Response](docs/GetTransaction200Response.md)
  - [GetTransactionReceipt200Response](docs/GetTransactionReceipt200Response.md)
  - [Group](docs/Group.md)
@@ -266,6 +268,9 @@ Class | Method | HTTP request | Description
  - [MethodCallResponse](docs/MethodCallResponse.md)
  - [MethodTypeConversionOptions](docs/MethodTypeConversionOptions.md)
  - [ModelError](docs/ModelError.md)
+ - [Plan](docs/Plan.md)
+ - [PlanFeature](docs/PlanFeature.md)
+ - [PlanLimit](docs/PlanLimit.md)
  - [PostMethodArgs](docs/PostMethodArgs.md)
  - [PostMethodResponse](docs/PostMethodResponse.md)
  - [PreviewArgs](docs/PreviewArgs.md)

@@ -2819,6 +2819,31 @@ export interface GetFunctionTypeConversions200Response {
 /**
  *
  * @export
+ * @interface GetPlan200Response
+ */
+export interface GetPlan200Response {
+  /**
+   * The status code.
+   * @type {number}
+   * @memberof GetPlan200Response
+   */
+  status: number;
+  /**
+   * The human-readable status message.
+   * @type {string}
+   * @memberof GetPlan200Response
+   */
+  message: string;
+  /**
+   *
+   * @type {Plan}
+   * @memberof GetPlan200Response
+   */
+  result: Plan;
+}
+/**
+ *
+ * @export
  * @interface GetTransaction200Response
  */
 export interface GetTransaction200Response {
@@ -3682,6 +3707,81 @@ export interface ModelError {
    * @memberof ModelError
    */
   message: string;
+}
+/**
+ * A plan containing limits and features.
+ * @export
+ * @interface Plan
+ */
+export interface Plan {
+  /**
+   * The name of the plan.
+   * @type {string}
+   * @memberof Plan
+   */
+  name: string;
+  /**
+   * When the plan was last updated.
+   * @type {string}
+   * @memberof Plan
+   */
+  updatedAt: string;
+  /**
+   * The limits associated with the plan.
+   * @type {Array<PlanLimit>}
+   * @memberof Plan
+   */
+  limits: Array<PlanLimit>;
+  /**
+   * The features associated with the plan.
+   * @type {Array<PlanFeature>}
+   * @memberof Plan
+   */
+  features: Array<PlanFeature>;
+}
+/**
+ * A feature flag in a plan.
+ * @export
+ * @interface PlanFeature
+ */
+export interface PlanFeature {
+  /**
+   * The name of the feature.
+   * @type {string}
+   * @memberof PlanFeature
+   */
+  name: string;
+  /**
+   * Whether the feature is enabled.
+   * @type {boolean}
+   * @memberof PlanFeature
+   */
+  enabled: boolean;
+}
+/**
+ * A limit on plan usage.
+ * @export
+ * @interface PlanLimit
+ */
+export interface PlanLimit {
+  /**
+   * The name of the limit.
+   * @type {string}
+   * @memberof PlanLimit
+   */
+  name: string;
+  /**
+   * The limit value. Null means unlimited.
+   * @type {number}
+   * @memberof PlanLimit
+   */
+  limit: number | null;
+  /**
+   * The current count for this limit.
+   * @type {number}
+   * @memberof PlanLimit
+   */
+  count?: number;
 }
 /**
  * Arguments to be passed into a contract function.
@@ -5856,6 +5956,40 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       };
     },
     /**
+     * Returns the current plan with limits and features.
+     * @summary Get plan
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPlan: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/plan`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication cookie required
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions
+      };
+    },
+    /**
      * Invites a new user.
      * @summary Invite user
      * @param {InviteRequest} inviteRequest
@@ -6950,6 +7084,27 @@ export const AdminApiFp = function (configuration?: Configuration) {
         )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
+     * Returns the current plan with limits and features.
+     * @summary Get plan
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPlan(
+      options?: RawAxiosRequestConfig
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetPlan200Response>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getPlan(options);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['AdminApi.getPlan']?.[localVarOperationServerIndex]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
+    },
+    /**
      * Invites a new user.
      * @summary Invite user
      * @param {InviteRequest} inviteRequest
@@ -7568,6 +7723,15 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
       return localVarFp.getApiKey(apiKeyID, options).then((request) => request(axios, basePath));
     },
     /**
+     * Returns the current plan with limits and features.
+     * @summary Get plan
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPlan(options?: RawAxiosRequestConfig): AxiosPromise<GetPlan200Response> {
+      return localVarFp.getPlan(options).then((request) => request(axios, basePath));
+    },
+    /**
      * Invites a new user.
      * @summary Invite user
      * @param {InviteRequest} inviteRequest
@@ -7948,6 +8112,15 @@ export interface AdminApiInterface {
    * @memberof AdminApiInterface
    */
   getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKey200Response>;
+
+  /**
+   * Returns the current plan with limits and features.
+   * @summary Get plan
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApiInterface
+   */
+  getPlan(options?: RawAxiosRequestConfig): AxiosPromise<GetPlan200Response>;
 
   /**
    * Invites a new user.
@@ -8344,6 +8517,19 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
   public getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
       .getApiKey(apiKeyID, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Returns the current plan with limits and features.
+   * @summary Get plan
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AdminApi
+   */
+  public getPlan(options?: RawAxiosRequestConfig) {
+    return AdminApiFp(this.configuration)
+      .getPlan(options)
       .then((request) => request(this.axios, this.basePath));
   }
 

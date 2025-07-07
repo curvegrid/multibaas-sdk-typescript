@@ -96,6 +96,7 @@ docs/GetEventMonitorStatus200Response.md
 docs/GetEventQuery200Response.md
 docs/GetEventTypeConversions200Response.md
 docs/GetFunctionTypeConversions200Response.md
+docs/GetPlan200Response.md
 docs/GetTransaction200Response.md
 docs/GetTransactionReceipt200Response.md
 docs/Group.md
@@ -132,6 +133,9 @@ docs/MethodArg.md
 docs/MethodCallPreviewResponse.md
 docs/MethodCallResponse.md
 docs/MethodTypeConversionOptions.md
+docs/Plan.md
+docs/PlanFeature.md
+docs/PlanLimit.md
 docs/PostMethodArgs.md
 docs/PostMethodResponse.md
 docs/PreviewArgs.md

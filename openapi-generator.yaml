@@ -6,7 +6,7 @@ gitRepoId: multibaas-sdk-typescript
 licenseName: MIT
 additionalProperties:
   npmName: "@curvegrid/multibaas-sdk"
-  npmVersion: 1.0.6
+  npmVersion: 1.0.7
   disallowAdditionalPropertiesIfNotPresent: true
   legacyDiscriminatorBehavior: false
   withInterfaces: true
