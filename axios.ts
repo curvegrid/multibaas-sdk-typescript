@@ -1,5 +1,3 @@
-import { AxiosError, isAxiosError } from 'axios';
-
 /**
  * MultiBaas error response.
  *
@@ -9,18 +7,33 @@ import { AxiosError, isAxiosError } from 'axios';
  *   message: "Blockchain Not Found"
  * }
  */
-interface ErrorResponse {
+export interface ErrorResponse {
   status: number;
   message: string;
 }
 
-export class APIError extends Error {
+/**
+ * Local interface for Axios error structure to avoid direct dependency on AxiosError type
+ */
+interface AxiosErrorLike {
+  code?: string;
+  message: string;
+  stack?: string;
+  response?: {
+    data: ErrorResponse;
+  };
+}
+
+export class APIError<T = AxiosErrorLike> extends Error {
   status: number | undefined;
   code: string | undefined;
-  cause: AxiosError;
+  cause: T;
 
-  constructor(originalError: AxiosError<ErrorResponse>) {
-    const { status, message } = originalError.response.data;
+  constructor(originalError: T & AxiosErrorLike) {
+    const errorData = originalError.response?.data;
+    const message = errorData?.message || originalError.message || 'Unknown error';
+    const status = errorData?.status;
+
     super(message);
     this.name = 'APIError';
     this.stack = originalError.stack;
@@ -29,11 +42,4 @@ export class APIError extends Error {
     this.code = originalError.code;
     this.cause = originalError;
   }
-}
-
-export function errorInterceptor(error: unknown) {
-  if (isAxiosError<ErrorResponse>(error)) {
-    return Promise.reject(new APIError(error));
-  }
-  return Promise.reject(error);
 }
