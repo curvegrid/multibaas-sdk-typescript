@@ -24,7 +24,6 @@ Name | Type | Description | Notes
 **timestamp** | **string** | Call the function at a specific timestamp. Only available for read functions calls and if the &#x60;historical_blocks_feature&#x60; is enabled (see the plan endpoint). Mutually exclusive with the &#x60;blockNumber&#x60; parameter. | [optional] [default to undefined]
 **blockNumber** | **string** | Call the function at a specific block. Only available for read functions calls and if the &#x60;historical_blocks_feature&#x60; is enabled (see the plan endpoint). Mutually exclusive with the &#x60;timestamp&#x60; parameter. | [optional] [default to undefined]
 **contractOverride** | **boolean** | If set to true the given address and contract don\&#39;t need to be linked for the function to be called. | [optional] [default to undefined]
-**preview** | [**PreviewArgs**](PreviewArgs.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -50,7 +49,6 @@ const instance: PostMethodArgs = {
     timestamp,
     blockNumber,
     contractOverride,
-    preview,
 };
 ```
 

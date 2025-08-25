@@ -6,9 +6,9 @@ A user invitation to MultiBaas.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | The invite ID. | [default to undefined]
 **email** | **string** | The invitee\&#39;s email address. | [default to undefined]
 **createdAt** | **string** | The time the invite was created. | [default to undefined]
+**expiresAt** | **string** | The time the invite expires. | [default to undefined]
 
 ## Example
 
@@ -16,9 +16,9 @@ Name | Type | Description | Notes
 import { Invite } from '@curvegrid/multibaas-sdk';
 
 const instance: Invite = {
-    id,
     email,
     createdAt,
+    expiresAt,
 };
 ```
 

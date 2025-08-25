@@ -1,4 +1,4 @@
-## @curvegrid/multibaas-sdk@1.0.8
+## @curvegrid/multibaas-sdk@1.0.9
 
 This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
 
@@ -36,7 +36,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install @curvegrid/multibaas-sdk@1.0.8 --save
+npm install @curvegrid/multibaas-sdk@1.0.9 --save
 ```
 
 _unPublished (not recommended):_
@@ -264,7 +264,6 @@ Class | Method | HTTP request | Description
  - [ListWebhooks200Response](docs/ListWebhooks200Response.md)
  - [Log](docs/Log.md)
  - [MethodArg](docs/MethodArg.md)
- - [MethodCallPreviewResponse](docs/MethodCallPreviewResponse.md)
  - [MethodCallResponse](docs/MethodCallResponse.md)
  - [MethodTypeConversionOptions](docs/MethodTypeConversionOptions.md)
  - [ModelError](docs/ModelError.md)
@@ -273,7 +272,6 @@ Class | Method | HTTP request | Description
  - [PlanLimit](docs/PlanLimit.md)
  - [PostMethodArgs](docs/PostMethodArgs.md)
  - [PostMethodResponse](docs/PostMethodResponse.md)
- - [PreviewArgs](docs/PreviewArgs.md)
  - [Role](docs/Role.md)
  - [SavedEventQuery](docs/SavedEventQuery.md)
  - [SetAddress201Response](docs/SetAddress201Response.md)

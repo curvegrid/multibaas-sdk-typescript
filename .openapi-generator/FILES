@@ -130,7 +130,6 @@ docs/ListWebhookEvents200Response.md
 docs/ListWebhooks200Response.md
 docs/Log.md
 docs/MethodArg.md
-docs/MethodCallPreviewResponse.md
 docs/MethodCallResponse.md
 docs/MethodTypeConversionOptions.md
 docs/Plan.md
@@ -138,7 +137,6 @@ docs/PlanFeature.md
 docs/PlanLimit.md
 docs/PostMethodArgs.md
 docs/PostMethodResponse.md
-docs/PreviewArgs.md
 docs/Role.md
 docs/SavedEventQuery.md
 docs/SetAddress201Response.md

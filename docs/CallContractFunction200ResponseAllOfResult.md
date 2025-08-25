@@ -7,7 +7,6 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **kind** | **string** | The response object type (discriminator). | [default to undefined]
 **output** | **any** | The function call output. | [default to undefined]
-**input** | **Array&lt;object&gt;** | The function call inputs. | [default to undefined]
 
 ## Example
 
@@ -17,7 +16,6 @@ import { CallContractFunction200ResponseAllOfResult } from '@curvegrid/multibaas
 const instance: CallContractFunction200ResponseAllOfResult = {
     kind,
     output,
-    input,
 };
 ```
 
