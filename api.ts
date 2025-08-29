@@ -35,772 +35,442 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 
 /**
  * An API key.
- * @export
- * @interface APIKey
  */
 export interface APIKey {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof APIKey
    */
   label: string;
-  /**
-   *
-   * @type {number}
-   * @memberof APIKey
-   */
   id: number;
   /**
    * The time the API key was created.
-   * @type {string}
-   * @memberof APIKey
    */
   createdAt: string;
   /**
    * The time the API key was last used.
-   * @type {string}
-   * @memberof APIKey
    */
   lastUsedAt?: string;
   /**
    * The ID of the user that created the API key.
-   * @type {number}
-   * @memberof APIKey
    */
   createdBy: number;
   /**
    * The signature of the API key.
-   * @type {string}
-   * @memberof APIKey
    */
   signature: string;
 }
 /**
  * A freshly created API key with its secret.
- * @export
- * @interface APIKeyWithSecret
  */
 export interface APIKeyWithSecret {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof APIKeyWithSecret
    */
   label: string;
-  /**
-   *
-   * @type {number}
-   * @memberof APIKeyWithSecret
-   */
   id: number;
   /**
    * The time the API key was created.
-   * @type {string}
-   * @memberof APIKeyWithSecret
    */
   createdAt: string;
   /**
    * The time the API key was last used.
-   * @type {string}
-   * @memberof APIKeyWithSecret
    */
   lastUsedAt?: string;
   /**
    * The ID of the user that created the API key.
-   * @type {number}
-   * @memberof APIKeyWithSecret
    */
   createdBy: number;
   /**
    * The signature of the API key.
-   * @type {string}
-   * @memberof APIKeyWithSecret
    */
   signature: string;
   /**
    * The secret key of the API key.
-   * @type {string}
-   * @memberof APIKeyWithSecret
    */
   key: string;
 }
-/**
- *
- * @export
- * @interface AcceptInvite200Response
- */
 export interface AcceptInvite200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof AcceptInvite200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof AcceptInvite200Response
    */
   message: string;
-  /**
-   *
-   * @type {User}
-   * @memberof AcceptInvite200Response
-   */
   result: User;
 }
-/**
- *
- * @export
- * @interface AcceptInviteRequest
- */
 export interface AcceptInviteRequest {
   /**
    * The user ID Token
-   * @type {string}
-   * @memberof AcceptInviteRequest
    */
   idToken?: string;
 }
 /**
  * An access tuple representing an address and its storage keys.
- * @export
- * @interface AccessTuple
  */
 export interface AccessTuple {
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof AccessTuple
    */
   address: string | null;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof AccessTuple
-   */
   storageKeys: Array<string>;
 }
 /**
  * Add key request data.
- * @export
- * @interface AddKey
  */
 export interface AddKey {
   /**
    * The Application ID that will be accessing the Key Vault.
-   * @type {string}
-   * @memberof AddKey
    */
   clientID: string;
   /**
    * The name of the key.
-   * @type {string}
-   * @memberof AddKey
    */
   keyName: string;
   /**
    * The version of the key.
-   * @type {string}
-   * @memberof AddKey
    */
   keyVersion: string;
   /**
    * The name given to the vault your key is stored in.
-   * @type {string}
-   * @memberof AddKey
    */
   vaultName: string;
 }
 /**
  * An address details.
- * @export
- * @interface Address
  */
 export interface Address {
   /**
    * An alias to easily identify and reference addresses.
-   * @type {string}
-   * @memberof Address
    */
   alias: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof Address
    */
   address: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Address
-   */
   balance?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Address
-   */
   chain: string;
   /**
    * The next transaction nonce for this address (obtained from the blockchain node).
-   * @type {number}
-   * @memberof Address
    */
   nonce?: number;
   /**
    * The next transaction nonce for this address when using the nonce management feature.
-   * @type {number}
-   * @memberof Address
    */
   localNonce?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof Address
-   */
   codeAt?: string;
-  /**
-   *
-   * @type {Array<ContractMetadata>}
-   * @memberof Address
-   */
   contracts: Array<ContractMetadata>;
-  /**
-   *
-   * @type {Array<ContractLookup>}
-   * @memberof Address
-   */
   contractLookup?: Array<ContractLookup>;
 }
 /**
  * An address and it\'s alias.
- * @export
- * @interface AddressAlias
  */
 export interface AddressAlias {
   /**
    * An alias to easily identify and reference addresses.
-   * @type {string}
-   * @memberof AddressAlias
    */
   alias: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof AddressAlias
    */
   address: string;
 }
 /**
  * An audit log entry.
- * @export
- * @interface AuditLog
  */
 export interface AuditLog {
   /**
    * The ID of the user who performed the action.
-   * @type {number}
-   * @memberof AuditLog
    */
   actionByID: number;
   /**
    * The ID of the user who was acted upon.
-   * @type {number}
-   * @memberof AuditLog
    */
   actionOnID?: number;
   /**
    * The email of the user who performed the action.
-   * @type {string}
-   * @memberof AuditLog
    */
   actionByUserEmail: string;
   /**
    * The email of the user who was acted upon.
-   * @type {string}
-   * @memberof AuditLog
    */
   actionOnUserEmail?: string;
   /**
    * The type of action that was performed.
-   * @type {string}
-   * @memberof AuditLog
    */
   type: string;
   /**
    * The time the action was performed.
-   * @type {string}
-   * @memberof AuditLog
    */
   createdAt: string;
   /**
    * The data associated with the action.
-   * @type {object}
-   * @memberof AuditLog
    */
   activityData: object;
 }
 /**
  * An Azure account.
- * @export
- * @interface AzureAccount
  */
 export interface AzureAccount {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof AzureAccount
    */
   label: string;
   /**
    * The Application ID that will be accessing the Key Vault.
-   * @type {string}
-   * @memberof AzureAccount
    */
   clientID: string;
   /**
    * The application’s secret key that you generate when you first register the application in Azure.
-   * @type {string}
-   * @memberof AzureAccount
    */
   clientSecret: string;
   /**
    * Also known as Directory ID.
-   * @type {string}
-   * @memberof AzureAccount
    */
   tenantID: string;
   /**
    * The ID linked to your subscription to Azure services.
-   * @type {string}
-   * @memberof AzureAccount
    */
   subscriptionID: string;
   /**
    * The Resource Group Name for the resource being accessed.
-   * @type {string}
-   * @memberof AzureAccount
    */
   baseGroupName: string;
-  /**
-   *
-   * @type {number}
-   * @memberof AzureAccount
-   */
   id: number;
 }
 /**
  * An HSM Wallet
- * @export
- * @interface AzureHardwareWallet
  */
 export interface AzureHardwareWallet {
-  /**
-   *
-   * @type {number}
-   * @memberof AzureHardwareWallet
-   */
   id: number;
-  /**
-   *
-   * @type {number}
-   * @memberof AzureHardwareWallet
-   */
   azureAccountID: number;
   /**
    * The name given to the vault your key is stored in.
-   * @type {string}
-   * @memberof AzureHardwareWallet
    */
   vaultName: string;
   /**
    * The name of the key.
-   * @type {string}
-   * @memberof AzureHardwareWallet
    */
   keyName: string;
   /**
    * The version of the key.
-   * @type {string}
-   * @memberof AzureHardwareWallet
    */
   keyVersion: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof AzureHardwareWallet
    */
   publicAddress: string;
 }
 /**
  * An HSM Wallet returned when a new key is created
- * @export
- * @interface AzureWallet
  */
 export interface AzureWallet {
   /**
    * The name of the key.
-   * @type {string}
-   * @memberof AzureWallet
    */
   keyName: string;
   /**
    * The version of the key.
-   * @type {string}
-   * @memberof AzureWallet
    */
   keyVersion: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof AzureWallet
    */
   publicAddress: string;
 }
 /**
  * An API key.
- * @export
- * @interface BaseAPIKey
  */
 export interface BaseAPIKey {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof BaseAPIKey
    */
   label: string;
 }
 /**
  * An Azure account.
- * @export
- * @interface BaseAzureAccount
  */
 export interface BaseAzureAccount {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof BaseAzureAccount
    */
   label: string;
   /**
    * The Application ID that will be accessing the Key Vault.
-   * @type {string}
-   * @memberof BaseAzureAccount
    */
   clientID: string;
   /**
    * The application’s secret key that you generate when you first register the application in Azure.
-   * @type {string}
-   * @memberof BaseAzureAccount
    */
   clientSecret: string;
   /**
    * Also known as Directory ID.
-   * @type {string}
-   * @memberof BaseAzureAccount
    */
   tenantID: string;
   /**
    * The ID linked to your subscription to Azure services.
-   * @type {string}
-   * @memberof BaseAzureAccount
    */
   subscriptionID: string;
   /**
    * The Resource Group Name for the resource being accessed.
-   * @type {string}
-   * @memberof BaseAzureAccount
    */
   baseGroupName: string;
 }
 /**
  * A contract.
- * @export
- * @interface BaseContract
  */
 export interface BaseContract {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof BaseContract
    */
   label: string;
   /**
    * The name of the contract.
-   * @type {string}
-   * @memberof BaseContract
    */
   contractName: string;
   /**
    * The contract version.
-   * @type {string}
-   * @memberof BaseContract
    */
   version: string;
   /**
    * The smart-contract bytecode.
-   * @type {string}
-   * @memberof BaseContract
    */
   bin?: string;
   /**
    * The contract raw ABI JSON string.
-   * @type {string}
-   * @memberof BaseContract
    */
   rawAbi: string;
   /**
    * The user documentation JSON string.
-   * @type {string}
-   * @memberof BaseContract
    */
   userDoc?: string;
   /**
    * The developer documentation JSON string.
-   * @type {string}
-   * @memberof BaseContract
    */
   developerDoc?: string;
   /**
    * The contract metadata JSON string.
-   * @type {string}
-   * @memberof BaseContract
    */
   metadata?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof BaseContract
-   */
   isFavorite?: boolean;
 }
 /**
  * Standard response.
- * @export
- * @interface BaseResponse
  */
 export interface BaseResponse {
   /**
    * The status code.
-   * @type {number}
-   * @memberof BaseResponse
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof BaseResponse
    */
   message: string;
 }
 /**
  * A user.
- * @export
- * @interface BaseUser
  */
 export interface BaseUser {
   /**
    * The user\'s email address.
-   * @type {string}
-   * @memberof BaseUser
    */
   email: string;
   /**
    * The user\'s name.
-   * @type {string}
-   * @memberof BaseUser
    */
   name: string;
 }
-/**
- *
- * @export
- * @interface BaseWebhookEndpoint
- */
 export interface BaseWebhookEndpoint {
   /**
    * The URL to send the webhook to.
-   * @type {string}
-   * @memberof BaseWebhookEndpoint
    */
   url: string;
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof BaseWebhookEndpoint
    */
   label: string;
   /**
    * The events to subscribe to.
-   * @type {Array<WebhookEventsType>}
-   * @memberof BaseWebhookEndpoint
    */
   subscriptions: Array<WebhookEventsType>;
 }
 /**
  * A block in the Ethereum blockchain.
- * @export
- * @interface Block
  */
 export interface Block {
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Block
    */
   hash: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Block
-   */
   difficulty: string;
-  /**
-   *
-   * @type {number}
-   * @memberof Block
-   */
   gasLimit: number;
-  /**
-   *
-   * @type {string}
-   * @memberof Block
-   */
   number: string;
-  /**
-   *
-   * @type {number}
-   * @memberof Block
-   */
   timestamp: number;
-  /**
-   *
-   * @type {Array<Transaction>}
-   * @memberof Block
-   */
   transactions: Array<Transaction>;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Block
    */
   receiptsRoot: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Block
    */
   parentHash: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Block
    */
   sha3Uncles: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof Block
    */
   miner: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Block
    */
   stateRoot: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Block
    */
   transactionsRoot: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Block
    */
   logsBloom: string;
-  /**
-   *
-   * @type {number}
-   * @memberof Block
-   */
   gasUsed: number;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Block
    */
   nonce: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Block
    */
   mixHash: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Block
-   */
   extraData: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Block
-   */
   baseFeePerGas?: string;
 }
 /**
  * CORS Origin
- * @export
- * @interface CORSOrigin
  */
 export interface CORSOrigin {
-  /**
-   *
-   * @type {number}
-   * @memberof CORSOrigin
-   */
   id?: number;
   /**
    * The CORS Origin
-   * @type {string}
-   * @memberof CORSOrigin
    */
   origin?: string;
 }
-/**
- *
- * @export
- * @interface CallContractFunction200Response
- */
 export interface CallContractFunction200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CallContractFunction200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CallContractFunction200Response
    */
   message: string;
-  /**
-   *
-   * @type {CallContractFunction200ResponseAllOfResult}
-   * @memberof CallContractFunction200Response
-   */
   result: CallContractFunction200ResponseAllOfResult;
 }
 /**
  * @type CallContractFunction200ResponseAllOfResult
- * @export
  */
 export type CallContractFunction200ResponseAllOfResult =
   | ({ kind: 'MethodCallResponse' } & MethodCallResponse)
@@ -808,8 +478,6 @@ export type CallContractFunction200ResponseAllOfResult =
 
 /**
  * A blockchain chain name.
- * @export
- * @enum {string}
  */
 
 export const ChainName = {
@@ -820,1499 +488,743 @@ export type ChainName = typeof ChainName[keyof typeof ChainName];
 
 /**
  * The status of the Chain
- * @export
- * @interface ChainStatus
  */
 export interface ChainStatus {
-  /**
-   *
-   * @type {number}
-   * @memberof ChainStatus
-   */
   blockNumber: number;
   /**
    * The client version for this chain node.
-   * @type {string}
-   * @memberof ChainStatus
    */
   version: string;
-  /**
-   *
-   * @type {number}
-   * @memberof ChainStatus
-   */
   chainID: number;
-  /**
-   *
-   * @type {number}
-   * @memberof ChainStatus
-   */
   networkID: number;
   /**
    * The current base fee (only available for chains that support EIP-1559).
-   * @type {string}
-   * @memberof ChainStatus
    */
   baseFee?: string;
 }
 /**
  * A Cloud Wallet transaction to be signed.
- * @export
- * @interface CloudWalletTXToSign
  */
 export interface CloudWalletTXToSign {
-  /**
-   *
-   * @type {CloudWalletTXToSignTx}
-   * @memberof CloudWalletTXToSign
-   */
   tx: CloudWalletTXToSignTx;
 }
 /**
  * An Ethereum transaction.
- * @export
- * @interface CloudWalletTXToSignTx
  */
 export interface CloudWalletTXToSignTx {
   /**
    * Sender account nonce of the transaction
-   * @type {number}
-   * @memberof CloudWalletTXToSignTx
    */
   nonce?: number;
   /**
    * Gas price of the transaction
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   gasPrice?: string;
   /**
    * Fee cap per gas of the transaction
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   gasFeeCap?: string;
   /**
    * GasTipCap per gas of the transaction
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   gasTipCap?: string;
   /**
    * Gas limit of the transaction
-   * @type {number}
-   * @memberof CloudWalletTXToSignTx
    */
   gas: number;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   from: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   to?: string | null;
   /**
    * Amount (in wei) to send with the transaction.
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   value: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   data: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof CloudWalletTXToSignTx
    */
   hash?: string;
   /**
    * Transaction type
-   * @type {number}
-   * @memberof CloudWalletTXToSignTx
    */
   type: number;
 }
 /**
  * A returned contract.
- * @export
- * @interface Contract
  */
 export interface Contract {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof Contract
    */
   label: string;
   /**
    * The name of the contract.
-   * @type {string}
-   * @memberof Contract
    */
   contractName: string;
   /**
    * The contract version.
-   * @type {string}
-   * @memberof Contract
    */
   version: string;
   /**
    * The smart-contract bytecode.
-   * @type {string}
-   * @memberof Contract
    */
   bin?: string;
   /**
    * The contract raw ABI JSON string.
-   * @type {string}
-   * @memberof Contract
    */
   rawAbi: string;
   /**
    * The user documentation JSON string.
-   * @type {string}
-   * @memberof Contract
    */
   userDoc?: string;
   /**
    * The developer documentation JSON string.
-   * @type {string}
-   * @memberof Contract
    */
   developerDoc?: string;
   /**
    * The contract metadata JSON string.
-   * @type {string}
-   * @memberof Contract
    */
   metadata?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof Contract
-   */
   isFavorite?: boolean;
-  /**
-   *
-   * @type {ContractABI}
-   * @memberof Contract
-   */
   abi: ContractABI;
   /**
    * List of the contract instances.
-   * @type {Array<ContractInstance>}
-   * @memberof Contract
    */
   instances?: Array<ContractInstance>;
 }
 /**
  * The contract ABI.
- * @export
- * @interface ContractABI
  */
 export interface ContractABI {
-  /**
-   *
-   * @type {ContractABIMethod1}
-   * @memberof ContractABI
-   */
   constructor: ContractABIMethod1 | null;
-  /**
-   *
-   * @type {{ [key: string]: ContractABIMethod; }}
-   * @memberof ContractABI
-   */
   methods: { [key: string]: ContractABIMethod };
-  /**
-   *
-   * @type {{ [key: string]: ContractABIEvent; }}
-   * @memberof ContractABI
-   */
   events: { [key: string]: ContractABIEvent };
-  /**
-   *
-   * @type {{ [key: string]: ContractABIError; }}
-   * @memberof ContractABI
-   */
   errors?: { [key: string]: ContractABIError };
-  /**
-   *
-   * @type {ContractABIMethod}
-   * @memberof ContractABI
-   */
   fallback: ContractABIMethod | null;
-  /**
-   *
-   * @type {ContractABIMethod}
-   * @memberof ContractABI
-   */
   receive: ContractABIMethod | null;
 }
 /**
  * A contract error.
- * @export
- * @interface ContractABIError
  */
 export interface ContractABIError {
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof ContractABIError
    */
   id: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIError
-   */
   name: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIError
-   */
   signature: string;
   /**
    * List of contract event\'s input arguments.
-   * @type {Array<ContractABIErrorArgument>}
-   * @memberof ContractABIError
    */
   inputs: Array<ContractABIErrorArgument>;
   /**
    * The developer documentation.
-   * @type {string}
-   * @memberof ContractABIError
    */
   notes?: string;
   /**
    * The user documentation.
-   * @type {string}
-   * @memberof ContractABIError
    */
   description?: string;
 }
 /**
  * A contract error argument.
- * @export
- * @interface ContractABIErrorArgument
  */
 export interface ContractABIErrorArgument {
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIErrorArgument
-   */
   name: string;
-  /**
-   *
-   * @type {ContractABIType}
-   * @memberof ContractABIErrorArgument
-   */
   type: ContractABIType;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIErrorArgument
-   */
   typeName: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractABIErrorArgument
-   */
   indexed: boolean;
   /**
    * The developer documentation.
-   * @type {string}
-   * @memberof ContractABIErrorArgument
    */
   notes: string;
 }
 /**
  * A contract event.
- * @export
- * @interface ContractABIEvent
  */
 export interface ContractABIEvent {
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof ContractABIEvent
    */
   id: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIEvent
-   */
   name: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIEvent
-   */
   signature: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractABIEvent
-   */
   anonymous: boolean;
   /**
    * List of contract event\'s input arguments.
-   * @type {Array<ContractABIEventArgument>}
-   * @memberof ContractABIEvent
    */
   inputs: Array<ContractABIEventArgument>;
   /**
    * The developer documentation.
-   * @type {string}
-   * @memberof ContractABIEvent
    */
   notes: string;
   /**
    * The user documentation.
-   * @type {string}
-   * @memberof ContractABIEvent
    */
   description: string;
 }
 /**
  * A contract event argument.
- * @export
- * @interface ContractABIEventArgument
  */
 export interface ContractABIEventArgument {
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIEventArgument
-   */
   name: string;
-  /**
-   *
-   * @type {ContractABIType}
-   * @memberof ContractABIEventArgument
-   */
   type: ContractABIType;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIEventArgument
-   */
   typeName: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractABIEventArgument
-   */
   indexed: boolean;
-  /**
-   *
-   * @type {ContractABITypeConversion}
-   * @memberof ContractABIEventArgument
-   */
   typeConversion: ContractABITypeConversion | null;
   /**
    * The developer documentation.
-   * @type {string}
-   * @memberof ContractABIEventArgument
    */
   notes: string;
 }
 /**
  * A contract function.
- * @export
- * @interface ContractABIMethod
  */
 export interface ContractABIMethod {
   /**
    * A hex string.
-   * @type {string}
-   * @memberof ContractABIMethod
    */
   id: string;
   /**
    * Name of the function.
-   * @type {string}
-   * @memberof ContractABIMethod
    */
   name: string;
   /**
    * The function signature.
-   * @type {string}
-   * @memberof ContractABIMethod
    */
   signature: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractABIMethod
-   */
   const: boolean;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractABIMethod
-   */
   payable: boolean;
   /**
    * List of function arguments.
-   * @type {Array<ContractABIMethodArgument>}
-   * @memberof ContractABIMethod
    */
   inputs: Array<ContractABIMethodArgument>;
   /**
    * List of function outputs.
-   * @type {Array<ContractABIMethodArgument>}
-   * @memberof ContractABIMethod
    */
   outputs: Array<ContractABIMethodArgument>;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethod
-   */
   author: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethod
-   */
   notes: string;
   /**
    * The function description.
-   * @type {string}
-   * @memberof ContractABIMethod
    */
   description: string;
 }
 /**
  * A contract function.
- * @export
- * @interface ContractABIMethod1
  */
 export interface ContractABIMethod1 {
   /**
    * A hex string.
-   * @type {string}
-   * @memberof ContractABIMethod1
    */
   id: string;
   /**
    * Name of the function.
-   * @type {string}
-   * @memberof ContractABIMethod1
    */
   name: string;
   /**
    * The function signature.
-   * @type {string}
-   * @memberof ContractABIMethod1
    */
   signature: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractABIMethod1
-   */
   const: boolean;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractABIMethod1
-   */
   payable: boolean;
   /**
    * List of function arguments.
-   * @type {Array<ContractABIMethodArgument>}
-   * @memberof ContractABIMethod1
    */
   inputs: Array<ContractABIMethodArgument>;
   /**
    * List of function outputs.
-   * @type {Array<ContractABIMethodArgument>}
-   * @memberof ContractABIMethod1
    */
   outputs: Array<ContractABIMethodArgument>;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethod1
-   */
   author: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethod1
-   */
   notes: string;
   /**
    * The function description.
-   * @type {string}
-   * @memberof ContractABIMethod1
    */
   description: string;
 }
 /**
  * A contract function argument.
- * @export
- * @interface ContractABIMethodArgument
  */
 export interface ContractABIMethodArgument {
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethodArgument
-   */
   name: string;
-  /**
-   *
-   * @type {ContractABIType}
-   * @memberof ContractABIMethodArgument
-   */
   type: ContractABIType;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethodArgument
-   */
   typeName: string;
-  /**
-   *
-   * @type {ContractABITypeConversion}
-   * @memberof ContractABIMethodArgument
-   */
   typeConversion: ContractABITypeConversion | null;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIMethodArgument
-   */
   notes: string;
 }
 /**
  * A contract function or event argument type.
- * @export
- * @interface ContractABIType
  */
 export interface ContractABIType {
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABIType
-   */
   type: string;
-  /**
-   *
-   * @type {number}
-   * @memberof ContractABIType
-   */
   size?: number;
-  /**
-   *
-   * @type {Array<ContractABIType>}
-   * @memberof ContractABIType
-   */
   tupleElems?: Array<ContractABIType>;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ContractABIType
-   */
   tupleRawNames?: Array<string>;
-  /**
-   *
-   * @type {ContractABIType}
-   * @memberof ContractABIType
-   */
   elem?: ContractABIType;
 }
 /**
  * Holds JSON-compatible type conversion information.
- * @export
- * @interface ContractABITypeConversion
  */
 export interface ContractABITypeConversion {
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABITypeConversion
-   */
   mode: string;
-  /**
-   *
-   * @type {number}
-   * @memberof ContractABITypeConversion
-   */
   decimalsAbsolute: number | null;
-  /**
-   *
-   * @type {string}
-   * @memberof ContractABITypeConversion
-   */
   decimalsFunction: string | null;
 }
 /**
  * Type conversion options for an event.
- * @export
- * @interface ContractEventOptions
  */
 export interface ContractEventOptions {
-  /**
-   *
-   * @type {string}
-   * @memberof ContractEventOptions
-   */
   signature?: string;
-  /**
-   *
-   * @type {Array<ContractParameter>}
-   * @memberof ContractEventOptions
-   */
   inputs: Array<ContractParameter>;
 }
 /**
  * The contract information within the event or transaction.
- * @export
- * @interface ContractInformation
  */
 export interface ContractInformation {
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof ContractInformation
    */
   address: string;
   /**
    * An alias to easily identify and reference addresses.
-   * @type {string}
-   * @memberof ContractInformation
    */
   addressAlias: string;
   /**
    * The name of the contract.
-   * @type {string}
-   * @memberof ContractInformation
    */
   name: string;
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof ContractInformation
    */
   label: string;
 }
 /**
  * A contract instance
- * @export
- * @interface ContractInstance
  */
 export interface ContractInstance {
-  /**
-   *
-   * @type {string}
-   * @memberof ContractInstance
-   */
   alias: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof ContractInstance
    */
   address: string;
 }
 /**
  * The contract lookup item.
- * @export
- * @interface ContractLookup
  */
 export interface ContractLookup {
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof ContractLookup
    */
   address: string;
   /**
    * The name of the contract.
-   * @type {string}
-   * @memberof ContractLookup
    */
   name?: string;
   /**
    * The contract ABI JSON string.
-   * @type {string}
-   * @memberof ContractLookup
    */
   abi: string;
   /**
    * The smart-contract bytecode.
-   * @type {string}
-   * @memberof ContractLookup
    */
   bytecode?: string;
   /**
    * The contract\'s source code.
-   * @type {string}
-   * @memberof ContractLookup
    */
   source?: string;
   /**
    * The user documentation JSON string.
-   * @type {string}
-   * @memberof ContractLookup
    */
   userdoc?: string;
   /**
    * The developer documentation JSON string.
-   * @type {string}
-   * @memberof ContractLookup
    */
   devdoc?: string;
   /**
    * Indicates whether the contract has been verified.
-   * @type {boolean}
-   * @memberof ContractLookup
    */
   verified: boolean;
   /**
    * The name of the service that provided the contract verification.
-   * @type {string}
-   * @memberof ContractLookup
    */
   verifiedSource?: string;
   /**
    * The URL to the contract\'s verification details on the verification service.
-   * @type {string}
-   * @memberof ContractLookup
    */
   verifiedLink?: string;
   /**
    * Indicates whether the contract is a proxy contract.
-   * @type {boolean}
-   * @memberof ContractLookup
    */
   proxy: boolean;
 }
-/**
- *
- * @export
- * @interface ContractMetadata
- */
 export interface ContractMetadata {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof ContractMetadata
    */
   label: string;
   /**
    * The name of the contract.
-   * @type {string}
-   * @memberof ContractMetadata
    */
   name: string;
   /**
    * The contract version.
-   * @type {string}
-   * @memberof ContractMetadata
    */
   version: string;
 }
 /**
  * The contract method\'s information returned within the event or transaction.
- * @export
- * @interface ContractMethodInformation
  */
 export interface ContractMethodInformation {
   /**
    * The name of the method.
-   * @type {string}
-   * @memberof ContractMethodInformation
    */
   name: string;
   /**
    * The method signature.
-   * @type {string}
-   * @memberof ContractMethodInformation
    */
   signature: string;
-  /**
-   *
-   * @type {Array<MethodArg>}
-   * @memberof ContractMethodInformation
-   */
   inputs: Array<MethodArg>;
 }
 /**
  * Type conversion options for a function.
- * @export
- * @interface ContractMethodOptions
  */
 export interface ContractMethodOptions {
   /**
    * The function signature.
-   * @type {string}
-   * @memberof ContractMethodOptions
    */
   signature?: string;
   /**
    * List of function input parameters.
-   * @type {Array<ContractParameter>}
-   * @memberof ContractMethodOptions
    */
   inputs: Array<ContractParameter>;
   /**
    * List of function output parameters.
-   * @type {Array<ContractParameter>}
-   * @memberof ContractMethodOptions
    */
   outputs?: Array<ContractParameter>;
 }
 /**
  * A contract overview.
- * @export
- * @interface ContractOverview
  */
 export interface ContractOverview {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof ContractOverview
    */
   label: string;
   /**
    * The name of the contract.
-   * @type {string}
-   * @memberof ContractOverview
    */
   contractName: string;
   /**
    * The contract version.
-   * @type {string}
-   * @memberof ContractOverview
    */
   version: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractOverview
-   */
   isFavorite?: boolean;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ContractOverview
-   */
   deployable: boolean;
   /**
    * List of contract instances.
-   * @type {Array<ContractInstance>}
-   * @memberof ContractOverview
    */
   instances: Array<ContractInstance>;
 }
 /**
  * Type conversion options for an input or an output of a function or an event.
- * @export
- * @interface ContractParameter
  */
 export interface ContractParameter {
-  /**
-   *
-   * @type {ContractABITypeConversion}
-   * @memberof ContractParameter
-   */
   typeConversion: ContractABITypeConversion | null;
 }
-/**
- *
- * @export
- * @interface CountEventQueryRecords200Response
- */
 export interface CountEventQueryRecords200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CountEventQueryRecords200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CountEventQueryRecords200Response
    */
   message: string;
   /**
    * The record count.
-   * @type {number}
-   * @memberof CountEventQueryRecords200Response
    */
   result: number;
 }
-/**
- *
- * @export
- * @interface CountWalletTransactions200Response
- */
 export interface CountWalletTransactions200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CountWalletTransactions200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CountWalletTransactions200Response
    */
   message: string;
   /**
    * The transaction count.
-   * @type {number}
-   * @memberof CountWalletTransactions200Response
    */
   result: number;
 }
-/**
- *
- * @export
- * @interface CountWebhookEvents200Response
- */
 export interface CountWebhookEvents200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CountWebhookEvents200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CountWebhookEvents200Response
    */
   message: string;
   /**
    * The number of webhook events.
-   * @type {number}
-   * @memberof CountWebhookEvents200Response
    */
   result: number;
 }
-/**
- *
- * @export
- * @interface CountWebhooks200Response
- */
 export interface CountWebhooks200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CountWebhooks200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CountWebhooks200Response
    */
   message: string;
   /**
    * The webhook count.
-   * @type {number}
-   * @memberof CountWebhooks200Response
    */
   result: number;
 }
-/**
- *
- * @export
- * @interface CreateApiKey200Response
- */
 export interface CreateApiKey200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CreateApiKey200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CreateApiKey200Response
    */
   message: string;
-  /**
-   *
-   * @type {APIKeyWithSecret}
-   * @memberof CreateApiKey200Response
-   */
   result: APIKeyWithSecret;
 }
-/**
- *
- * @export
- * @interface CreateApiKeyRequest
- */
 export interface CreateApiKeyRequest {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof CreateApiKeyRequest
    */
   label: string;
-  /**
-   *
-   * @type {Array<number>}
-   * @memberof CreateApiKeyRequest
-   */
   groupIDs?: Array<number>;
 }
-/**
- *
- * @export
- * @interface CreateHsmKey200Response
- */
 export interface CreateHsmKey200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CreateHsmKey200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CreateHsmKey200Response
    */
   message: string;
-  /**
-   *
-   * @type {AzureWallet}
-   * @memberof CreateHsmKey200Response
-   */
   result: AzureWallet;
 }
 /**
  * Create Key request data.
- * @export
- * @interface CreateKey
  */
 export interface CreateKey {
   /**
    * The Application ID that will be accessing the Key Vault.
-   * @type {string}
-   * @memberof CreateKey
    */
   clientID: string;
   /**
    * The name of the key.
-   * @type {string}
-   * @memberof CreateKey
    */
   keyName: string;
   /**
    * The name given to the vault your key is stored in.
-   * @type {string}
-   * @memberof CreateKey
    */
   vaultName: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof CreateKey
-   */
   useHardwareModule: boolean;
 }
-/**
- *
- * @export
- * @interface CreateWebhook200Response
- */
 export interface CreateWebhook200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof CreateWebhook200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof CreateWebhook200Response
    */
   message: string;
-  /**
-   *
-   * @type {WebhookEndpoint}
-   * @memberof CreateWebhook200Response
-   */
   result: WebhookEndpoint;
 }
-/**
- *
- * @export
- * @interface DeployContract200Response
- */
 export interface DeployContract200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof DeployContract200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof DeployContract200Response
    */
   message: string;
-  /**
-   *
-   * @type {DeployContractTransaction}
-   * @memberof DeployContract200Response
-   */
   result: DeployContractTransaction;
 }
 /**
  * The transaction returned when you deploy a contracts.
- * @export
- * @interface DeployContractTransaction
  */
 export interface DeployContractTransaction {
-  /**
-   *
-   * @type {TransactionToSignTx}
-   * @memberof DeployContractTransaction
-   */
   tx: TransactionToSignTx;
-  /**
-   *
-   * @type {boolean}
-   * @memberof DeployContractTransaction
-   */
   submitted: boolean;
-  /**
-   *
-   * @type {string}
-   * @memberof DeployContractTransaction
-   */
   deployAt?: string;
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof DeployContractTransaction
    */
   label?: string;
 }
 /**
  * The domain fields for EIP-712. All fields are optional per the specification.
- * @export
- * @interface EIP712Domain
  */
 export interface EIP712Domain {
   /**
    * Human-readable name of the signing domain.
-   * @type {string}
-   * @memberof EIP712Domain
    */
   name?: string;
   /**
    * Current major version of the signing domain.
-   * @type {string}
-   * @memberof EIP712Domain
    */
   version?: string;
-  /**
-   *
-   * @type {EIP712DomainChainId}
-   * @memberof EIP712Domain
-   */
   chainId?: EIP712DomainChainId;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof EIP712Domain
    */
   verifyingContract?: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof EIP712Domain
    */
   salt?: string;
 }
 /**
  * @type EIP712DomainChainId
  * The EIP-155 chain ID of the application using the typed data.
- * @export
  */
 export type EIP712DomainChainId = number | string;
 
-/**
- *
- * @export
- * @interface EIP712TypeEntry
- */
 export interface EIP712TypeEntry {
-  /**
-   *
-   * @type {string}
-   * @memberof EIP712TypeEntry
-   */
   name: string;
-  /**
-   *
-   * @type {string}
-   * @memberof EIP712TypeEntry
-   */
   type: string;
 }
 /**
  * EIP-712 structured typed data object.
- * @export
- * @interface EIP712TypedData
  */
 export interface EIP712TypedData {
-  /**
-   *
-   * @type {EIP712Types}
-   * @memberof EIP712TypedData
-   */
   types: EIP712Types;
   /**
    * The root type of the message object. Must correspond to a key in the `types` object.
-   * @type {string}
-   * @memberof EIP712TypedData
    */
   primaryType: string;
-  /**
-   *
-   * @type {EIP712Domain}
-   * @memberof EIP712TypedData
-   */
   domain: EIP712Domain;
   /**
    * The actual data, conforming to the `primaryType` definition in `types`.
-   * @type {object}
-   * @memberof EIP712TypedData
    */
   message: object;
 }
 /**
  * A mapping of type names to arrays of fields.
- * @export
- * @interface EIP712Types
  */
 export interface EIP712Types {
   [key: string]: Array<EIP712TypeEntry> | any;
 
-  /**
-   *
-   * @type {Array<EIP712TypeEntry>}
-   * @memberof EIP712Types
-   */
   EIP712Domain: Array<EIP712TypeEntry>;
 }
 /**
  * An event returned by the API call.
- * @export
- * @interface Event
  */
 export interface Event {
   /**
    * The time at which the event was triggered.
-   * @type {string}
-   * @memberof Event
    */
   triggeredAt: string;
-  /**
-   *
-   * @type {EventInformation}
-   * @memberof Event
-   */
   event: EventInformation;
-  /**
-   *
-   * @type {TransactionInformation}
-   * @memberof Event
-   */
   transaction: TransactionInformation;
 }
 /**
  * Holds a field in the event\'s data.
- * @export
- * @interface EventField
  */
 export interface EventField {
   /**
    * The input name.
-   * @type {string}
-   * @memberof EventField
    */
   name: string;
   /**
    * The input value.
-   * @type {any}
-   * @memberof EventField
    */
   value: any;
   /**
    * Has the value been hashed into a keccak256 string?
-   * @type {boolean}
-   * @memberof EventField
    */
   hashed: boolean;
   /**
    * The type of the argument.
-   * @type {string}
-   * @memberof EventField
    */
   type: string;
 }
 /**
  * The event information returned as part of an event.
- * @export
- * @interface EventInformation
  */
 export interface EventInformation {
   /**
    * The name of the event.
-   * @type {string}
-   * @memberof EventInformation
    */
   name: string;
   /**
    * The event signature.
-   * @type {string}
-   * @memberof EventInformation
    */
   signature: string;
   /**
    * The list of input arguments for the event.
-   * @type {Array<EventField>}
-   * @memberof EventInformation
    */
   inputs: Array<EventField>;
   /**
    * The raw output from an event. Omitted when returned as part of a transaction receipt.
-   * @type {string}
-   * @memberof EventInformation
    */
   rawFields?: string;
-  /**
-   *
-   * @type {ContractInformation}
-   * @memberof EventInformation
-   */
   contract: ContractInformation;
   /**
    * The event\'s index in the log.
-   * @type {number}
-   * @memberof EventInformation
    */
   indexInLog: number;
 }
 /**
  * Status of an Event Monitor
- * @export
- * @interface EventMonitorStatus
  */
 export interface EventMonitorStatus {
-  /**
-   *
-   * @type {number}
-   * @memberof EventMonitorStatus
-   */
   contractId?: number;
-  /**
-   *
-   * @type {number}
-   * @memberof EventMonitorStatus
-   */
   addressId?: number;
-  /**
-   *
-   * @type {boolean}
-   * @memberof EventMonitorStatus
-   */
   isProcessingPastLogs: boolean;
-  /**
-   *
-   * @type {number}
-   * @memberof EventMonitorStatus
-   */
   idealBlockRange?: number;
-  /**
-   *
-   * @type {number}
-   * @memberof EventMonitorStatus
-   */
   latestBlockNumber: number;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof EventMonitorStatus
    */
   latestBlockHash: string;
-  /**
-   *
-   * @type {number}
-   * @memberof EventMonitorStatus
-   */
   startBlockNumber: number;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof EventMonitorStatus
    */
   startBlockHash: string;
-  /**
-   *
-   * @type {string}
-   * @memberof EventMonitorStatus
-   */
   updatedAt: string;
 }
 /**
  * An event query.
- * @export
- * @interface EventQuery
  */
 export interface EventQuery {
-  /**
-   *
-   * @type {Array<EventQueryEvent>}
-   * @memberof EventQuery
-   */
   events: Array<EventQueryEvent>;
   /**
    * The results will be grouped according to this field. An aggregator for non Group By fields must be specified if groupBy is specified.
-   * @type {string}
-   * @memberof EventQuery
    */
   groupBy?: string;
   /**
    * The results will be ordered according to this field.
-   * @type {string}
-   * @memberof EventQuery
    */
   orderBy?: string;
   /**
    * Specify ascending or descending order, the default is \"ASC\".
-   * @type {string}
-   * @memberof EventQuery
    */
   order?: EventQueryOrderEnum;
 }
@@ -2326,63 +1238,37 @@ export type EventQueryOrderEnum = typeof EventQueryOrderEnum[keyof typeof EventQ
 
 /**
  * A query on a single event.
- * @export
- * @interface EventQueryEvent
  */
 export interface EventQueryEvent {
   /**
    * The name of an event.
-   * @type {string}
-   * @memberof EventQueryEvent
    */
   eventName: string;
   /**
    * The query information about all the fields to select from an event.
-   * @type {Array<EventQueryField>}
-   * @memberof EventQueryEvent
    */
   select: Array<EventQueryField>;
-  /**
-   *
-   * @type {EventQueryFilter}
-   * @memberof EventQueryEvent
-   */
   filter?: EventQueryFilter;
 }
 /**
  * A single event field\'s query information.
- * @export
- * @interface EventQueryField
  */
 export interface EventQueryField {
-  /**
-   *
-   * @type {FieldType}
-   * @memberof EventQueryField
-   */
   type: FieldType;
   /**
    * The field name. Either `name` or `inputIndex` is required if `fieldType == \"input\"`.
-   * @type {string}
-   * @memberof EventQueryField
    */
   name?: string;
   /**
    * The field\'s index, can be used in place of `name`.
-   * @type {number}
-   * @memberof EventQueryField
    */
   inputIndex?: number | null;
   /**
    * The name that will be used to return the field.
-   * @type {string}
-   * @memberof EventQueryField
    */
   alias?: string;
   /**
    * The type of aggregation to perform on the field.
-   * @type {string}
-   * @memberof EventQueryField
    */
   aggregator?: EventQueryFieldAggregatorEnum | null;
 }
@@ -2401,44 +1287,27 @@ export type EventQueryFieldAggregatorEnum =
 
 /**
  * A event query filter.
- * @export
- * @interface EventQueryFilter
  */
 export interface EventQueryFilter {
   /**
    * The rule type, can be omitted if this is the last filter to be applied.
-   * @type {string}
-   * @memberof EventQueryFilter
    */
   rule?: EventQueryFilterRuleEnum;
-  /**
-   *
-   * @type {FieldType}
-   * @memberof EventQueryFilter
-   */
   fieldType?: FieldType;
   /**
    * The field\'s index, can be used in place of `name`.
-   * @type {number}
-   * @memberof EventQueryFilter
    */
   inputIndex?: number | null;
   /**
    * The operator on the filter.
-   * @type {string}
-   * @memberof EventQueryFilter
    */
   operator?: EventQueryFilterOperatorEnum;
   /**
    * The value to be compared with.
-   * @type {string}
-   * @memberof EventQueryFilter
    */
   value?: string;
   /**
    * Other filters to be applied in succession with the rule specified.
-   * @type {Array<EventQueryFilter>}
-   * @memberof EventQueryFilter
    */
   children?: Array<EventQueryFilter>;
 }
@@ -2463,59 +1332,32 @@ export type EventQueryFilterOperatorEnum =
 
 /**
  * Results of an executed event query.
- * @export
- * @interface EventQueryResults
  */
 export interface EventQueryResults {
-  /**
-   *
-   * @type {Array<{ [key: string]: any; }>}
-   * @memberof EventQueryResults
-   */
   rows: Array<{ [key: string]: any }>;
 }
 /**
  * Type conversion options for each of the inputs of an event.
- * @export
- * @interface EventTypeConversionOptions
  */
 export interface EventTypeConversionOptions {
   /**
    * List of event\'s input parameters.
-   * @type {Array<TypeConversionOptions>}
-   * @memberof EventTypeConversionOptions
    */
   inputs: Array<TypeConversionOptions>;
 }
-/**
- *
- * @export
- * @interface ExecuteArbitraryEventQuery200Response
- */
 export interface ExecuteArbitraryEventQuery200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ExecuteArbitraryEventQuery200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ExecuteArbitraryEventQuery200Response
    */
   message: string;
-  /**
-   *
-   * @type {EventQueryResults}
-   * @memberof ExecuteArbitraryEventQuery200Response
-   */
   result: EventQueryResults;
 }
 /**
  * The field type in a select or filter.
- * @export
- * @enum {string}
  */
 
 export const FieldType = {
@@ -2536,1205 +1378,611 @@ export type FieldType = typeof FieldType[keyof typeof FieldType];
 
 /**
  * Specify custom gas parameters
- * @export
- * @interface GasParams
  */
 export interface GasParams {
   /**
    * Gas price to use for the cancel/resubmit.
-   * @type {string}
-   * @memberof GasParams
    */
   gasPrice?: string;
   /**
    * Gas fee cap to use for the EIP-1559 cancel/resubmit.
-   * @type {string}
-   * @memberof GasParams
    */
   gasFeeCap?: string;
   /**
    * Gas priority fee cap to use for the EIP-1559 cancel/resubmit.
-   * @type {string}
-   * @memberof GasParams
    */
   gasTipCap?: string;
   /**
    * Gas limit to set for the cancel/resubmit.
-   * @type {number}
-   * @memberof GasParams
    */
   gas?: number;
 }
-/**
- *
- * @export
- * @interface GetApiKey200Response
- */
 export interface GetApiKey200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetApiKey200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetApiKey200Response
    */
   message: string;
-  /**
-   *
-   * @type {APIKey}
-   * @memberof GetApiKey200Response
-   */
   result: APIKey;
 }
-/**
- *
- * @export
- * @interface GetBlock200Response
- */
 export interface GetBlock200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetBlock200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetBlock200Response
    */
   message: string;
-  /**
-   *
-   * @type {Block}
-   * @memberof GetBlock200Response
-   */
   result: Block;
 }
-/**
- *
- * @export
- * @interface GetChainStatus200Response
- */
 export interface GetChainStatus200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetChainStatus200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetChainStatus200Response
    */
   message: string;
-  /**
-   *
-   * @type {ChainStatus}
-   * @memberof GetChainStatus200Response
-   */
   result: ChainStatus;
 }
-/**
- *
- * @export
- * @interface GetContract200Response
- */
 export interface GetContract200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetContract200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetContract200Response
    */
   message: string;
-  /**
-   *
-   * @type {Contract}
-   * @memberof GetContract200Response
-   */
   result: Contract;
 }
-/**
- *
- * @export
- * @interface GetContractVersions200Response
- */
 export interface GetContractVersions200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetContractVersions200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetContractVersions200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<Contract>}
-   * @memberof GetContractVersions200Response
-   */
   result: Array<Contract>;
 }
-/**
- *
- * @export
- * @interface GetEventCount200Response
- */
 export interface GetEventCount200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetEventCount200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetEventCount200Response
    */
   message: string;
   /**
    * The number of events.
-   * @type {number}
-   * @memberof GetEventCount200Response
    */
   result: number;
 }
-/**
- *
- * @export
- * @interface GetEventMonitorStatus200Response
- */
 export interface GetEventMonitorStatus200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetEventMonitorStatus200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetEventMonitorStatus200Response
    */
   message: string;
-  /**
-   *
-   * @type {EventMonitorStatus}
-   * @memberof GetEventMonitorStatus200Response
-   */
   result: EventMonitorStatus;
 }
-/**
- *
- * @export
- * @interface GetEventQuery200Response
- */
 export interface GetEventQuery200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetEventQuery200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetEventQuery200Response
    */
   message: string;
-  /**
-   *
-   * @type {EventQuery}
-   * @memberof GetEventQuery200Response
-   */
   result: EventQuery;
 }
-/**
- *
- * @export
- * @interface GetEventTypeConversions200Response
- */
 export interface GetEventTypeConversions200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetEventTypeConversions200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetEventTypeConversions200Response
    */
   message: string;
-  /**
-   *
-   * @type {EventTypeConversionOptions}
-   * @memberof GetEventTypeConversions200Response
-   */
   result: EventTypeConversionOptions;
 }
-/**
- *
- * @export
- * @interface GetFunctionTypeConversions200Response
- */
 export interface GetFunctionTypeConversions200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetFunctionTypeConversions200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetFunctionTypeConversions200Response
    */
   message: string;
-  /**
-   *
-   * @type {MethodTypeConversionOptions}
-   * @memberof GetFunctionTypeConversions200Response
-   */
   result: MethodTypeConversionOptions;
 }
-/**
- *
- * @export
- * @interface GetPlan200Response
- */
 export interface GetPlan200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetPlan200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetPlan200Response
    */
   message: string;
-  /**
-   *
-   * @type {Plan}
-   * @memberof GetPlan200Response
-   */
   result: Plan;
 }
-/**
- *
- * @export
- * @interface GetTransaction200Response
- */
 export interface GetTransaction200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetTransaction200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetTransaction200Response
    */
   message: string;
-  /**
-   *
-   * @type {TransactionData}
-   * @memberof GetTransaction200Response
-   */
   result: TransactionData;
 }
-/**
- *
- * @export
- * @interface GetTransactionReceipt200Response
- */
 export interface GetTransactionReceipt200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof GetTransactionReceipt200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof GetTransactionReceipt200Response
    */
   message: string;
-  /**
-   *
-   * @type {TransactionReceipt}
-   * @memberof GetTransactionReceipt200Response
-   */
   result: TransactionReceipt;
 }
 /**
  * A group.
- * @export
- * @interface Group
  */
 export interface Group {
   /**
    * The group ID.
-   * @type {number}
-   * @memberof Group
    */
   id: number;
   /**
    * The group name.
-   * @type {string}
-   * @memberof Group
    */
   name: string;
   /**
    * The group short name.
-   * @type {string}
-   * @memberof Group
    */
   shortName: string;
   /**
    * The group description.
-   * @type {string}
-   * @memberof Group
    */
   description: string;
   /**
    * The group roles.
-   * @type {Array<Role>}
-   * @memberof Group
    */
   roles: Array<Role>;
 }
 /**
  * Response body for returning HSM Data.
- * @export
- * @interface HSMData
  */
 export interface HSMData {
-  /**
-   *
-   * @type {AzureAccount}
-   * @memberof HSMData
-   */
   configuration: AzureAccount;
   /**
    * An array of Azure Hardware Wallets.
-   * @type {Array<AzureHardwareWallet>}
-   * @memberof HSMData
    */
   wallets: Array<AzureHardwareWallet>;
 }
 /**
  * @type HSMSignRequest
- * @export
  */
 export type HSMSignRequest =
   | ({ method: 'eth_signTypedData_v4' } & HSMSignRequestTypedData)
-  | ({ method: 'personal_sign' } & HSMSignRequestPersonalSign)
-  | ({ method: 'HSMSignRequestPersonalSign' } & HSMSignRequestPersonalSign)
-  | ({ method: 'HSMSignRequestTypedData' } & HSMSignRequestTypedData);
+  | ({ method: 'personal_sign' } & HSMSignRequestPersonalSign);
 
 /**
  * Request to sign a message using a cloud wallet.
- * @export
- * @interface HSMSignRequestPersonalSign
  */
 export interface HSMSignRequestPersonalSign {
   /**
    * The signing method to use.
-   * @type {string}
-   * @memberof HSMSignRequestPersonalSign
    */
   method: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof HSMSignRequestPersonalSign
    */
   address: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof HSMSignRequestPersonalSign
    */
   data: string;
-  /**
-   *
-   * @type {HSMSignRequestPersonalSignChainId}
-   * @memberof HSMSignRequestPersonalSign
-   */
   chainId?: HSMSignRequestPersonalSignChainId;
 }
 /**
  * @type HSMSignRequestPersonalSignChainId
  * Optionally lock the message to a specific chain by encoding the chain ID in the signature per EIP-155.
- * @export
  */
 export type HSMSignRequestPersonalSignChainId = number | string;
 
 /**
  * Request to sign typed data using a cloud wallet.
- * @export
- * @interface HSMSignRequestTypedData
  */
 export interface HSMSignRequestTypedData {
   /**
    * The signing method to use.
-   * @type {string}
-   * @memberof HSMSignRequestTypedData
    */
   method: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof HSMSignRequestTypedData
    */
   address: string;
-  /**
-   *
-   * @type {EIP712TypedData}
-   * @memberof HSMSignRequestTypedData
-   */
   data: EIP712TypedData;
 }
 /**
  * Response body representing a sign-data response.
- * @export
- * @interface HSMSignResponse
  */
 export interface HSMSignResponse {
-  /**
-   *
-   * @type {string}
-   * @memberof HSMSignResponse
-   */
   publicKey: string;
-  /**
-   *
-   * @type {string}
-   * @memberof HSMSignResponse
-   */
   signature: string;
 }
 /**
  * A user invitation to MultiBaas.
- * @export
- * @interface Invite
  */
 export interface Invite {
   /**
    * The invitee\'s email address.
-   * @type {string}
-   * @memberof Invite
    */
   email: string;
   /**
    * The time the invite was created.
-   * @type {string}
-   * @memberof Invite
    */
   createdAt: string;
   /**
    * The time the invite expires.
-   * @type {string}
-   * @memberof Invite
    */
   expiresAt: string;
 }
 /**
  * An invite request with groups.
- * @export
- * @interface InviteRequest
  */
 export interface InviteRequest {
   /**
    * The invitee\'s email address.
-   * @type {string}
-   * @memberof InviteRequest
    */
   email: string;
-  /**
-   *
-   * @type {Array<number>}
-   * @memberof InviteRequest
-   */
   groupIDs?: Array<number>;
 }
-/**
- *
- * @export
- * @interface LinkAddressContractRequest
- */
 export interface LinkAddressContractRequest {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof LinkAddressContractRequest
    */
   label: string;
   /**
    * The contract version.
-   * @type {string}
-   * @memberof LinkAddressContractRequest
    */
   version?: string;
   /**
    * The block number from which to start syncing events. The value can be `latest` for the latest block number, an absolute block number (e.g. `123` for the block number 123), or a relative block number (e.g. `-100` for 100 blocks before the latest block). If absent, the event monitor will be disabled for this contract and events won\'t be synced.
-   * @type {string}
-   * @memberof LinkAddressContractRequest
    */
   startingBlock?: string;
 }
-/**
- *
- * @export
- * @interface ListAddresses200Response
- */
 export interface ListAddresses200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListAddresses200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListAddresses200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<AddressAlias>}
-   * @memberof ListAddresses200Response
-   */
   result: Array<AddressAlias>;
 }
-/**
- *
- * @export
- * @interface ListApiKeys200Response
- */
 export interface ListApiKeys200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListApiKeys200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListApiKeys200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<APIKey>}
-   * @memberof ListApiKeys200Response
-   */
   result: Array<APIKey>;
 }
-/**
- *
- * @export
- * @interface ListAuditLogs200Response
- */
 export interface ListAuditLogs200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListAuditLogs200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListAuditLogs200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<AuditLog>}
-   * @memberof ListAuditLogs200Response
-   */
   result: Array<AuditLog>;
 }
-/**
- *
- * @export
- * @interface ListContractVersions200Response
- */
 export interface ListContractVersions200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListContractVersions200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListContractVersions200Response
    */
   message: string;
-  /**
-   *
-   * @type {ListContractVersions200ResponseAllOfResult}
-   * @memberof ListContractVersions200Response
-   */
   result: ListContractVersions200ResponseAllOfResult;
 }
-/**
- *
- * @export
- * @interface ListContractVersions200ResponseAllOfResult
- */
 export interface ListContractVersions200ResponseAllOfResult {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof ListContractVersions200ResponseAllOfResult
    */
   label: string;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof ListContractVersions200ResponseAllOfResult
-   */
   versions: Array<string>;
 }
-/**
- *
- * @export
- * @interface ListContracts200Response
- */
 export interface ListContracts200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListContracts200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListContracts200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<ContractOverview>}
-   * @memberof ListContracts200Response
-   */
   result: Array<ContractOverview>;
 }
-/**
- *
- * @export
- * @interface ListCorsOrigins200Response
- */
 export interface ListCorsOrigins200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListCorsOrigins200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListCorsOrigins200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<CORSOrigin>}
-   * @memberof ListCorsOrigins200Response
-   */
   result: Array<CORSOrigin>;
 }
-/**
- *
- * @export
- * @interface ListEventQueries200Response
- */
 export interface ListEventQueries200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListEventQueries200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListEventQueries200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<SavedEventQuery>}
-   * @memberof ListEventQueries200Response
-   */
   result: Array<SavedEventQuery>;
 }
-/**
- *
- * @export
- * @interface ListEvents200Response
- */
 export interface ListEvents200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListEvents200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListEvents200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<Event>}
-   * @memberof ListEvents200Response
-   */
   result: Array<Event>;
 }
-/**
- *
- * @export
- * @interface ListGroups200Response
- */
 export interface ListGroups200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListGroups200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListGroups200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<Group>}
-   * @memberof ListGroups200Response
-   */
   result: Array<Group>;
 }
-/**
- *
- * @export
- * @interface ListHsm200Response
- */
 export interface ListHsm200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListHsm200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListHsm200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<HSMData>}
-   * @memberof ListHsm200Response
-   */
   result: Array<HSMData>;
 }
-/**
- *
- * @export
- * @interface ListHsmWallets200Response
- */
 export interface ListHsmWallets200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListHsmWallets200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListHsmWallets200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<StandaloneWallet>}
-   * @memberof ListHsmWallets200Response
-   */
   result: Array<StandaloneWallet>;
 }
-/**
- *
- * @export
- * @interface ListInvites200Response
- */
 export interface ListInvites200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListInvites200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListInvites200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<Invite>}
-   * @memberof ListInvites200Response
-   */
   result: Array<Invite>;
 }
-/**
- *
- * @export
- * @interface ListUserSigners200Response
- */
 export interface ListUserSigners200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListUserSigners200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListUserSigners200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<SignerWallet>}
-   * @memberof ListUserSigners200Response
-   */
   result: Array<SignerWallet>;
 }
-/**
- *
- * @export
- * @interface ListUsers200Response
- */
 export interface ListUsers200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListUsers200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListUsers200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<User>}
-   * @memberof ListUsers200Response
-   */
   result: Array<User>;
 }
-/**
- *
- * @export
- * @interface ListWalletTransactions200Response
- */
 export interface ListWalletTransactions200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListWalletTransactions200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListWalletTransactions200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<WalletTransaction>}
-   * @memberof ListWalletTransactions200Response
-   */
   result: Array<WalletTransaction>;
 }
-/**
- *
- * @export
- * @interface ListWebhookEvents200Response
- */
 export interface ListWebhookEvents200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListWebhookEvents200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListWebhookEvents200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<WebhookEvent>}
-   * @memberof ListWebhookEvents200Response
-   */
   result: Array<WebhookEvent>;
 }
-/**
- *
- * @export
- * @interface ListWebhooks200Response
- */
 export interface ListWebhooks200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof ListWebhooks200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof ListWebhooks200Response
    */
   message: string;
-  /**
-   *
-   * @type {Array<WebhookEndpoint>}
-   * @memberof ListWebhooks200Response
-   */
   result: Array<WebhookEndpoint>;
 }
 /**
  * A contract log event.
- * @export
- * @interface Log
  */
 export interface Log {
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof Log
    */
   address: string;
   /**
    * A list of topics provided by the contract.
-   * @type {Array<string>}
-   * @memberof Log
    */
   topics: Array<string>;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Log
    */
   data: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Log
    */
   blockNumber: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Log
    */
   transactionHash: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Log
    */
   transactionIndex: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Log
    */
   blockHash: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Log
    */
   logIndex: string;
   /**
    * True if this log was reverted due to a chain reorganization.
-   * @type {boolean}
-   * @memberof Log
    */
   removed: boolean;
 }
 /**
  * An argument passed to a method call.
- * @export
- * @interface MethodArg
  */
 export interface MethodArg {
   /**
    * The input name.
-   * @type {string}
-   * @memberof MethodArg
    */
   name: string;
   /**
    * The input value.
-   * @type {any}
-   * @memberof MethodArg
    */
   value: any;
   /**
    * The type of the argument.
-   * @type {string}
-   * @memberof MethodArg
    */
   type: string;
 }
 /**
  * The result of a function call.
- * @export
- * @interface MethodCallResponse
  */
 export interface MethodCallResponse extends PostMethodResponse {
   /**
    * The function call output.
-   * @type {any}
-   * @memberof MethodCallResponse
    */
   output: any;
 }
 /**
  * Type conversion options for each of the inputs and outputs of a function.
- * @export
- * @interface MethodTypeConversionOptions
  */
 export interface MethodTypeConversionOptions {
-  /**
-   *
-   * @type {Array<TypeConversionOptions>}
-   * @memberof MethodTypeConversionOptions
-   */
   inputs: Array<TypeConversionOptions>;
-  /**
-   *
-   * @type {Array<TypeConversionOptions>}
-   * @memberof MethodTypeConversionOptions
-   */
   outputs: Array<TypeConversionOptions>;
 }
 /**
  * An error response.
- * @export
- * @interface ModelError
  */
 export interface ModelError {
   /**
    * The unique error code.
-   * @type {number}
-   * @memberof ModelError
    */
   status: number;
   /**
    * The human-readable error message.
-   * @type {string}
-   * @memberof ModelError
    */
   message: string;
 }
 /**
  * A plan containing limits and features.
- * @export
- * @interface Plan
  */
 export interface Plan {
   /**
    * The name of the plan.
-   * @type {string}
-   * @memberof Plan
    */
   name: string;
   /**
    * When the plan was last updated.
-   * @type {string}
-   * @memberof Plan
    */
   updatedAt: string;
   /**
    * The limits associated with the plan.
-   * @type {Array<PlanLimit>}
-   * @memberof Plan
    */
   limits: Array<PlanLimit>;
   /**
    * The features associated with the plan.
-   * @type {Array<PlanFeature>}
-   * @memberof Plan
    */
   features: Array<PlanFeature>;
 }
 /**
  * A feature flag in a plan.
- * @export
- * @interface PlanFeature
  */
 export interface PlanFeature {
   /**
    * The name of the feature.
-   * @type {string}
-   * @memberof PlanFeature
    */
   name: PlanFeatureNameEnum;
   /**
    * Whether the feature is enabled.
-   * @type {boolean}
-   * @memberof PlanFeature
    */
   enabled: boolean;
 }
@@ -3752,26 +2000,18 @@ export type PlanFeatureNameEnum = typeof PlanFeatureNameEnum[keyof typeof PlanFe
 
 /**
  * A limit on plan usage.
- * @export
- * @interface PlanLimit
  */
 export interface PlanLimit {
   /**
    * The name of the limit.
-   * @type {string}
-   * @memberof PlanLimit
    */
   name: PlanLimitNameEnum;
   /**
    * The limit value. Null means unlimited.
-   * @type {number}
-   * @memberof PlanLimit
    */
   limit: number | null;
   /**
    * The current count for this limit.
-   * @type {number}
-   * @memberof PlanLimit
    */
   count?: number;
 }
@@ -3795,367 +2035,222 @@ export type PlanLimitNameEnum = typeof PlanLimitNameEnum[keyof typeof PlanLimitN
 
 /**
  * Arguments to be passed into a contract function.
- * @export
- * @interface PostMethodArgs
  */
 export interface PostMethodArgs {
-  /**
-   *
-   * @type {string}
-   * @memberof PostMethodArgs
-   */
   signature?: string;
   /**
    * List of the function arguments.
-   * @type {Array<any>}
-   * @memberof PostMethodArgs
    */
   args?: Array<any>;
   /**
    * An Ethereum address (0x prefixed hex) or an address alias.
-   * @type {string}
-   * @memberof PostMethodArgs
    */
   from?: string;
   /**
    * Nonce to use for the transaction execution.
-   * @type {number}
-   * @memberof PostMethodArgs
    */
   nonce?: number;
   /**
    * Gas price to use for the transaction execution.
-   * @type {number}
-   * @memberof PostMethodArgs
    */
   gasPrice?: number;
   /**
    * Gas fee cap to use for the 1559 transaction execution.
-   * @type {number}
-   * @memberof PostMethodArgs
    */
   gasFeeCap?: number;
   /**
    * Gas priority fee cap to use for the 1559 transaction execution.
-   * @type {number}
-   * @memberof PostMethodArgs
    */
   gasTipCap?: number;
   /**
    * Gas limit to set for the transaction execution.
-   * @type {number}
-   * @memberof PostMethodArgs
    */
   gas?: number;
   /**
    * An Ethereum address (0x prefixed hex) or an address alias.
-   * @type {string}
-   * @memberof PostMethodArgs
    */
   to?: string;
   /**
    * Amount (in wei) to send with the transaction.
-   * @type {string}
-   * @memberof PostMethodArgs
    */
   value?: string;
   /**
    * If the `from` address is an HSM address and this flag is set to `true`, the transaction will be automatically signed and submitted to the blockchain.
-   * @type {boolean}
-   * @memberof PostMethodArgs
    */
   signAndSubmit?: boolean;
   /**
    * If the `from` address is an HSM address and this flag is set to `true`, MultiBaas will keep track of the nonce and set it accordingly. This is particularly useful when submitting multiple transactions concurrently or in a very short period of time. If this flag is set to `true` and a `nonce` is provided, it will reset the nonce tracker to the given nonce (useful if the nonce tracker is out of sync).
-   * @type {boolean}
-   * @memberof PostMethodArgs
    */
   nonceManagement?: boolean;
   /**
    * If set to `true`, forces a legacy type transaction. Otherwise an EIP-1559 transaction will created if the network supports it.
-   * @type {boolean}
-   * @memberof PostMethodArgs
    */
   preEIP1559?: boolean;
   /**
    * An Ethereum address (0x prefixed hex) or an address alias.
-   * @type {string}
-   * @memberof PostMethodArgs
    */
   signer?: string;
   /**
    * Mode to format integer outputs in the function call\'s responses. There are 3 possible modes:   - `auto` (the default option), where number format is decided by its type:     - If the type has size at most 32 bits, then the number is returned verbatim.     - If the type has size larger than 32 bits, then the number is returned as a string.   - `as_numbers`, where all numbers are returned verbatim.   - `as_strings`, where all numbers are returned as strings.
-   * @type {string}
-   * @memberof PostMethodArgs
    */
   formatInts?: string;
   /**
    * Call the function at a specific timestamp. Only available for read functions calls and if the `historical_blocks_feature` is enabled (see the plan endpoint). Mutually exclusive with the `blockNumber` parameter.
-   * @type {string}
-   * @memberof PostMethodArgs
    */
   timestamp?: string;
   /**
    * Call the function at a specific block. Only available for read functions calls and if the `historical_blocks_feature` is enabled (see the plan endpoint). Mutually exclusive with the `timestamp` parameter.
-   * @type {string}
-   * @memberof PostMethodArgs
    */
   blockNumber?: string;
   /**
    * If set to true the given address and contract don\'t need to be linked for the function to be called.
-   * @type {boolean}
-   * @memberof PostMethodArgs
    */
   contractOverride?: boolean;
 }
-/**
- *
- * @export
- * @interface PostMethodResponse
- */
 export interface PostMethodResponse {
   /**
    * The response object type (discriminator).
-   * @type {string}
-   * @memberof PostMethodResponse
    */
   kind: string;
 }
 /**
  * A role.
- * @export
- * @interface Role
  */
 export interface Role {
   /**
    * The role ID.
-   * @type {number}
-   * @memberof Role
    */
   id: number;
   /**
    * The role name.
-   * @type {string}
-   * @memberof Role
    */
   name: string;
   /**
    * The role short name.
-   * @type {string}
-   * @memberof Role
    */
   shortName: string;
   /**
    * The role description.
-   * @type {string}
-   * @memberof Role
    */
   description: string;
 }
 /**
  * A saved event query.
- * @export
- * @interface SavedEventQuery
  */
 export interface SavedEventQuery {
-  /**
-   *
-   * @type {number}
-   * @memberof SavedEventQuery
-   */
   id: number;
   /**
    * An event query label.
-   * @type {string}
-   * @memberof SavedEventQuery
    */
   label: string;
-  /**
-   *
-   * @type {EventQuery}
-   * @memberof SavedEventQuery
-   */
   query: EventQuery;
   /**
    * Specifies if this a system-generated query which is not modifiable by the user.
-   * @type {boolean}
-   * @memberof SavedEventQuery
    */
   isSystem: boolean;
 }
-/**
- *
- * @export
- * @interface SetAddress201Response
- */
 export interface SetAddress201Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof SetAddress201Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof SetAddress201Response
    */
   message: string;
-  /**
-   *
-   * @type {Address}
-   * @memberof SetAddress201Response
-   */
   result: Address;
 }
 /**
  * Authorization data for setCode operations.
- * @export
- * @interface SetCodeAuthorization
  */
 export interface SetCodeAuthorization {
   /**
    * A hex string.
-   * @type {string}
-   * @memberof SetCodeAuthorization
    */
   chainId: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof SetCodeAuthorization
    */
   address: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof SetCodeAuthorization
    */
   nonce: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof SetCodeAuthorization
    */
   yParity: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof SetCodeAuthorization
    */
   r: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof SetCodeAuthorization
    */
   s: string;
 }
 /**
  * Request body representing a set local nonce request.
- * @export
- * @interface SetNonceRequest
  */
 export interface SetNonceRequest {
   /**
    * If nonce is specified the provided value is set, otherwise the value is read from the blockchain.
-   * @type {number}
-   * @memberof SetNonceRequest
    */
   nonce?: number;
 }
-/**
- *
- * @export
- * @interface SignData200Response
- */
 export interface SignData200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof SignData200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof SignData200Response
    */
   message: string;
-  /**
-   *
-   * @type {HSMSignResponse}
-   * @memberof SignData200Response
-   */
   result: HSMSignResponse;
 }
 /**
  * A transaction that was signed externally and submitted.
- * @export
- * @interface SignedTransactionResponse
  */
 export interface SignedTransactionResponse {
-  /**
-   *
-   * @type {Transaction}
-   * @memberof SignedTransactionResponse
-   */
   tx: Transaction;
 }
 /**
  * The object used to receive a pre-signed raw transaction.
- * @export
- * @interface SignedTransactionSubmission
  */
 export interface SignedTransactionSubmission {
   /**
    * The pre-signed raw transaction.
-   * @type {string}
-   * @memberof SignedTransactionSubmission
    */
   signedTx: string;
 }
 /**
  * A signer label.
- * @export
- * @interface SignerLabel
  */
 export interface SignerLabel {
   /**
    * The label of the signer.
-   * @type {string}
-   * @memberof SignerLabel
    */
   label: string;
 }
 /**
  * A signer wallet.
- * @export
- * @interface SignerWallet
  */
 export interface SignerWallet {
   /**
    * The type of the signer.
-   * @type {string}
-   * @memberof SignerWallet
    */
   type: SignerWalletTypeEnum;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof SignerWallet
    */
   wallet: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof SignerWallet
    */
   signer: string;
   /**
    * The label of the signer.
-   * @type {string}
-   * @memberof SignerWallet
    */
   label: string;
 }
@@ -4171,429 +2266,238 @@ export type SignerWalletTypeEnum = typeof SignerWalletTypeEnum[keyof typeof Sign
 
 /**
  * An object containing an HSM wallet\'s details.
- * @export
- * @interface StandaloneWallet
  */
 export interface StandaloneWallet {
   /**
    * The Application ID that accesses the Key Vault.
-   * @type {string}
-   * @memberof StandaloneWallet
    */
   clientID?: string;
   /**
    * The Resource Group Name for the resource being accessed.
-   * @type {string}
-   * @memberof StandaloneWallet
    */
   baseGroupName: string;
   /**
    * The name given to the vault your key is stored in.
-   * @type {string}
-   * @memberof StandaloneWallet
    */
   vaultName?: string;
   /**
    * The name of the key.
-   * @type {string}
-   * @memberof StandaloneWallet
    */
   keyName: string;
   /**
    * The version of the key.
-   * @type {string}
-   * @memberof StandaloneWallet
    */
   keyVersion?: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof StandaloneWallet
    */
   publicAddress: string;
 }
-/**
- *
- * @export
- * @interface SubmitSignedTransaction200Response
- */
 export interface SubmitSignedTransaction200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof SubmitSignedTransaction200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof SubmitSignedTransaction200Response
    */
   message: string;
-  /**
-   *
-   * @type {SignedTransactionResponse}
-   * @memberof SubmitSignedTransaction200Response
-   */
   result: SignedTransactionResponse;
 }
 /**
  * A transaction from the Ethereum Blockchain.
- * @export
- * @interface Transaction
  */
 export interface Transaction {
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Transaction
    */
   type: string;
   /**
    * A hex string or null.
-   * @type {string}
-   * @memberof Transaction
    */
   chainId?: string | null;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Transaction
    */
   nonce: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof Transaction
    */
   to: string | null;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof Transaction
    */
   from?: string | null;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Transaction
    */
   gas: string;
   /**
    * A hex string or null.
-   * @type {string}
-   * @memberof Transaction
    */
   gasPrice?: string | null;
   /**
    * A hex string or null.
-   * @type {string}
-   * @memberof Transaction
    */
   maxPriorityFeePerGas?: string | null;
   /**
    * A hex string or null.
-   * @type {string}
-   * @memberof Transaction
    */
   maxFeePerGas?: string | null;
   /**
    * A hex string or null.
-   * @type {string}
-   * @memberof Transaction
    */
   maxFeePerBlobGas?: string | null;
   /**
    * A hex string or null.
-   * @type {string}
-   * @memberof Transaction
    */
   value: string | null;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Transaction
    */
   input: string;
-  /**
-   *
-   * @type {Array<AccessTuple>}
-   * @memberof Transaction
-   */
   accessList?: Array<AccessTuple> | null;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Transaction
-   */
   blobVersionedHashes?: Array<string> | null;
-  /**
-   *
-   * @type {Array<SetCodeAuthorization>}
-   * @memberof Transaction
-   */
   authorizationList?: Array<SetCodeAuthorization> | null;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Transaction
    */
   v: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Transaction
    */
   r: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof Transaction
    */
   s: string;
   /**
    * A hex string or null.
-   * @type {string}
-   * @memberof Transaction
    */
   yParity?: string | null;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Transaction
-   */
   blobs?: Array<string> | null;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Transaction
-   */
   commitments?: Array<string> | null;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Transaction
-   */
   proofs?: Array<string> | null;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof Transaction
    */
   hash: string;
 }
 /**
  * The transaction data returned from a call to get transaction by hash.
- * @export
- * @interface TransactionData
  */
 export interface TransactionData {
-  /**
-   *
-   * @type {Transaction}
-   * @memberof TransactionData
-   */
   data: Transaction;
   /**
    * Whether the transaction has been included yet.
-   * @type {boolean}
-   * @memberof TransactionData
    */
   isPending: boolean;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof TransactionData
    */
   from: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof TransactionData
    */
   blockHash?: string;
   /**
    * The transaction block number.
-   * @type {string}
-   * @memberof TransactionData
    */
   blockNumber?: string;
-  /**
-   *
-   * @type {ContractInformation}
-   * @memberof TransactionData
-   */
   contract?: ContractInformation;
-  /**
-   *
-   * @type {ContractMethodInformation}
-   * @memberof TransactionData
-   */
   method?: ContractMethodInformation;
 }
 /**
  * The transaction information returned as part of an event.
- * @export
- * @interface TransactionInformation
  */
 export interface TransactionInformation {
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof TransactionInformation
    */
   from: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionInformation
    */
   txData: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof TransactionInformation
    */
   txHash: string;
   /**
    * The location of the transaction in the block.
-   * @type {number}
-   * @memberof TransactionInformation
    */
   txIndexInBlock: number;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof TransactionInformation
    */
   blockHash: string;
   /**
    * The transaction block number.
-   * @type {number}
-   * @memberof TransactionInformation
    */
   blockNumber: number;
-  /**
-   *
-   * @type {ContractInformation}
-   * @memberof TransactionInformation
-   */
   contract: ContractInformation;
-  /**
-   *
-   * @type {ContractMethodInformation}
-   * @memberof TransactionInformation
-   */
   method: ContractMethodInformation;
 }
 /**
  * Record of the transaction\'s outcome.
- * @export
- * @interface TransactionReceipt
  */
 export interface TransactionReceipt {
-  /**
-   *
-   * @type {TransactionReceiptData}
-   * @memberof TransactionReceipt
-   */
   data: TransactionReceiptData;
-  /**
-   *
-   * @type {Array<EventInformation>}
-   * @memberof TransactionReceipt
-   */
   events?: Array<EventInformation>;
 }
-/**
- *
- * @export
- * @interface TransactionReceiptData
- */
 export interface TransactionReceiptData {
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   type?: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   root: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   status: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   cumulativeGasUsed: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   logsBloom: string;
-  /**
-   *
-   * @type {Array<Log>}
-   * @memberof TransactionReceiptData
-   */
   logs: Array<Log>;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   transactionHash: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   contractAddress: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   gasUsed: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   effectiveGasPrice: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   blockNumber: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   transactionIndex: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof TransactionReceiptData
    */
   blockHash: string;
 }
 /**
  * The status of a TXM transaction.
- * @export
- * @enum {string}
  */
 
 export const TransactionStatus = {
@@ -4609,361 +2513,200 @@ export type TransactionStatus = typeof TransactionStatus[keyof typeof Transactio
 
 /**
  * A transaction to be signed.
- * @export
- * @interface TransactionToSign
  */
 export interface TransactionToSign {
-  /**
-   *
-   * @type {TransactionToSignTx}
-   * @memberof TransactionToSign
-   */
   tx: TransactionToSignTx;
-  /**
-   *
-   * @type {boolean}
-   * @memberof TransactionToSign
-   */
   submitted: boolean;
 }
-/**
- *
- * @export
- * @interface TransactionToSignResponse
- */
 export interface TransactionToSignResponse extends PostMethodResponse {
-  /**
-   *
-   * @type {TransactionToSignTx}
-   * @memberof TransactionToSignResponse
-   */
   tx: TransactionToSignTx;
-  /**
-   *
-   * @type {boolean}
-   * @memberof TransactionToSignResponse
-   */
   submitted: boolean;
 }
 /**
  * An Ethereum transaction.
- * @export
- * @interface TransactionToSignTx
  */
 export interface TransactionToSignTx {
   /**
    * Sender account nonce of the transaction
-   * @type {number}
-   * @memberof TransactionToSignTx
    */
   nonce: number;
   /**
    * Gas price of the transaction
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   gasPrice?: string;
   /**
    * Fee cap per gas of the transaction
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   gasFeeCap?: string;
   /**
    * GasTipCap per gas of the transaction
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   gasTipCap?: string;
   /**
    * Gas limit of the transaction
-   * @type {number}
-   * @memberof TransactionToSignTx
    */
   gas: number;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   from: string;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   to?: string | null;
   /**
    * Amount (in wei) to send with the transaction.
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   value: string;
   /**
    * A hex string.
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   data: string;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof TransactionToSignTx
    */
   hash?: string;
   /**
    * Transaction type
-   * @type {number}
-   * @memberof TransactionToSignTx
    */
   type: number;
 }
-/**
- *
- * @export
- * @interface TransferEth200Response
- */
 export interface TransferEth200Response {
   /**
    * The status code.
-   * @type {number}
-   * @memberof TransferEth200Response
    */
   status: number;
   /**
    * The human-readable status message.
-   * @type {string}
-   * @memberof TransferEth200Response
    */
   message: string;
-  /**
-   *
-   * @type {TransactionToSign}
-   * @memberof TransferEth200Response
-   */
   result: TransactionToSign;
 }
 /**
  * Represents the set of type conversions allowed for a particular input or output of a function (how it may be \"cast\").
- * @export
- * @interface TypeConversionOptions
  */
 export interface TypeConversionOptions {
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof TypeConversionOptions
-   */
   types?: Array<string> | null;
 }
 /**
  * A user.
- * @export
- * @interface User
  */
 export interface User {
   /**
    * The user\'s email address.
-   * @type {string}
-   * @memberof User
    */
   email: string;
   /**
    * The user\'s name.
-   * @type {string}
-   * @memberof User
    */
   name: string;
   /**
    * The user ID.
-   * @type {number}
-   * @memberof User
    */
   id: number;
 }
-/**
- *
- * @export
- * @interface WalletTransaction
- */
 export interface WalletTransaction {
-  /**
-   *
-   * @type {Transaction}
-   * @memberof WalletTransaction
-   */
   tx: Transaction;
-  /**
-   *
-   * @type {TransactionStatus}
-   * @memberof WalletTransaction
-   */
   status: TransactionStatus;
   /**
    * An ethereum address.
-   * @type {string}
-   * @memberof WalletTransaction
    */
   from: string;
   /**
    * The total number of resubmission attempts.
-   * @type {number}
-   * @memberof WalletTransaction
    */
   resubmissionAttempts: number;
   /**
    * The total number of successful resubmission (added into the transaction pool).
-   * @type {number}
-   * @memberof WalletTransaction
    */
   successfulResubmissions: number;
   /**
    * The time the transaction was created.
-   * @type {string}
-   * @memberof WalletTransaction
    */
   createdAt: string;
   /**
    * The time the transaction was last updated.
-   * @type {string}
-   * @memberof WalletTransaction
    */
   updatedAt: string;
   /**
    * Whether the transaction failed when it was included in a block.
-   * @type {boolean}
-   * @memberof WalletTransaction
    */
   failed?: boolean;
   /**
    * The block number that the transaction was included in.
-   * @type {number}
-   * @memberof WalletTransaction
    */
   blockNumber?: number;
   /**
    * The keccak256 hash as a hex string of 256 bits.
-   * @type {string}
-   * @memberof WalletTransaction
    */
   blockHash?: string;
 }
 
-/**
- *
- * @export
- * @interface WebhookEndpoint
- */
 export interface WebhookEndpoint {
   /**
    * The URL to send the webhook to.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   url: string;
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   label: string;
   /**
    * The events to subscribe to.
-   * @type {Array<WebhookEventsType>}
-   * @memberof WebhookEndpoint
    */
   subscriptions: Array<WebhookEventsType>;
-  /**
-   *
-   * @type {number}
-   * @memberof WebhookEndpoint
-   */
   id: number;
   /**
    * The time the next attempt will be made.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   nextAttempt?: string;
   /**
    * The time the last attempt was made.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   lastAttempt?: string;
   /**
    * The number of failed webhook endpoint calls since the last successful call.
-   * @type {number}
-   * @memberof WebhookEndpoint
    */
   failedCalls: number;
   /**
    * The last error received from the webhook endpoint.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   lastError?: string;
   /**
    * The time the webhook was created.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   createdAt: string;
   /**
    * The time the webhook was last updated.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   updatedAt: string;
   /**
    * The secret key used to sign the webhook.
-   * @type {string}
-   * @memberof WebhookEndpoint
    */
   secret: string;
 }
-/**
- *
- * @export
- * @interface WebhookEvent
- */
 export interface WebhookEvent {
   /**
    * The ID of the webhook event.
-   * @type {number}
-   * @memberof WebhookEvent
    */
   id: number;
-  /**
-   *
-   * @type {WebhookEventsType}
-   * @memberof WebhookEvent
-   */
   eventType: WebhookEventsType;
   /**
    * The data associated with the event.
-   * @type {object}
-   * @memberof WebhookEvent
    */
   data: object;
   /**
    * The time the webhook event was created.
-   * @type {string}
-   * @memberof WebhookEvent
    */
   createdAt: string;
   /**
    * The time the webhook event was last updated.
-   * @type {string}
-   * @memberof WebhookEvent
    */
   deliveredAt?: string;
 }
 
 /**
  * The type of the webhook event.
- * @export
- * @enum {string}
  */
 
 export const WebhookEventsType = {
@@ -4975,7 +2718,6 @@ export type WebhookEventsType = typeof WebhookEventsType[keyof typeof WebhookEve
 
 /**
  * AddressesApi - axios parameter creator
- * @export
  */
 export const AddressesApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -5166,7 +2908,6 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
 
 /**
  * AddressesApi - functional programming interface
- * @export
  */
 export const AddressesApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = AddressesApiAxiosParamCreator(configuration);
@@ -5276,7 +3017,6 @@ export const AddressesApiFp = function (configuration?: Configuration) {
 
 /**
  * AddressesApi - factory interface
- * @export
  */
 export const AddressesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = AddressesApiFp(configuration);
@@ -5343,8 +3083,6 @@ export const AddressesApiFactory = function (configuration?: Configuration, base
 
 /**
  * AddressesApi - interface
- * @export
- * @interface AddressesApi
  */
 export interface AddressesApiInterface {
   /**
@@ -5354,7 +3092,6 @@ export interface AddressesApiInterface {
    * @param {string} addressOrAlias An address or the alias of an address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApiInterface
    */
   deleteAddress(chain: ChainName, addressOrAlias: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -5366,7 +3103,6 @@ export interface AddressesApiInterface {
    * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address. - &#x60;contractLookup&#x60; to get the contract(s) details for this address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApiInterface
    */
   getAddress(
     chain: ChainName,
@@ -5381,7 +3117,6 @@ export interface AddressesApiInterface {
    * @param {ChainName} chain The blockchain chain label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApiInterface
    */
   listAddresses(chain: ChainName, options?: RawAxiosRequestConfig): AxiosPromise<ListAddresses200Response>;
 
@@ -5392,7 +3127,6 @@ export interface AddressesApiInterface {
    * @param {AddressAlias} addressAlias
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApiInterface
    */
   setAddress(
     chain: ChainName,
@@ -5403,9 +3137,6 @@ export interface AddressesApiInterface {
 
 /**
  * AddressesApi - object-oriented interface
- * @export
- * @class AddressesApi
- * @extends {BaseAPI}
  */
 export class AddressesApi extends BaseAPI implements AddressesApiInterface {
   /**
@@ -5415,7 +3146,6 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @param {string} addressOrAlias An address or the alias of an address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApi
    */
   public deleteAddress(chain: ChainName, addressOrAlias: string, options?: RawAxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
@@ -5431,7 +3161,6 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @param {Array<GetAddressIncludeEnum>} [include] Optional data to fetch from the blockchain: - &#x60;balance&#x60; to get the balance of this address. - &#x60;code&#x60; to get the code at this address. - &#x60;nonce&#x60; to get the next available transaction nonce for this address. - &#x60;contractLookup&#x60; to get the contract(s) details for this address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApi
    */
   public getAddress(
     chain: ChainName,
@@ -5450,7 +3179,6 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @param {ChainName} chain The blockchain chain label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApi
    */
   public listAddresses(chain: ChainName, options?: RawAxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
@@ -5465,7 +3193,6 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
    * @param {AddressAlias} addressAlias
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AddressesApi
    */
   public setAddress(chain: ChainName, addressAlias: AddressAlias, options?: RawAxiosRequestConfig) {
     return AddressesApiFp(this.configuration)
@@ -5474,9 +3201,6 @@ export class AddressesApi extends BaseAPI implements AddressesApiInterface {
   }
 }
 
-/**
- * @export
- */
 export const GetAddressIncludeEnum = {
   Balance: 'balance',
   Code: 'code',
@@ -5487,7 +3211,6 @@ export type GetAddressIncludeEnum = typeof GetAddressIncludeEnum[keyof typeof Ge
 
 /**
  * AdminApi - axios parameter creator
- * @export
  */
 export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -6796,7 +4519,6 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * AdminApi - functional programming interface
- * @export
  */
 export const AdminApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration);
@@ -7573,7 +5295,6 @@ export const AdminApiFp = function (configuration?: Configuration) {
 
 /**
  * AdminApi - factory interface
- * @export
  */
 export const AdminApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = AdminApiFp(configuration);
@@ -7967,8 +5688,6 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * AdminApi - interface
- * @export
- * @interface AdminApi
  */
 export interface AdminApiInterface {
   /**
@@ -7978,7 +5697,6 @@ export interface AdminApiInterface {
    * @param {AcceptInviteRequest} acceptInviteRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   acceptInvite(
     inviteID: string,
@@ -7992,7 +5710,6 @@ export interface AdminApiInterface {
    * @param {CORSOrigin} cORSOrigin
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   addCorsOrigin(cORSOrigin: CORSOrigin, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8003,7 +5720,6 @@ export interface AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   addGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8014,7 +5730,6 @@ export interface AdminApiInterface {
    * @param {string} roleShortName
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   addGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8025,7 +5740,6 @@ export interface AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   addGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8035,7 +5749,6 @@ export interface AdminApiInterface {
    * @param {string} inviteID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   checkInvite(inviteID: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8045,7 +5758,6 @@ export interface AdminApiInterface {
    * @param {CreateApiKeyRequest} createApiKeyRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   createApiKey(
     createApiKeyRequest: CreateApiKeyRequest,
@@ -8058,7 +5770,6 @@ export interface AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   deleteApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8068,7 +5779,6 @@ export interface AdminApiInterface {
    * @param {string} email
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   deleteInvite(email: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
@@ -8078,7 +5788,6 @@ export interface AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   deleteUser(userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8088,7 +5797,6 @@ export interface AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<GetApiKey200Response>;
 
@@ -8097,7 +5805,6 @@ export interface AdminApiInterface {
    * @summary Get plan
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   getPlan(options?: RawAxiosRequestConfig): AxiosPromise<GetPlan200Response>;
 
@@ -8107,7 +5814,6 @@ export interface AdminApiInterface {
    * @param {InviteRequest} inviteRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   inviteUser(inviteRequest: InviteRequest, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8117,7 +5823,6 @@ export interface AdminApiInterface {
    * @param {boolean} [all] If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   listApiKeys(all?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<ListApiKeys200Response>;
 
@@ -8126,7 +5831,6 @@ export interface AdminApiInterface {
    * @summary List audit logs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   listAuditLogs(options?: RawAxiosRequestConfig): AxiosPromise<ListAuditLogs200Response>;
 
@@ -8135,7 +5839,6 @@ export interface AdminApiInterface {
    * @summary List CORS origins
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   listCorsOrigins(options?: RawAxiosRequestConfig): AxiosPromise<ListCorsOrigins200Response>;
 
@@ -8147,7 +5850,6 @@ export interface AdminApiInterface {
    * @param {boolean} [assignable]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   listGroups(
     userID?: number,
@@ -8161,7 +5863,6 @@ export interface AdminApiInterface {
    * @summary List invites
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   listInvites(options?: RawAxiosRequestConfig): AxiosPromise<ListInvites200Response>;
 
@@ -8171,7 +5872,6 @@ export interface AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   listUserSigners(userID: number, options?: RawAxiosRequestConfig): AxiosPromise<ListUserSigners200Response>;
 
@@ -8181,7 +5881,6 @@ export interface AdminApiInterface {
    * @param {number} [groupID]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   listUsers(groupID?: number, options?: RawAxiosRequestConfig): AxiosPromise<ListUsers200Response>;
 
@@ -8191,7 +5890,6 @@ export interface AdminApiInterface {
    * @param {number} originID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   removeCorsOrigin(originID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8202,7 +5900,6 @@ export interface AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   removeGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8213,7 +5910,6 @@ export interface AdminApiInterface {
    * @param {string} roleShortName
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   removeGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8224,7 +5920,6 @@ export interface AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   removeGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -8235,7 +5930,6 @@ export interface AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   removeUserSignerCloudWallet(
     userID: number,
@@ -8250,7 +5944,6 @@ export interface AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   removeUserSignerSafeAccount(
     userID: number,
@@ -8265,7 +5958,6 @@ export interface AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   removeUserSignerWeb3Wallet(
     userID: number,
@@ -8280,7 +5972,6 @@ export interface AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   setUserSignerCloudWallet(
     userID: number,
@@ -8296,7 +5987,6 @@ export interface AdminApiInterface {
    * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   setUserSignerSafeAccount(
     userID: number,
@@ -8313,7 +6003,6 @@ export interface AdminApiInterface {
    * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   setUserSignerWeb3Wallet(
     userID: number,
@@ -8329,16 +6018,12 @@ export interface AdminApiInterface {
    * @param {BaseAPIKey} baseAPIKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApiInterface
    */
   updateApiKey(apiKeyID: number, baseAPIKey: BaseAPIKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 }
 
 /**
  * AdminApi - object-oriented interface
- * @export
- * @class AdminApi
- * @extends {BaseAPI}
  */
 export class AdminApi extends BaseAPI implements AdminApiInterface {
   /**
@@ -8348,7 +6033,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {AcceptInviteRequest} acceptInviteRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public acceptInvite(inviteID: string, acceptInviteRequest: AcceptInviteRequest, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8362,7 +6046,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {CORSOrigin} cORSOrigin
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public addCorsOrigin(cORSOrigin: CORSOrigin, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8377,7 +6060,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public addGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8392,7 +6074,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} roleShortName
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public addGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8407,7 +6088,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public addGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8421,7 +6101,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} inviteID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public checkInvite(inviteID: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8435,7 +6114,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {CreateApiKeyRequest} createApiKeyRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public createApiKey(createApiKeyRequest: CreateApiKeyRequest, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8449,7 +6127,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public deleteApiKey(apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8463,7 +6140,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} email
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public deleteInvite(email: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8477,7 +6153,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public deleteUser(userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8491,7 +6166,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public getApiKey(apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8504,7 +6178,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @summary Get plan
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public getPlan(options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8518,7 +6191,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {InviteRequest} inviteRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public inviteUser(inviteRequest: InviteRequest, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8532,7 +6204,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {boolean} [all] If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public listApiKeys(all?: boolean, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8545,7 +6216,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @summary List audit logs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public listAuditLogs(options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8558,7 +6228,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @summary List CORS origins
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public listCorsOrigins(options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8574,7 +6243,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {boolean} [assignable]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public listGroups(userID?: number, apiKeyID?: number, assignable?: boolean, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8587,7 +6255,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @summary List invites
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public listInvites(options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8601,7 +6268,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public listUserSigners(userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8615,7 +6281,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} [groupID]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public listUsers(groupID?: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8629,7 +6294,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} originID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public removeCorsOrigin(originID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8644,7 +6308,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} apiKeyID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public removeGroupApiKey(groupID: number, apiKeyID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8659,7 +6322,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} roleShortName
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public removeGroupRole(groupID: number, roleShortName: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8674,7 +6336,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {number} userID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public removeGroupUser(groupID: number, userID: number, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8689,7 +6350,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public removeUserSignerCloudWallet(userID: number, walletAddress: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8704,7 +6364,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public removeUserSignerSafeAccount(userID: number, walletAddress: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8719,7 +6378,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public removeUserSignerWeb3Wallet(userID: number, walletAddress: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8734,7 +6392,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public setUserSignerCloudWallet(userID: number, walletAddress: string, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8750,7 +6407,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public setUserSignerSafeAccount(
     userID: number,
@@ -8771,7 +6427,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {SignerLabel} signerLabel
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public setUserSignerWeb3Wallet(
     userID: number,
@@ -8791,7 +6446,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
    * @param {BaseAPIKey} baseAPIKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof AdminApi
    */
   public updateApiKey(apiKeyID: number, baseAPIKey: BaseAPIKey, options?: RawAxiosRequestConfig) {
     return AdminApiFp(this.configuration)
@@ -8802,7 +6456,6 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
 
 /**
  * ChainsApi - axios parameter creator
- * @export
  */
 export const ChainsApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -9095,7 +6748,6 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * ChainsApi - functional programming interface
- * @export
  */
 export const ChainsApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = ChainsApiAxiosParamCreator(configuration);
@@ -9261,7 +6913,6 @@ export const ChainsApiFp = function (configuration?: Configuration) {
 
 /**
  * ChainsApi - factory interface
- * @export
  */
 export const ChainsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = ChainsApiFp(configuration);
@@ -9360,8 +7011,6 @@ export const ChainsApiFactory = function (configuration?: Configuration, basePat
 
 /**
  * ChainsApi - interface
- * @export
- * @interface ChainsApi
  */
 export interface ChainsApiInterface {
   /**
@@ -9371,7 +7020,6 @@ export interface ChainsApiInterface {
    * @param {string} block A block number, hash or \&#39;latest\&#39; for the latest block.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApiInterface
    */
   getBlock(chain: ChainName, block: string, options?: RawAxiosRequestConfig): AxiosPromise<GetBlock200Response>;
 
@@ -9381,7 +7029,6 @@ export interface ChainsApiInterface {
    * @param {ChainName} chain The blockchain chain label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApiInterface
    */
   getChainStatus(chain: ChainName, options?: RawAxiosRequestConfig): AxiosPromise<GetChainStatus200Response>;
 
@@ -9393,7 +7040,6 @@ export interface ChainsApiInterface {
    * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApiInterface
    */
   getTransaction(
     chain: ChainName,
@@ -9410,7 +7056,6 @@ export interface ChainsApiInterface {
    * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApiInterface
    */
   getTransactionReceipt(
     chain: ChainName,
@@ -9426,7 +7071,6 @@ export interface ChainsApiInterface {
    * @param {SignedTransactionSubmission} signedTransactionSubmission
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApiInterface
    */
   submitSignedTransaction(
     chain: ChainName,
@@ -9441,7 +7085,6 @@ export interface ChainsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApiInterface
    */
   transferEth(
     chain: ChainName,
@@ -9452,9 +7095,6 @@ export interface ChainsApiInterface {
 
 /**
  * ChainsApi - object-oriented interface
- * @export
- * @class ChainsApi
- * @extends {BaseAPI}
  */
 export class ChainsApi extends BaseAPI implements ChainsApiInterface {
   /**
@@ -9464,7 +7104,6 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @param {string} block A block number, hash or \&#39;latest\&#39; for the latest block.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApi
    */
   public getBlock(chain: ChainName, block: string, options?: RawAxiosRequestConfig) {
     return ChainsApiFp(this.configuration)
@@ -9478,7 +7117,6 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @param {ChainName} chain The blockchain chain label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApi
    */
   public getChainStatus(chain: ChainName, options?: RawAxiosRequestConfig) {
     return ChainsApiFp(this.configuration)
@@ -9494,7 +7132,6 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @param {GetTransactionIncludeEnum} [include] Include contract and method call details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApi
    */
   public getTransaction(
     chain: ChainName,
@@ -9515,7 +7152,6 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @param {GetTransactionReceiptIncludeEnum} [include] Include contract and event details, if available.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApi
    */
   public getTransactionReceipt(
     chain: ChainName,
@@ -9535,7 +7171,6 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @param {SignedTransactionSubmission} signedTransactionSubmission
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApi
    */
   public submitSignedTransaction(
     chain: ChainName,
@@ -9554,7 +7189,6 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ChainsApi
    */
   public transferEth(chain: ChainName, postMethodArgs: PostMethodArgs, options?: RawAxiosRequestConfig) {
     return ChainsApiFp(this.configuration)
@@ -9563,16 +7197,10 @@ export class ChainsApi extends BaseAPI implements ChainsApiInterface {
   }
 }
 
-/**
- * @export
- */
 export const GetTransactionIncludeEnum = {
   Contract: 'contract'
 } as const;
 export type GetTransactionIncludeEnum = typeof GetTransactionIncludeEnum[keyof typeof GetTransactionIncludeEnum];
-/**
- * @export
- */
 export const GetTransactionReceiptIncludeEnum = {
   Contract: 'contract'
 } as const;
@@ -9581,7 +7209,6 @@ export type GetTransactionReceiptIncludeEnum =
 
 /**
  * ContractsApi - axios parameter creator
- * @export
  */
 export const ContractsApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -10500,7 +8127,6 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
 
 /**
  * ContractsApi - functional programming interface
- * @export
  */
 export const ContractsApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = ContractsApiAxiosParamCreator(configuration);
@@ -11046,7 +8672,6 @@ export const ContractsApiFp = function (configuration?: Configuration) {
 
 /**
  * ContractsApi - factory interface
- * @export
  */
 export const ContractsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = ContractsApiFp(configuration);
@@ -11360,8 +8985,6 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
 
 /**
  * ContractsApi - interface
- * @export
- * @interface ContractsApi
  */
 export interface ContractsApiInterface {
   /**
@@ -11374,7 +8997,6 @@ export interface ContractsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   callContractFunction(
     chain: ChainName,
@@ -11392,7 +9014,6 @@ export interface ContractsApiInterface {
    * @param {BaseContract} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   createContract(
     contract: string,
@@ -11406,7 +9027,6 @@ export interface ContractsApiInterface {
    * @param {Array<BaseContract>} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   createContracts(baseContract: Array<BaseContract>, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -11416,7 +9036,6 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   deleteContract(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -11427,7 +9046,6 @@ export interface ContractsApiInterface {
    * @param {string} version Contract Version.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   deleteContractVersion(contract: string, version: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -11438,7 +9056,6 @@ export interface ContractsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   deployContract(
     contract: string,
@@ -11454,7 +9071,6 @@ export interface ContractsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   deployContractVersion(
     contract: string,
@@ -11469,7 +9085,6 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   getContract(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<GetContract200Response>;
 
@@ -11480,7 +9095,6 @@ export interface ContractsApiInterface {
    * @param {string} version Contract Version.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   getContractVersion(
     contract: string,
@@ -11494,7 +9108,6 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   getContractVersions(contract: string, options?: RawAxiosRequestConfig): AxiosPromise<GetContractVersions200Response>;
 
@@ -11506,7 +9119,6 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   getEventMonitorStatus(
     chain: ChainName,
@@ -11523,7 +9135,6 @@ export interface ContractsApiInterface {
    * @param {string} event Contract Event.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   getEventTypeConversions(
     contract: string,
@@ -11540,7 +9151,6 @@ export interface ContractsApiInterface {
    * @param {string} method Contract function.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   getFunctionTypeConversions(
     contract: string,
@@ -11557,7 +9167,6 @@ export interface ContractsApiInterface {
    * @param {LinkAddressContractRequest} linkAddressContractRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   linkAddressContract(
     chain: ChainName,
@@ -11572,7 +9181,6 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   listContractVersions(
     contract: string,
@@ -11584,7 +9192,6 @@ export interface ContractsApiInterface {
    * @summary List contracts
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   listContracts(options?: RawAxiosRequestConfig): AxiosPromise<ListContracts200Response>;
 
@@ -11597,7 +9204,6 @@ export interface ContractsApiInterface {
    * @param {ContractEventOptions} contractEventOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   setEventTypeConversions(
     contract: string,
@@ -11616,7 +9222,6 @@ export interface ContractsApiInterface {
    * @param {ContractMethodOptions} contractMethodOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   setFunctionTypeConversions(
     contract: string,
@@ -11634,7 +9239,6 @@ export interface ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApiInterface
    */
   unlinkAddressContract(
     chain: ChainName,
@@ -11646,9 +9250,6 @@ export interface ContractsApiInterface {
 
 /**
  * ContractsApi - object-oriented interface
- * @export
- * @class ContractsApi
- * @extends {BaseAPI}
  */
 export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
@@ -11661,7 +9262,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public callContractFunction(
     chain: ChainName,
@@ -11683,7 +9283,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {BaseContract} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public createContract(contract: string, baseContract: BaseContract, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11697,7 +9296,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {Array<BaseContract>} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public createContracts(baseContract: Array<BaseContract>, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11711,7 +9309,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public deleteContract(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11726,7 +9323,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} version Contract Version.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public deleteContractVersion(contract: string, version: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11741,7 +9337,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public deployContract(contract: string, postMethodArgs: PostMethodArgs, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11757,7 +9352,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public deployContractVersion(
     contract: string,
@@ -11776,7 +9370,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public getContract(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11791,7 +9384,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} version Contract Version.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public getContractVersion(contract: string, version: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11805,7 +9397,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public getContractVersions(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11821,7 +9412,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public getEventMonitorStatus(
     chain: ChainName,
@@ -11842,7 +9432,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} event Contract Event.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public getEventTypeConversions(contract: string, version: string, event: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11858,7 +9447,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} method Contract function.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public getFunctionTypeConversions(
     contract: string,
@@ -11879,7 +9467,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {LinkAddressContractRequest} linkAddressContractRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public linkAddressContract(
     chain: ChainName,
@@ -11898,7 +9485,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public listContractVersions(contract: string, options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11911,7 +9497,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @summary List contracts
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public listContracts(options?: RawAxiosRequestConfig) {
     return ContractsApiFp(this.configuration)
@@ -11928,7 +9513,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {ContractEventOptions} contractEventOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public setEventTypeConversions(
     contract: string,
@@ -11951,7 +9535,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {ContractMethodOptions} contractMethodOptions
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public setFunctionTypeConversions(
     contract: string,
@@ -11973,7 +9556,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * @param {string} contract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof ContractsApi
    */
   public unlinkAddressContract(
     chain: ChainName,
@@ -11989,7 +9571,6 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
 
 /**
  * EventQueriesApi - axios parameter creator
- * @export
  */
 export const EventQueriesApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -12312,7 +9893,6 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
 
 /**
  * EventQueriesApi - functional programming interface
- * @export
  */
 export const EventQueriesApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = EventQueriesApiAxiosParamCreator(configuration);
@@ -12496,7 +10076,6 @@ export const EventQueriesApiFp = function (configuration?: Configuration) {
 
 /**
  * EventQueriesApi - factory interface
- * @export
  */
 export const EventQueriesApiFactory = function (
   configuration?: Configuration,
@@ -12605,8 +10184,6 @@ export const EventQueriesApiFactory = function (
 
 /**
  * EventQueriesApi - interface
- * @export
- * @interface EventQueriesApi
  */
 export interface EventQueriesApiInterface {
   /**
@@ -12615,7 +10192,6 @@ export interface EventQueriesApiInterface {
    * @param {string} eventQuery An event query label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApiInterface
    */
   countEventQueryRecords(
     eventQuery: string,
@@ -12628,7 +10204,6 @@ export interface EventQueriesApiInterface {
    * @param {string} eventQuery An event query label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApiInterface
    */
   deleteEventQuery(eventQuery: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -12640,7 +10215,6 @@ export interface EventQueriesApiInterface {
    * @param {number} [limit]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApiInterface
    */
   executeArbitraryEventQuery(
     eventQuery: EventQuery,
@@ -12657,7 +10231,6 @@ export interface EventQueriesApiInterface {
    * @param {number} [limit]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApiInterface
    */
   executeEventQuery(
     eventQuery: string,
@@ -12672,7 +10245,6 @@ export interface EventQueriesApiInterface {
    * @param {string} eventQuery An event query label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApiInterface
    */
   getEventQuery(eventQuery: string, options?: RawAxiosRequestConfig): AxiosPromise<GetEventQuery200Response>;
 
@@ -12681,7 +10253,6 @@ export interface EventQueriesApiInterface {
    * @summary List event queries
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApiInterface
    */
   listEventQueries(options?: RawAxiosRequestConfig): AxiosPromise<ListEventQueries200Response>;
 
@@ -12692,7 +10263,6 @@ export interface EventQueriesApiInterface {
    * @param {EventQuery} eventQuery2
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApiInterface
    */
   setEventQuery(
     eventQuery: string,
@@ -12703,9 +10273,6 @@ export interface EventQueriesApiInterface {
 
 /**
  * EventQueriesApi - object-oriented interface
- * @export
- * @class EventQueriesApi
- * @extends {BaseAPI}
  */
 export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface {
   /**
@@ -12714,7 +10281,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @param {string} eventQuery An event query label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApi
    */
   public countEventQueryRecords(eventQuery: string, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
@@ -12728,7 +10294,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @param {string} eventQuery An event query label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApi
    */
   public deleteEventQuery(eventQuery: string, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
@@ -12744,7 +10309,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @param {number} [limit]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApi
    */
   public executeArbitraryEventQuery(
     eventQuery: EventQuery,
@@ -12765,7 +10329,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @param {number} [limit]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApi
    */
   public executeEventQuery(eventQuery: string, offset?: number, limit?: number, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
@@ -12779,7 +10342,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @param {string} eventQuery An event query label.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApi
    */
   public getEventQuery(eventQuery: string, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
@@ -12792,7 +10354,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @summary List event queries
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApi
    */
   public listEventQueries(options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
@@ -12807,7 +10368,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
    * @param {EventQuery} eventQuery2
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventQueriesApi
    */
   public setEventQuery(eventQuery: string, eventQuery2: EventQuery, options?: RawAxiosRequestConfig) {
     return EventQueriesApiFp(this.configuration)
@@ -12818,7 +10378,6 @@ export class EventQueriesApi extends BaseAPI implements EventQueriesApiInterface
 
 /**
  * EventsApi - axios parameter creator
- * @export
  */
 export const EventsApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -13043,7 +10602,6 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * EventsApi - functional programming interface
- * @export
  */
 export const EventsApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = EventsApiAxiosParamCreator(configuration);
@@ -13171,7 +10729,6 @@ export const EventsApiFp = function (configuration?: Configuration) {
 
 /**
  * EventsApi - factory interface
- * @export
  */
 export const EventsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = EventsApiFp(configuration);
@@ -13283,8 +10840,6 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
 
 /**
  * EventsApi - interface
- * @export
- * @interface EventsApi
  */
 export interface EventsApiInterface {
   /**
@@ -13304,7 +10859,6 @@ export interface EventsApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventsApiInterface
    */
   getEventCount(
     blockHash?: string,
@@ -13339,7 +10893,6 @@ export interface EventsApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventsApiInterface
    */
   listEvents(
     blockHash?: string,
@@ -13360,9 +10913,6 @@ export interface EventsApiInterface {
 
 /**
  * EventsApi - object-oriented interface
- * @export
- * @class EventsApi
- * @extends {BaseAPI}
  */
 export class EventsApi extends BaseAPI implements EventsApiInterface {
   /**
@@ -13382,7 +10932,6 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventsApi
    */
   public getEventCount(
     blockHash?: string,
@@ -13435,7 +10984,6 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof EventsApi
    */
   public listEvents(
     blockHash?: string,
@@ -13474,7 +11022,6 @@ export class EventsApi extends BaseAPI implements EventsApiInterface {
 
 /**
  * HsmApi - axios parameter creator
- * @export
  */
 export const HsmApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -13948,7 +11495,6 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
 
 /**
  * HsmApi - functional programming interface
- * @export
  */
 export const HsmApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = HsmApiAxiosParamCreator(configuration);
@@ -14226,7 +11772,6 @@ export const HsmApiFp = function (configuration?: Configuration) {
 
 /**
  * HsmApi - factory interface
- * @export
  */
 export const HsmApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = HsmApiFp(configuration);
@@ -14375,8 +11920,6 @@ export const HsmApiFactory = function (configuration?: Configuration, basePath?:
 
 /**
  * HsmApi - interface
- * @export
- * @interface HsmApi
  */
 export interface HsmApiInterface {
   /**
@@ -14385,7 +11928,6 @@ export interface HsmApiInterface {
    * @param {BaseAzureAccount} baseAzureAccount
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   addHsmConfig(baseAzureAccount: BaseAzureAccount, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -14395,7 +11937,6 @@ export interface HsmApiInterface {
    * @param {AddKey} addKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   addHsmKey(addKey: AddKey, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -14405,7 +11946,6 @@ export interface HsmApiInterface {
    * @param {CreateKey} createKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   createHsmKey(createKey: CreateKey, options?: RawAxiosRequestConfig): AxiosPromise<CreateHsmKey200Response>;
 
@@ -14414,7 +11954,6 @@ export interface HsmApiInterface {
    * @summary List HSM configs and wallets
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   listHsm(options?: RawAxiosRequestConfig): AxiosPromise<ListHsm200Response>;
 
@@ -14431,7 +11970,6 @@ export interface HsmApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   listHsmWallets(
     keyName?: string,
@@ -14451,7 +11989,6 @@ export interface HsmApiInterface {
    * @param {string} clientId The HSM client ID.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   removeHsmConfig(clientId: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -14461,7 +11998,6 @@ export interface HsmApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   removeHsmKey(walletAddress: string, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -14473,7 +12009,6 @@ export interface HsmApiInterface {
    * @param {SetNonceRequest} setNonceRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   setLocalNonce(
     chain: ChainName,
@@ -14489,7 +12024,6 @@ export interface HsmApiInterface {
    * @param {CloudWalletTXToSign} cloudWalletTXToSign
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   signAndSubmitTransaction(
     chain: ChainName,
@@ -14504,7 +12038,6 @@ export interface HsmApiInterface {
    * @param {HSMSignRequest} hSMSignRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApiInterface
    */
   signData(
     chain: ChainName,
@@ -14515,9 +12048,6 @@ export interface HsmApiInterface {
 
 /**
  * HsmApi - object-oriented interface
- * @export
- * @class HsmApi
- * @extends {BaseAPI}
  */
 export class HsmApi extends BaseAPI implements HsmApiInterface {
   /**
@@ -14526,7 +12056,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {BaseAzureAccount} baseAzureAccount
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public addHsmConfig(baseAzureAccount: BaseAzureAccount, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
@@ -14540,7 +12069,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {AddKey} addKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public addHsmKey(addKey: AddKey, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
@@ -14554,7 +12082,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {CreateKey} createKey
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public createHsmKey(createKey: CreateKey, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
@@ -14567,7 +12094,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @summary List HSM configs and wallets
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public listHsm(options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
@@ -14588,7 +12114,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public listHsmWallets(
     keyName?: string,
@@ -14612,7 +12137,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {string} clientId The HSM client ID.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public removeHsmConfig(clientId: string, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
@@ -14626,7 +12150,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public removeHsmKey(walletAddress: string, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
@@ -14642,7 +12165,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {SetNonceRequest} setNonceRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public setLocalNonce(
     chain: ChainName,
@@ -14662,7 +12184,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {CloudWalletTXToSign} cloudWalletTXToSign
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public signAndSubmitTransaction(
     chain: ChainName,
@@ -14681,7 +12202,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
    * @param {HSMSignRequest} hSMSignRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof HsmApi
    */
   public signData(chain: ChainName, hSMSignRequest: HSMSignRequest, options?: RawAxiosRequestConfig) {
     return HsmApiFp(this.configuration)
@@ -14692,7 +12212,6 @@ export class HsmApi extends BaseAPI implements HsmApiInterface {
 
 /**
  * TxmApi - axios parameter creator
- * @export
  */
 export const TxmApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -14939,7 +12458,6 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
 
 /**
  * TxmApi - functional programming interface
- * @export
  */
 export const TxmApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = TxmApiAxiosParamCreator(configuration);
@@ -15088,7 +12606,6 @@ export const TxmApiFp = function (configuration?: Configuration) {
 
 /**
  * TxmApi - factory interface
- * @export
  */
 export const TxmApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = TxmApiFp(configuration);
@@ -15184,8 +12701,6 @@ export const TxmApiFactory = function (configuration?: Configuration, basePath?:
 
 /**
  * TxmApi - interface
- * @export
- * @interface TxmApi
  */
 export interface TxmApiInterface {
   /**
@@ -15197,7 +12712,6 @@ export interface TxmApiInterface {
    * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApiInterface
    */
   cancelTransaction(
     chain: ChainName,
@@ -15214,7 +12728,6 @@ export interface TxmApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApiInterface
    */
   countWalletTransactions(
     chain: ChainName,
@@ -15234,7 +12747,6 @@ export interface TxmApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApiInterface
    */
   listWalletTransactions(
     chain: ChainName,
@@ -15256,7 +12768,6 @@ export interface TxmApiInterface {
    * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApiInterface
    */
   speedUpTransaction(
     chain: ChainName,
@@ -15269,9 +12780,6 @@ export interface TxmApiInterface {
 
 /**
  * TxmApi - object-oriented interface
- * @export
- * @class TxmApi
- * @extends {BaseAPI}
  */
 export class TxmApi extends BaseAPI implements TxmApiInterface {
   /**
@@ -15283,7 +12791,6 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApi
    */
   public cancelTransaction(
     chain: ChainName,
@@ -15304,7 +12811,6 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * @param {string} walletAddress An Ethereum address.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApi
    */
   public countWalletTransactions(chain: ChainName, walletAddress: string, options?: RawAxiosRequestConfig) {
     return TxmApiFp(this.configuration)
@@ -15324,7 +12830,6 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApi
    */
   public listWalletTransactions(
     chain: ChainName,
@@ -15350,7 +12855,6 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
    * @param {GasParams} gasParams
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof TxmApi
    */
   public speedUpTransaction(
     chain: ChainName,
@@ -15367,7 +12871,6 @@ export class TxmApi extends BaseAPI implements TxmApiInterface {
 
 /**
  * WebhooksApi - axios parameter creator
- * @export
  */
 export const WebhooksApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
@@ -15717,7 +13220,6 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
 
 /**
  * WebhooksApi - functional programming interface
- * @export
  */
 export const WebhooksApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = WebhooksApiAxiosParamCreator(configuration);
@@ -15917,7 +13419,6 @@ export const WebhooksApiFp = function (configuration?: Configuration) {
 
 /**
  * WebhooksApi - factory interface
- * @export
  */
 export const WebhooksApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = WebhooksApiFp(configuration);
@@ -16033,8 +13534,6 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
 
 /**
  * WebhooksApi - interface
- * @export
- * @interface WebhooksApi
  */
 export interface WebhooksApiInterface {
   /**
@@ -16043,7 +13542,6 @@ export interface WebhooksApiInterface {
    * @param {number} webhookID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   countWebhookEvents(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<CountWebhookEvents200Response>;
 
@@ -16052,7 +13550,6 @@ export interface WebhooksApiInterface {
    * @summary Count webhooks
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   countWebhooks(options?: RawAxiosRequestConfig): AxiosPromise<CountWebhooks200Response>;
 
@@ -16062,7 +13559,6 @@ export interface WebhooksApiInterface {
    * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   createWebhook(
     baseWebhookEndpoint: BaseWebhookEndpoint,
@@ -16075,7 +13571,6 @@ export interface WebhooksApiInterface {
    * @param {number} webhookID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   deleteWebhook(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<BaseResponse>;
 
@@ -16085,7 +13580,6 @@ export interface WebhooksApiInterface {
    * @param {number} webhookID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   getWebhook(webhookID: number, options?: RawAxiosRequestConfig): AxiosPromise<CreateWebhook200Response>;
 
@@ -16097,7 +13591,6 @@ export interface WebhooksApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   listWebhookEvents(
     webhookID: number,
@@ -16113,7 +13606,6 @@ export interface WebhooksApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   listWebhooks(limit?: number, offset?: number, options?: RawAxiosRequestConfig): AxiosPromise<ListWebhooks200Response>;
 
@@ -16124,7 +13616,6 @@ export interface WebhooksApiInterface {
    * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApiInterface
    */
   updateWebhook(
     webhookID: number,
@@ -16135,9 +13626,6 @@ export interface WebhooksApiInterface {
 
 /**
  * WebhooksApi - object-oriented interface
- * @export
- * @class WebhooksApi
- * @extends {BaseAPI}
  */
 export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
   /**
@@ -16146,7 +13634,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @param {number} webhookID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public countWebhookEvents(webhookID: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
@@ -16159,7 +13646,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @summary Count webhooks
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public countWebhooks(options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
@@ -16173,7 +13659,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public createWebhook(baseWebhookEndpoint: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
@@ -16187,7 +13672,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @param {number} webhookID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public deleteWebhook(webhookID: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
@@ -16201,7 +13685,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @param {number} webhookID
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public getWebhook(webhookID: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
@@ -16217,7 +13700,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public listWebhookEvents(webhookID: number, limit?: number, offset?: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
@@ -16232,7 +13714,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @param {number} [offset]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public listWebhooks(limit?: number, offset?: number, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
@@ -16247,7 +13728,6 @@ export class WebhooksApi extends BaseAPI implements WebhooksApiInterface {
    * @param {BaseWebhookEndpoint} baseWebhookEndpoint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof WebhooksApi
    */
   public updateWebhook(webhookID: number, baseWebhookEndpoint: BaseWebhookEndpoint, options?: RawAxiosRequestConfig) {
     return WebhooksApiFp(this.configuration)
