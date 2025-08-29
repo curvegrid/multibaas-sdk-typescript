@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **blockNumber** | **string** | The transaction block number. | [optional] [default to undefined]
 **contract** | [**ContractInformation**](ContractInformation.md) |  | [optional] [default to undefined]
 **method** | [**ContractMethodInformation**](ContractMethodInformation.md) |  | [optional] [default to undefined]
+**authorizationExtraInfo** | [**Array&lt;AuthorizationExtraInfo&gt;**](AuthorizationExtraInfo.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -27,6 +28,7 @@ const instance: TransactionData = {
     blockNumber,
     contract,
     method,
+    authorizationExtraInfo,
 };
 ```
 

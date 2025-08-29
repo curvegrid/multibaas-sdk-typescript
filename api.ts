@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * MultiBaas API
- * MultiBaas\'s REST APIv0.
+ * MultiBaas API provides a unified interface for interacting with blockchain networks. It enables applications to deploy and manage smart contracts, call contract methods, and query blockchain data through standard REST endpoints. The API also includes features for authentication, role-based access control, and integration with existing systems, allowing developers to build blockchain-powered applications without needing deep protocol-level expertise.
  *
  * The version of the OpenAPI document: 0.0
  *
@@ -208,6 +208,23 @@ export interface AuditLog {
    * The data associated with the action.
    */
   activityData: object;
+}
+/**
+ * Additional information about any EIP-7702 authorizations.
+ */
+export interface AuthorizationExtraInfo {
+  /**
+   * An ethereum address.
+   */
+  authority: string;
+  /**
+   * Indicates whether the format of the authorization is valid.
+   */
+  formatValid: boolean;
+  /**
+   * Additional notes about the validity of the authorization.
+   */
+  notes: string;
 }
 /**
  * An Azure account.
@@ -2406,6 +2423,7 @@ export interface TransactionData {
   blockNumber?: string;
   contract?: ContractInformation;
   method?: ContractMethodInformation;
+  authorizationExtraInfo?: Array<AuthorizationExtraInfo> | null;
 }
 /**
  * The transaction information returned as part of an event.

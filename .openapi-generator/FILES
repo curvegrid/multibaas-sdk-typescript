@@ -15,6 +15,7 @@ docs/AddressAlias.md
 docs/AddressesApi.md
 docs/AdminApi.md
 docs/AuditLog.md
+docs/AuthorizationExtraInfo.md
 docs/AzureAccount.md
 docs/AzureHardwareWallet.md
 docs/AzureWallet.md
