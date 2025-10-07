@@ -1,4 +1,4 @@
-inputSpec: https://api.redocly.com/registry/bundle/curvegrid/multibaas/v0/openapi.yaml
+inputSpec: https://data.multibaas.com/api/v0/openapi.yaml
 outputDir: .
 generatorName: typescript-axios
 gitUserId: curvegrid
