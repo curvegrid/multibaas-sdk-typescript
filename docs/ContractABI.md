@@ -6,7 +6,7 @@ The contract ABI.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**constructor** | [**ContractABIMethod1**](ContractABIMethod1.md) |  | [default to undefined]
+**constructor** | [**ContractABIMethod**](ContractABIMethod.md) |  | [default to undefined]
 **methods** | [**{ [key: string]: ContractABIMethod; }**](ContractABIMethod.md) |  | [default to undefined]
 **events** | [**{ [key: string]: ContractABIEvent; }**](ContractABIEvent.md) |  | [default to undefined]
 **errors** | [**{ [key: string]: ContractABIError; }**](ContractABIError.md) |  | [optional] [default to undefined]
