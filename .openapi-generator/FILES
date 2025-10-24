@@ -29,7 +29,6 @@ docs/Block.md
 docs/CORSOrigin.md
 docs/CallContractFunction200Response.md
 docs/CallContractFunction200ResponseAllOfResult.md
-docs/ChainName.md
 docs/ChainStatus.md
 docs/ChainsApi.md
 docs/CloudWalletTXToSign.md
@@ -73,8 +72,8 @@ docs/EIP712Types.md
 docs/Error.md
 docs/Event.md
 docs/EventField.md
+docs/EventIndexingStatus.md
 docs/EventInformation.md
-docs/EventMonitorStatus.md
 docs/EventQueriesApi.md
 docs/EventQuery.md
 docs/EventQueryEvent.md
@@ -92,7 +91,7 @@ docs/GetChainStatus200Response.md
 docs/GetContract200Response.md
 docs/GetContractVersions200Response.md
 docs/GetEventCount200Response.md
-docs/GetEventMonitorStatus200Response.md
+docs/GetEventIndexingStatus200Response.md
 docs/GetEventQuery200Response.md
 docs/GetEventTypeConversions200Response.md
 docs/GetFunctionTypeConversions200Response.md

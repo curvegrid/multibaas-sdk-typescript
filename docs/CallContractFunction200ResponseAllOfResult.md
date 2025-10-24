@@ -6,6 +6,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **kind** | **string** | The response object type (discriminator). | [default to undefined]
+**tx** | [**TransactionToSignTx**](TransactionToSignTx.md) |  | [default to undefined]
+**submitted** | **boolean** |  | [default to undefined]
 **output** | **any** | The function call output. | [default to undefined]
 
 ## Example
@@ -15,6 +17,8 @@ import { CallContractFunction200ResponseAllOfResult } from '@curvegrid/multibaas
 
 const instance: CallContractFunction200ResponseAllOfResult = {
     kind,
+    tx,
+    submitted,
     output,
 };
 ```

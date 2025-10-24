@@ -4,12 +4,12 @@ All URIs are relative to *https://your_deployment.multibaas.com/api/v0*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**getBlock**](#getblock) | **GET** /chains/{chain}/blocks/{block} | Get a block|
-|[**getChainStatus**](#getchainstatus) | **GET** /chains/{chain}/status | Get chain status|
-|[**getTransaction**](#gettransaction) | **GET** /chains/{chain}/transactions/{hash} | Get transaction|
-|[**getTransactionReceipt**](#gettransactionreceipt) | **GET** /chains/{chain}/transactions/receipt/{hash} | Get transaction receipt|
-|[**submitSignedTransaction**](#submitsignedtransaction) | **POST** /chains/{chain}/transactions/submit | Submit signed transaction|
-|[**transferEth**](#transfereth) | **POST** /chains/{chain}/transfers | Transfer ETH|
+|[**getBlock**](#getblock) | **GET** /chains/ethereum/blocks/{block} | Get a block|
+|[**getChainStatus**](#getchainstatus) | **GET** /chains/ethereum/status | Get chain status|
+|[**getTransaction**](#gettransaction) | **GET** /chains/ethereum/transactions/{hash} | Get transaction|
+|[**getTransactionReceipt**](#gettransactionreceipt) | **GET** /chains/ethereum/transactions/receipt/{hash} | Get transaction receipt|
+|[**submitSignedTransaction**](#submitsignedtransaction) | **POST** /chains/ethereum/transactions/submit | Submit signed transaction|
+|[**transferEth**](#transfereth) | **POST** /chains/ethereum/transfers | Transfer ETH|
 
 # **getBlock**
 > GetBlock200Response getBlock()
@@ -27,11 +27,9 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
-let chain: ChainName; //The blockchain chain label. (default to undefined)
 let block: string; //A block number, hash or \'latest\' for the latest block. (default to undefined)
 
 const { status, data } = await apiInstance.getBlock(
-    chain,
     block
 );
 ```
@@ -40,7 +38,6 @@ const { status, data } = await apiInstance.getBlock(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **block** | [**string**] | A block number, hash or \&#39;latest\&#39; for the latest block. | defaults to undefined|
 
 
@@ -83,18 +80,11 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
-let chain: ChainName; //The blockchain chain label. (default to undefined)
-
-const { status, data } = await apiInstance.getChainStatus(
-    chain
-);
+const { status, data } = await apiInstance.getChainStatus();
 ```
 
 ### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
+This endpoint does not have any parameters.
 
 
 ### Return type
@@ -136,12 +126,10 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
-let chain: ChainName; //The blockchain chain label. (default to undefined)
 let hash: string; //A transaction hash. (default to undefined)
 let include: 'contract'; //Include contract and method call details, if available. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.getTransaction(
-    chain,
     hash,
     include
 );
@@ -151,7 +139,6 @@ const { status, data } = await apiInstance.getTransaction(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **hash** | [**string**] | A transaction hash. | defaults to undefined|
 | **include** | [**&#39;contract&#39;**]**Array<&#39;contract&#39;>** | Include contract and method call details, if available. | (optional) defaults to undefined|
 
@@ -195,12 +182,10 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
-let chain: ChainName; //The blockchain chain label. (default to undefined)
 let hash: string; //A transaction hash. (default to undefined)
 let include: 'contract'; //Include contract and event details, if available. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.getTransactionReceipt(
-    chain,
     hash,
     include
 );
@@ -210,7 +195,6 @@ const { status, data } = await apiInstance.getTransactionReceipt(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **hash** | [**string**] | A transaction hash. | defaults to undefined|
 | **include** | [**&#39;contract&#39;**]**Array<&#39;contract&#39;>** | Include contract and event details, if available. | (optional) defaults to undefined|
 
@@ -255,11 +239,9 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
-let chain: ChainName; //The blockchain chain label. (default to undefined)
 let signedTransactionSubmission: SignedTransactionSubmission; //
 
 const { status, data } = await apiInstance.submitSignedTransaction(
-    chain,
     signedTransactionSubmission
 );
 ```
@@ -269,7 +251,6 @@ const { status, data } = await apiInstance.submitSignedTransaction(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **signedTransactionSubmission** | **SignedTransactionSubmission**|  | |
-| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 
 
 ### Return type
@@ -312,11 +293,9 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ChainsApi(configuration);
 
-let chain: ChainName; //The blockchain chain label. (default to undefined)
 let postMethodArgs: PostMethodArgs; //
 
 const { status, data } = await apiInstance.transferEth(
-    chain,
     postMethodArgs
 );
 ```
@@ -326,7 +305,6 @@ const { status, data } = await apiInstance.transferEth(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **postMethodArgs** | **PostMethodArgs**|  | |
-| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 
 
 ### Return type
