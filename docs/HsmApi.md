@@ -11,9 +11,9 @@ All URIs are relative to *https://your_deployment.multibaas.com/api/v0*
 |[**listHsmWallets**](#listhsmwallets) | **GET** /hsm/wallets | List HSM wallets|
 |[**removeHsmConfig**](#removehsmconfig) | **DELETE** /hsm/config/{client_id} | Remove HSM config|
 |[**removeHsmKey**](#removehsmkey) | **DELETE** /hsm/key/{wallet_address} | Remove HSM key|
-|[**setLocalNonce**](#setlocalnonce) | **POST** /chains/ethereum/hsm/nonce/{wallet_address} | Set local nonce|
-|[**signAndSubmitTransaction**](#signandsubmittransaction) | **POST** /chains/ethereum/hsm/submit | Sign and submit transaction|
-|[**signData**](#signdata) | **POST** /chains/ethereum/hsm/sign | Sign data|
+|[**setLocalNonce**](#setlocalnonce) | **POST** /chains/{chain}/hsm/nonce/{wallet_address} | Set local nonce|
+|[**signAndSubmitTransaction**](#signandsubmittransaction) | **POST** /chains/{chain}/hsm/submit | Sign and submit transaction|
+|[**signData**](#signdata) | **POST** /chains/{chain}/hsm/sign | Sign data|
 
 # **addHsmConfig**
 > BaseResponse addHsmConfig(baseAzureAccount)
@@ -420,10 +420,12 @@ import {
 const configuration = new Configuration();
 const apiInstance = new HsmApi(configuration);
 
+let chain: ChainName; //The blockchain chain label. (default to undefined)
 let walletAddress: string; //An Ethereum address. (default to undefined)
 let setNonceRequest: SetNonceRequest; //
 
 const { status, data } = await apiInstance.setLocalNonce(
+    chain,
     walletAddress,
     setNonceRequest
 );
@@ -434,6 +436,7 @@ const { status, data } = await apiInstance.setLocalNonce(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **setNonceRequest** | **SetNonceRequest**|  | |
+| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **walletAddress** | [**string**] | An Ethereum address. | defaults to undefined|
 
 
@@ -477,9 +480,11 @@ import {
 const configuration = new Configuration();
 const apiInstance = new HsmApi(configuration);
 
+let chain: ChainName; //The blockchain chain label. (default to undefined)
 let cloudWalletTXToSign: CloudWalletTXToSign; //
 
 const { status, data } = await apiInstance.signAndSubmitTransaction(
+    chain,
     cloudWalletTXToSign
 );
 ```
@@ -489,6 +494,7 @@ const { status, data } = await apiInstance.signAndSubmitTransaction(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **cloudWalletTXToSign** | **CloudWalletTXToSign**|  | |
+| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 
 
 ### Return type
@@ -531,9 +537,11 @@ import {
 const configuration = new Configuration();
 const apiInstance = new HsmApi(configuration);
 
+let chain: ChainName; //The blockchain chain label. (default to undefined)
 let hSMSignRequest: HSMSignRequest; //
 
 const { status, data } = await apiInstance.signData(
+    chain,
     hSMSignRequest
 );
 ```
@@ -543,6 +551,7 @@ const { status, data } = await apiInstance.signData(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **hSMSignRequest** | **HSMSignRequest**|  | |
+| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 
 
 ### Return type

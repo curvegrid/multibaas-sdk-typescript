@@ -1,19 +1,21 @@
-# MethodCallResponse
+# MethodCallPreviewResponse
 
-The result of a function call.
+The result of a preview function arguments call.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**input** | **Array&lt;any&gt;** | The function call inputs. | [default to undefined]
 **output** | **any** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { MethodCallResponse } from '@curvegrid/multibaas-sdk';
+import { MethodCallPreviewResponse } from '@curvegrid/multibaas-sdk';
 
-const instance: MethodCallResponse = {
+const instance: MethodCallPreviewResponse = {
+    input,
     output,
 };
 ```

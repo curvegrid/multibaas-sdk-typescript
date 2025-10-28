@@ -44,6 +44,26 @@ jobs:
         with:
           node-version: "${{ env.NODE_VER }}"
           registry-url: https://registry.npmjs.org/
+      - name: Pull OpenAPI Generator Docker Image
+        run: |
+          if [[ "${{ github.event.inputs.openapi-generator-version }}" == "latest" || "${{ github.event.inputs.openapi-generator-version }}" == "7.17.0" ]]; then
+            echo "📥 Pulling Docker image: openapitools/openapi-generator-cli:latest"
+            docker pull openapitools/openapi-generator-cli:latest
+          else
+            echo "📥 Pulling Docker image: openapitools/openapi-generator-cli:v${{ github.event.inputs.openapi-generator-version }}"
+            docker pull openapitools/openapi-generator-cli:v${{ github.event.inputs.openapi-generator-version }}
+          fi
+      - name: Verify OpenAPI Generator Version
+        run: |
+          if [[ "${{ github.event.inputs.openapi-generator-version }}" == "latest" || "${{ github.event.inputs.openapi-generator-version }}" == "7.17.0" ]]; then
+            DOCKER_TAG="latest"
+          else
+            DOCKER_TAG="v${{ github.event.inputs.openapi-generator-version }}"
+          fi
+          echo "🔍 Verifying OpenAPI Generator version in Docker image: openapitools/openapi-generator-cli:${DOCKER_TAG}"
+          docker run --rm openapitools/openapi-generator-cli:${DOCKER_TAG} version
+      - name: Generate SDK to check for changes (Docker)
+        run: ./generate-docker.sh
       - name: Generate SDK to check for changes
         run: ./generate.sh
       - name: Check for changes
@@ -54,6 +74,48 @@ jobs:
           fi
       - name: Generate SDK with new package version
         run: ./generate.sh ${{ github.event.inputs.version }}
+      - name: Generate SDK with new package version (Docker)
+        run: ./generate-docker.sh ${{ github.event.inputs.version }}
+      
+      - name: Pack SDK for testing locally
+        id: build
+        run: |
+          # Build the package
+          npm pack
+          # Get the wheel filename for testing
+          WHEEL_FILE=$(ls *.tgz | head -n 1)
+          echo "wheel_file=$WHEEL_FILE" >> $GITHUB_OUTPUT
+      
+      - name: Run esm example
+        working-directory: example-esm
+        env:
+          MB_BASE_URL:  ${{ secrets.MB_BASE_URL }}
+          MB_API_KEY:   ${{ secrets.MB_API_KEY }}
+        run: |
+          # Install the built wheel package
+          npm install @curvegrid/multibaas-sdk-typescript@file:../${{ steps.build.outputs.wheel_file }}
+          # Install example dependencies
+          npm install
+          # Run the example script
+          npm run start
+          # Check TypeScript types
+          npx tsx --noEmit
+
+      - name: Run commonjs example
+        working-directory: example-commonjs
+        env:
+          MB_BASE_URL:  ${{ secrets.MB_BASE_URL }}
+          MB_API_KEY:   ${{ secrets.MB_API_KEY }}
+        run: |
+          # Install the built wheel package
+          npm install @curvegrid/multibaas-sdk-typescript@file:../${{ steps.build.outputs.wheel_file }}
+          # Install example dependencies
+          npm install
+          # Run the example script
+          npm run start
+          # Check TypeScript types
+          npx tsx --noEmit
+
       - name: Setup Git Configurations
         run: |
           git config --global user.name "GitHub Actions Bot"

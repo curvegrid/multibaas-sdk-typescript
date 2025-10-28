@@ -29,6 +29,7 @@ let txIndexInBlock: number; //Filter events by a transaction\'s index in the blo
 let eventIndexInLog: number; //Filter events by index in the log. (optional) (default to undefined)
 let txHash: string; //Filter events by a transaction hash. (optional) (default to undefined)
 let fromConstructor: boolean; //Filter events by whether they were emitted from the constructor function. (optional) (default to undefined)
+let chain: ChainName; //Filter events by a chain name. (optional) (default to undefined)
 let contractAddress: string; //Filter events by a contract address. (optional) (default to undefined)
 let contractLabel: string; //Filter events by a contract label. (optional) (default to undefined)
 let eventSignature: string; //Filter events by the signature. (optional) (default to undefined)
@@ -42,6 +43,7 @@ const { status, data } = await apiInstance.getEventCount(
     eventIndexInLog,
     txHash,
     fromConstructor,
+    chain,
     contractAddress,
     contractLabel,
     eventSignature,
@@ -60,6 +62,7 @@ const { status, data } = await apiInstance.getEventCount(
 | **eventIndexInLog** | [**number**] | Filter events by index in the log. | (optional) defaults to undefined|
 | **txHash** | [**string**] | Filter events by a transaction hash. | (optional) defaults to undefined|
 | **fromConstructor** | [**boolean**] | Filter events by whether they were emitted from the constructor function. | (optional) defaults to undefined|
+| **chain** | **ChainName** | Filter events by a chain name. | (optional) defaults to undefined|
 | **contractAddress** | [**string**] | Filter events by a contract address. | (optional) defaults to undefined|
 | **contractLabel** | [**string**] | Filter events by a contract label. | (optional) defaults to undefined|
 | **eventSignature** | [**string**] | Filter events by the signature. | (optional) defaults to undefined|
@@ -112,6 +115,7 @@ let txIndexInBlock: number; //Filter events by a transaction\'s index in the blo
 let eventIndexInLog: number; //Filter events by index in the log. (optional) (default to undefined)
 let txHash: string; //Filter events by a transaction hash. (optional) (default to undefined)
 let fromConstructor: boolean; //Filter events by whether they were emitted from the constructor function. (optional) (default to undefined)
+let chain: ChainName; //Filter events by a chain name. (optional) (default to undefined)
 let contractAddress: string; //Filter events by a contract address. (optional) (default to undefined)
 let contractLabel: string; //Filter events by a contract label. (optional) (default to undefined)
 let eventSignature: string; //Filter events by the signature. (optional) (default to undefined)
@@ -125,6 +129,7 @@ const { status, data } = await apiInstance.listEvents(
     eventIndexInLog,
     txHash,
     fromConstructor,
+    chain,
     contractAddress,
     contractLabel,
     eventSignature,
@@ -143,6 +148,7 @@ const { status, data } = await apiInstance.listEvents(
 | **eventIndexInLog** | [**number**] | Filter events by index in the log. | (optional) defaults to undefined|
 | **txHash** | [**string**] | Filter events by a transaction hash. | (optional) defaults to undefined|
 | **fromConstructor** | [**boolean**] | Filter events by whether they were emitted from the constructor function. | (optional) defaults to undefined|
+| **chain** | **ChainName** | Filter events by a chain name. | (optional) defaults to undefined|
 | **contractAddress** | [**string**] | Filter events by a contract address. | (optional) defaults to undefined|
 | **contractLabel** | [**string**] | Filter events by a contract label. | (optional) defaults to undefined|
 | **eventSignature** | [**string**] | Filter events by the signature. | (optional) defaults to undefined|

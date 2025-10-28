@@ -10,7 +10,6 @@ Name | Type | Description | Notes
 **chainId** | **string** | A hex string or null. | [optional] [default to undefined]
 **nonce** | **string** | A hex string. | [default to undefined]
 **to** | **string** | An ethereum address. | [default to undefined]
-**from** | **string** | An ethereum address. | [optional] [default to undefined]
 **gas** | **string** | A hex string. | [default to undefined]
 **gasPrice** | **string** | A hex string or null. | [optional] [default to undefined]
 **maxPriorityFeePerGas** | **string** | A hex string or null. | [optional] [default to undefined]
@@ -40,7 +39,6 @@ const instance: Transaction = {
     chainId,
     nonce,
     to,
-    from,
     gas,
     gasPrice,
     maxPriorityFeePerGas,

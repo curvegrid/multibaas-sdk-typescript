@@ -15,6 +15,10 @@
     "dist",
     "node_modules",
     "templates",
-    "example"
+    "example-esm",
+    "example-commonjs"
+  ],
+  "include": [
+    "*.ts"
   ]
 }

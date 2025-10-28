@@ -6,7 +6,7 @@ Results of an executed event query.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rows** | **Array&lt;{ [key: string]: any; }&gt;** |  | [default to undefined]
+**rows** | **Array&lt;object&gt;** |  | [default to undefined]
 
 ## Example
 

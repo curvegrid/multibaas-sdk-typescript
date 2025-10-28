@@ -1,4 +1,4 @@
-# GetPlan200Response
+# GetEventMonitorStatus200Response
 
 
 ## Properties
@@ -7,14 +7,14 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **status** | **number** | The status code. | [default to undefined]
 **message** | **string** | The human-readable status message. | [default to undefined]
-**result** | [**Plan**](Plan.md) |  | [default to undefined]
+**result** | [**EventMonitorStatus**](EventMonitorStatus.md) |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { GetPlan200Response } from '@curvegrid/multibaas-sdk';
+import { GetEventMonitorStatus200Response } from '@curvegrid/multibaas-sdk';
 
-const instance: GetPlan200Response = {
+const instance: GetEventMonitorStatus200Response = {
     status,
     message,
     result,

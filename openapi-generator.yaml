@@ -1,4 +1,4 @@
-inputSpec: https://data.multibaas.com/api/v0/openapi.yaml
+inputSpec: ./api.v0.yaml
 outputDir: .
 generatorName: typescript-axios
 gitUserId: curvegrid

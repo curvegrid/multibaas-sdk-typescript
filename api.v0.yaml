@@ -1,0 +1,5096 @@
+openapi: 3.1.1
+info:
+  title: MultiBaas API
+  version: "0.0"
+  contact:
+    name: Curvegrid
+  description: MultiBaas's REST APIv0.
+servers:
+  - url: "{base_url}/api/v0"
+    variables:
+      base_url:
+        default: https://your_deployment.multibaas.com
+        description: Your MultiBaas deployment URL.
+tags:
+  - name: admin
+  - name: addresses
+  - name: contracts
+  - name: chains
+  - name: hsm
+  - name: events
+  - name: event queries
+  - name: txm
+  - name: webhooks
+paths:
+  /api_keys:
+    get:
+      operationId: list-api-keys
+      summary: List API keys
+      description: Returns all the API keys.
+      tags:
+        - admin
+      parameters:
+        - name: all
+          in: query
+          schema:
+            type: boolean
+          style: form
+          explode: true
+          description: If true, returns all API keys on the system, otherwise, returns only the API keys owned by the calling user.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/APIKey"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: create-api-key
+      summary: Create API key
+      description: Creates an API key and adds it to group IDs.
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/BaseAPIKey"
+                - properties:
+                    groupIDs:
+                      type: array
+                      items:
+                        type: integer
+                        format: int64
+                        description: The group IDs to add the API key to.
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/APIKeyWithSecret"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /api_keys/{apiKeyID}:
+    parameters:
+      - $ref: "#/components/parameters/APIKeyID"
+    get:
+      operationId: get-api-key
+      summary: Get API Key
+      description: Returns an API key.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/APIKey"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    put:
+      operationId: update-api-key
+      summary: Update API key
+      description: Updates an API key.
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseAPIKey"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: delete-api-key
+      summary: Delete API key
+      description: Deletes an API key.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /invites:
+    post:
+      operationId: invite-user
+      summary: Invite user
+      description: Invites a new user.
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invite"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /invites/{inviteID}:
+    parameters:
+      - $ref: "#/components/parameters/InviteID"
+    get:
+      operationId: check-invite
+      summary: Check invite
+      description: Checks if a user invite is valid.
+      security: []
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: accept-invite
+      summary: Accept invite
+      description: Accepts a user invite.
+      tags:
+        - admin
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                idToken:
+                  type: string
+                  description: The user ID Token
+                  format: JWT
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/User"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/transfers:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+    post:
+      operationId: transfer-eth
+      summary: Transfer ETH
+      description: Returns a transaction for sending the native token between addresses.
+      tags:
+        - chains
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMethodArgs"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/TransactionToSign"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/transactions/submit:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+    post:
+      operationId: submit-signed-transaction
+      summary: Submit signed transaction
+      description: Receives a pre-signed raw transaction and submits it to the blockchain.
+      tags:
+        - chains
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignedTransactionSubmission"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/SignedTransactionResponse"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/transactions/{hash}:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/TransactionHash"
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+            - contract
+        style: form
+        explode: true
+        description: Include contract and method call details, if available.
+    get:
+      operationId: get-transaction
+      summary: Get transaction
+      description: Returns a transaction.
+      tags:
+        - chains
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/TransactionData"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/transactions/receipt/{hash}:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/TransactionHash"
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+            - contract
+        style: form
+        explode: true
+        description: Include contract and event details, if available.
+    get:
+      operationId: get-transaction-receipt
+      summary: Get transaction receipt
+      description: Returns the receipt of a transaction that's been successfully added to the blockchain.
+      tags:
+        - chains
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/TransactionReceipt"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/status:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+    get:
+      operationId: get-chain-status
+      summary: Get chain status
+      description: Returns the chain status.
+      tags:
+        - chains
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/ChainStatus"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/blocks/{block}:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/BlockRef"
+    get:
+      operationId: get-block
+      summary: Get a block
+      description: Returns a block.
+      tags:
+        - chains
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Block"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/addresses:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+    get:
+      operationId: list-addresses
+      summary: List addresses
+      description: Returns all the aliased addresses.
+      tags:
+        - addresses
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AddressAlias"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: set-address
+      summary: Create or update address
+      description: Associates an address with an alias.
+      tags:
+        - addresses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddressAlias"
+        required: true
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Address"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/addresses/{address-or-alias}:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/AddressOrAlias"
+    get:
+      operationId: get-address
+      summary: Get address
+      description: Returns details about an address.
+      parameters:
+        - in: query
+          name: include
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - balance
+                - code
+                - nonce
+                - contractLookup
+          style: form
+          explode: true
+          description: |
+            Optional data to fetch from the blockchain:
+            - `balance` to get the balance of this address.
+            - `code` to get the code at this address.
+            - `nonce` to get the next available transaction nonce for this address.
+            - `contractLookup` to get the contract(s) details for this address.
+      tags:
+        - addresses
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Address"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: delete-address
+      summary: Delete address
+      description: Deletes an address alias.
+      tags:
+        - addresses
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/addresses/{address-or-alias}/contracts:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/AddressOrAlias"
+    post:
+      operationId: link-address-contract
+      summary: Link address and contract
+      description: Links an address to a contract.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                label:
+                  $ref: "#/components/schemas/Label"
+                version:
+                  $ref: "#/components/schemas/ContractVersion"
+                startingBlock:
+                  description: The block number from which to start syncing events. The value can be `latest` for the latest block number, an absolute block number (e.g. `123` for the block number 123), or a relative block number (e.g. `-100` for 100 blocks before the latest block). If absent, the event monitor will be disabled for this contract and events won't be synced.
+                  type: string
+              required:
+                - label
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Address"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/addresses/{address-or-alias}/contracts/{contract}:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/AddressOrAlias"
+      - $ref: "#/components/parameters/ContractLabel"
+    delete:
+      operationId: unlink-address-contract
+      summary: Unlink address and contract
+      description: Unlinks an address from a contract.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Address"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/addresses/{address-or-alias}/contracts/{contract}/status:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/AddressOrAlias"
+      - $ref: "#/components/parameters/ContractLabel"
+    get:
+      operationId: get-event-monitor-status
+      summary: Get event monitor status
+      description: Returns the event monitor status for a given address and contract.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/EventMonitorStatus"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/addresses/{address-or-alias}/contracts/{contract}/methods/{method}:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/AddressOrAlias"
+      - $ref: "#/components/parameters/ContractLabel"
+      - $ref: "#/components/parameters/Method"
+    post:
+      operationId: call-contract-function
+      summary: Call a contract function
+      description: Builds a transaction to call the given contract function. Returns a transaction to be signed and signs and submits to the blockchain it if the `signAndSubmit` flag is enabled.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMethodArgs"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        oneOf:
+                          - $ref: "#/components/schemas/TransactionToSignResponse"
+                          - $ref: "#/components/schemas/MethodCallResponse"
+                          - $ref: "#/components/schemas/MethodCallPreviewResponse"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/hsm/sign:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+    post:
+      operationId: sign-data
+      summary: Sign data
+      description: Signs the given data using the given HSM address.
+      tags:
+        - hsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HSMSignRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/HSMSignResponse"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/hsm/submit:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+    post:
+      operationId: sign-and-submit-transaction
+      summary: Sign and submit transaction
+      description: Signs and submits the given transaction using an HSM address.
+      tags:
+        - hsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CloudWalletTXToSign"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/TransactionToSign"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/hsm/nonce/{wallet_address}:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/ETHAddress"
+    post:
+      operationId: set-local-nonce
+      summary: Set local nonce
+      description: Sets the next transaction nonce for the given HSM address that will be used with the nonce management feature.
+      tags:
+        - hsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetNonceRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts:
+    get:
+      operationId: list-contracts
+      summary: List contracts
+      description: Returns a list of contracts.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ContractOverview"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: create-contracts
+      summary: Create multiple contracts
+      description: Adds multiple contracts.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/BaseContract"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+    get:
+      operationId: get-contract
+      summary: Get a contract
+      description: Returns the given contract.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Contract"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: create-contract
+      summary: Create a contract
+      description: Adds a contract.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseContract"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Contract"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: delete-contract
+      summary: Delete a contract
+      description: Deletes a contract and all its versions.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}/deploy:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+    post:
+      operationId: deploy-contract
+      summary: Deploy a contract
+      description: Returns a transaction to deploy the given contract to the blockchain.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMethodArgs"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/DeployContractTransaction"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}/versions:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+    get:
+      operationId: list-contract-versions
+      summary: List all contract versions
+      description: Returns a list of the versions of a contract.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: object
+                        properties:
+                          label:
+                            $ref: "#/components/schemas/Label"
+                          versions:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/ContractVersion"
+                        required:
+                          - label
+                          - versions
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}/all:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+    get:
+      operationId: get-contract-versions
+      summary: Get all contract versions
+      description: Returns all the versions of a contract.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Contract"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}/{version}:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+      - $ref: "#/components/parameters/ContractVersion"
+    get:
+      operationId: get-contract-version
+      summary: Get a contract version
+      description: Returns a specific contract version.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/Contract"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: delete-contract-version
+      summary: Delete a contract version
+      description: Deletes a specific contract version.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}/{version}/deploy:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+      - $ref: "#/components/parameters/ContractVersion"
+    post:
+      operationId: deploy-contract-version
+      summary: Deploy a contract version
+      description: Returns a transaction to deploy the given contract version to the blockchain.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMethodArgs"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/DeployContractTransaction"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}/{version}/methods/{method}:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+      - $ref: "#/components/parameters/ContractVersion"
+      - $ref: "#/components/parameters/Method"
+    get:
+      operationId: get-function-type-conversions
+      summary: Get function type conversions
+      description: Returns the type conversion options for a given contract and function signature.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/MethodTypeConversionOptions"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: set-function-type-conversions
+      summary: Set function type conversions
+      description: Sets the type conversion options for a given contract and function signature.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContractMethodOptions"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /contracts/{contract}/{version}/events/{event}:
+    parameters:
+      - $ref: "#/components/parameters/ContractLabel"
+      - $ref: "#/components/parameters/ContractVersion"
+      - $ref: "#/components/parameters/Event"
+    get:
+      operationId: get-event-type-conversions
+      summary: Get event type conversions
+      description: Returns the type conversion options for a given contract and event signature.
+      tags:
+        - contracts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/EventTypeConversionOptions"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: set-event-type-conversions
+      summary: Set event type conversions
+      description: Sets the type conversion options for a given contract and event signature.
+      tags:
+        - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContractEventOptions"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /cors:
+    get:
+      operationId: list-cors-origins
+      summary: List CORS origins
+      description: Returns a list of CORS origins.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/CORSOrigin"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: add-cors-origin
+      summary: Add CORS origin
+      description: Adds a CORS origin.
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CORSOrigin"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /cors/{originID}:
+    parameters:
+      - $ref: "#/components/parameters/CORSOriginID"
+    delete:
+      operationId: remove-cors-origin
+      summary: Remove CORS Origin
+      description: Removes a CORS origin.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /events:
+    get:
+      operationId: list-events
+      summary: List events
+      description: Returns all events stored in the database.
+      tags:
+        - events
+      parameters:
+        - in: query
+          name: block_hash
+          schema:
+            $ref: "#/components/schemas/Keccak256Hash"
+          style: form
+          explode: true
+          description: Filter events by a block hash.
+        - in: query
+          name: block_number
+          schema:
+            type: integer
+            format: int64
+          style: form
+          explode: true
+          description: Filter events by a block number.
+        - in: query
+          name: tx_index_in_block
+          schema:
+            type: integer
+            format: int64
+          style: form
+          explode: true
+          description: Filter events by a transaction's index in the block.
+        - in: query
+          name: event_index_in_log
+          schema:
+            type: integer
+            format: int64
+          style: form
+          explode: true
+          description: Filter events by index in the log.
+        - in: query
+          name: tx_hash
+          schema:
+            $ref: "#/components/schemas/Keccak256Hash"
+          style: form
+          explode: true
+          description: Filter events by a transaction hash.
+        - in: query
+          name: from_constructor
+          schema:
+            type: boolean
+          style: form
+          explode: true
+          description: Filter events by whether they were emitted from the constructor function.
+        - in: query
+          name: chain
+          schema:
+            $ref: "#/components/schemas/ChainName"
+          style: form
+          explode: true
+          description: Filter events by a chain name.
+        - in: query
+          name: contract_address
+          schema:
+            $ref: "#/components/schemas/ETHAddress"
+          style: form
+          explode: true
+          description: Filter events by a contract address.
+        - in: query
+          name: contract_label
+          schema:
+            $ref: "#/components/schemas/Label"
+          style: form
+          explode: true
+          description: Filter events by a contract label.
+        - in: query
+          name: event_signature
+          schema:
+            type: string
+          style: form
+          explode: true
+          description: Filter events by the signature.
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationOffset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Event"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /events/count:
+    get:
+      operationId: get-event-count
+      summary: Get event count
+      description: Gets the number of events stored in the database.
+      tags:
+        - events
+      parameters:
+        - in: query
+          name: block_hash
+          schema:
+            $ref: "#/components/schemas/Keccak256Hash"
+          style: form
+          explode: true
+          description: Filter events by a block hash.
+        - in: query
+          name: block_number
+          schema:
+            type: integer
+            format: int64
+          style: form
+          explode: true
+          description: Filter events by a block number.
+        - in: query
+          name: tx_index_in_block
+          schema:
+            type: integer
+            format: int64
+          style: form
+          explode: true
+          description: Filter events by a transaction's index in the block.
+        - in: query
+          name: event_index_in_log
+          schema:
+            type: integer
+            format: int64
+          style: form
+          explode: true
+          description: Filter events by index in the log.
+        - in: query
+          name: tx_hash
+          schema:
+            $ref: "#/components/schemas/Keccak256Hash"
+          style: form
+          explode: true
+          description: Filter events by a transaction hash.
+        - in: query
+          name: from_constructor
+          schema:
+            type: boolean
+          style: form
+          explode: true
+          description: Filter events by whether they were emitted from the constructor function.
+        - in: query
+          name: chain
+          schema:
+            $ref: "#/components/schemas/ChainName"
+          style: form
+          explode: true
+          description: Filter events by a chain name.
+        - in: query
+          name: contract_address
+          schema:
+            $ref: "#/components/schemas/ETHAddress"
+          style: form
+          explode: true
+          description: Filter events by a contract address.
+        - in: query
+          name: contract_label
+          schema:
+            $ref: "#/components/schemas/Label"
+          style: form
+          explode: true
+          description: Filter events by a contract label.
+        - in: query
+          name: event_signature
+          schema:
+            type: string
+          style: form
+          explode: true
+          description: Filter events by the signature.
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationOffset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: integer
+                        format: int64
+                        description: The number of events.
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /hsm:
+    get:
+      operationId: list-hsm
+      summary: List HSM configs and wallets
+      description: Returns a list of HSM configs and their associated wallets.
+      tags:
+        - hsm
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/HSMData"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /hsm/wallets:
+    get:
+      operationId: list-hsm-wallets
+      summary: List HSM wallets
+      description: Returns a list of HSM wallets.
+      tags:
+        - hsm
+      parameters:
+        - in: query
+          name: key_name
+          schema:
+            $ref: "#/components/schemas/AzureKeyName"
+          style: form
+          explode: true
+          description: Filter wallets by a key name.
+        - in: query
+          name: key_version
+          schema:
+            $ref: "#/components/schemas/AzureKeyVersion"
+          style: form
+          explode: true
+          description: Filter wallets by a key version.
+        - in: query
+          name: vault_name
+          schema:
+            type: string
+          style: form
+          explode: true
+          description: Filter wallets by a vault name.
+        - in: query
+          name: base_group_name
+          schema:
+            type: string
+          style: form
+          explode: true
+          description: Filter wallets by a base group name.
+        - in: query
+          name: client_id
+          schema:
+            type: string
+          style: form
+          explode: true
+          description: Filter wallets by a client ID.
+        - in: query
+          name: public_address
+          schema:
+            $ref: "#/components/schemas/ETHAddress"
+          style: form
+          explode: true
+          description: Filter wallets by a public address.
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationOffset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/StandaloneWallet"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /hsm/key:
+    post:
+      operationId: add-hsm-key
+      summary: Add HSM key
+      description: Adds an existing key configuration.
+      tags:
+        - hsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddKey"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /hsm/key/{wallet_address}:
+    parameters:
+      - $ref: "#/components/parameters/ETHAddress"
+    delete:
+      operationId: remove-hsm-key
+      summary: Remove HSM key
+      description: Removes the specified key configuration.
+      tags:
+        - hsm
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /hsm/key/new:
+    post:
+      operationId: create-hsm-key
+      summary: Create HSM key
+      description: Creates a new key in the Azure KeyVault.
+      tags:
+        - hsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateKey"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/AzureWallet"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /hsm/config:
+    post:
+      operationId: add-hsm-config
+      summary: Add HSM config
+      description: Adds a new Azure account configuration.
+      tags:
+        - hsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseAzureAccount"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /hsm/config/{client_id}:
+    parameters:
+      - $ref: "#/components/parameters/ClientID"
+    delete:
+      operationId: remove-hsm-config
+      summary: Remove HSM config
+      description: Removes the specified Azure account configuration and its associated keys.
+      tags:
+        - hsm
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /queries:
+    post:
+      operationId: execute-arbitrary-event-query
+      summary: Execute arbitrary event query
+      description: Executes an arbitrary event query.
+      tags:
+        - event queries
+      parameters:
+        - $ref: "#/components/parameters/PaginationOffset"
+        - $ref: "#/components/parameters/PaginationLimit"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventQuery"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/EventQueryResults"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    get:
+      operationId: list-event-queries
+      summary: List event queries
+      description: Returns a list of saved event queries.
+      tags:
+        - event queries
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/SavedEventQuery"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /queries/{event_query}:
+    parameters:
+      - $ref: "#/components/parameters/EventQueryLabel"
+    get:
+      operationId: get-event-query
+      summary: Get event query
+      description: Returns the given saved event query.
+      tags:
+        - event queries
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/EventQuery"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    put:
+      operationId: set-event-query
+      summary: Create or update event query
+      description: Creates or updates the given saved event query.
+      tags:
+        - event queries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventQuery"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: delete-event-query
+      summary: Delete event query
+      description: Deletes the given saved event query.
+      tags:
+        - event queries
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /queries/{event_query}/results:
+    parameters:
+      - $ref: "#/components/parameters/EventQueryLabel"
+    get:
+      operationId: execute-event-query
+      summary: Execute event query
+      description: Executes the given saved event query.
+      tags:
+        - event queries
+      parameters:
+        - $ref: "#/components/parameters/PaginationOffset"
+        - $ref: "#/components/parameters/PaginationLimit"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/EventQueryResults"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /queries/{event_query}/count:
+    parameters:
+      - $ref: "#/components/parameters/EventQueryLabel"
+    get:
+      operationId: count-event-query-records
+      summary: Count event query records
+      description: Returns the record count of the given saved event query.
+      tags:
+        - event queries
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: integer
+                        format: int64
+                        description: The record count.
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/txm/{wallet_address}:
+    get:
+      operationId: list-wallet-transactions
+      summary: List transactions for a wallet
+      description: List the transactions submitted by the given wallet address.
+      tags:
+        - txm
+      parameters:
+        - $ref: "#/components/parameters/ChainParam"
+        - $ref: "#/components/parameters/ETHAddress"
+        - in: query
+          name: hash
+          schema:
+            $ref: "#/components/schemas/Keccak256Hash"
+          style: form
+          explode: true
+          description: "Filter transactions by transaction hash. To filter for multiple hashes, use ampersands: `?hash=HASH1&hash=HASH2&hash=HASH3`"
+        - in: query
+          name: nonce
+          schema:
+            type: integer
+            format: int64
+          style: form
+          explode: true
+          description: Filter transactions by nonce
+        - in: query
+          name: status
+          schema:
+            $ref: "#/components/schemas/TransactionStatus"
+          style: form
+          explode: true
+          description: Filter transactions by status
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationOffset"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/WalletTransaction"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/txm/{wallet_address}/count:
+    get:
+      operationId: count-wallet-transactions
+      summary: Count all transactions for a wallet
+      description: Count all transactions for the given wallet address.
+      tags:
+        - txm
+      parameters:
+        - $ref: "#/components/parameters/ChainParam"
+        - $ref: "#/components/parameters/ETHAddress"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: integer
+                        format: int64
+                        description: The transaction count.
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/txm/{wallet_address}/nonce/{nonce}/cancel:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/ETHAddress"
+      - $ref: "#/components/parameters/Nonce"
+    post:
+      operationId: cancel-transaction
+      summary: Cancel transaction
+      description: Cancels a transaction by resubmitting it as no-op transaction and with a higher gas price.
+      tags:
+        - txm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GasParams"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/TransactionToSign"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /chains/{chain}/txm/{wallet_address}/nonce/{nonce}/speed_up:
+    parameters:
+      - $ref: "#/components/parameters/ChainParam"
+      - $ref: "#/components/parameters/ETHAddress"
+      - $ref: "#/components/parameters/Nonce"
+    post:
+      operationId: speed-up-transaction
+      summary: Speed up transaction
+      description: Speeds up a transaction by resubmitting it with a higher gas price.
+      tags:
+        - txm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GasParams"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/TransactionToSign"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /webhooks:
+    get:
+      parameters:
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationOffset"
+      operationId: list-webhooks
+      summary: List webhooks
+      description: List all webhook endpoints.
+      tags:
+        - webhooks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/WebhookEndpoint"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: create-webhook
+      summary: Create webhook
+      description: Create a webhook.
+      tags:
+        - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseWebhookEndpoint"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/WebhookEndpoint"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /webhooks/count:
+    get:
+      operationId: count-webhooks
+      summary: Count webhooks
+      description: Count all webhook endpoints.
+      tags:
+        - webhooks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: integer
+                        format: int64
+                        description: The webhook count.
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /webhooks/{webhookID}:
+    parameters:
+      - $ref: "#/components/parameters/WebhookID"
+    get:
+      operationId: get-webhook
+      summary: Get webhook
+      description: Get a webhook endpoint.
+      tags:
+        - webhooks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/WebhookEndpoint"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: delete-webhook
+      summary: Delete webhook
+      description: Delete a webhook endpoint.
+      tags:
+        - webhooks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    put:
+      operationId: update-webhook
+      summary: Update webhook
+      description: Update a webhook endpoint.
+      tags:
+        - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseWebhookEndpoint"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        $ref: "#/components/schemas/WebhookEndpoint"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /webhooks/{webhookID}/events:
+    parameters:
+      - $ref: "#/components/parameters/WebhookID"
+    get:
+      parameters:
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationOffset"
+      operationId: list-webhook-events
+      summary: List webhook events
+      description: List events for the given webhook endpoint.
+      tags:
+        - webhooks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/WebhookEvent"
+                    required:
+                      - result
+  /webhooks/{webhookID}/events/count:
+    parameters:
+      - $ref: "#/components/parameters/WebhookID"
+    get:
+      operationId: count-webhook-events
+      summary: Count webhook events
+      description: Count the events for the given webhook endpoint.
+      tags:
+        - webhooks
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: integer
+                        format: int64
+                        description: The number of webhook events.
+                    required:
+                      - result
+  /users:
+    parameters:
+      - $ref: "#/components/parameters/GroupIDFilter"
+    get:
+      operationId: list-users
+      summary: List users
+      description: Returns all the users.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/User"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /users/{userID}:
+    parameters:
+      - $ref: "#/components/parameters/UserID"
+    delete:
+      operationId: delete-user
+      summary: Delete user
+      description: Deletes a user.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /users/{userID}/signers:
+    parameters:
+      - $ref: "#/components/parameters/UserID"
+    get:
+      operationId: list-user-signers
+      summary: List user signers
+      description: Returns all the signers for a user.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/SignerWallet"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /users/{userID}/web3wallets/{wallet_address}:
+    parameters:
+      - $ref: "#/components/parameters/UserID"
+      - $ref: "#/components/parameters/ETHAddress"
+    put:
+      operationId: set-user-signer-web3-wallet
+      summary: Add or update user web3 wallet signer
+      description: Adds or updates a user's web3 wallet signer.
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignerLabel"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: remove-user-signer-web3-wallet
+      summary: Remove user web3 wallet signer
+      description: Removes a web3 wallet signer from a user.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /users/{userID}/cloudwallets/{wallet_address}:
+    parameters:
+      - $ref: "#/components/parameters/UserID"
+      - $ref: "#/components/parameters/ETHAddress"
+    put:
+      operationId: set-user-signer-cloud-wallet
+      summary: Add or update user cloud wallet signer
+      description: Adds or updates a user's cloud wallet signer.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: remove-user-signer-cloud-wallet
+      summary: Remove user cloud wallet signer
+      description: Removes a cloud wallet signer from a user.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /users/{userID}/safeaccounts/{wallet_address}:
+    parameters:
+      - $ref: "#/components/parameters/UserID"
+      - $ref: "#/components/parameters/ETHAddress"
+    put:
+      operationId: set-user-signer-safe-account
+      summary: Add or update user safe account signer
+      description: Adds or updates a user's safe account signer.
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignerLabel"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: remove-user-signer-safe-account
+      summary: Remove user safe account signer
+      description: Removes a safe account signer from a user.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /groups:
+    parameters:
+      - $ref: "#/components/parameters/UserIDFilter"
+      - $ref: "#/components/parameters/ApiKeyIDFilter"
+      - $ref: "#/components/parameters/AssignableRoleFlag"
+    get:
+      operationId: list-groups
+      summary: List groups
+      description: Returns all the groups.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Group"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /groups/{groupID}/roles/{roleShortName}:
+    parameters:
+      - $ref: "#/components/parameters/GroupID"
+      - $ref: "#/components/parameters/RoleShortName"
+    put:
+      operationId: add-group-role
+      summary: Add role to group
+      description: Adds a role to a group.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: remove-group-role
+      summary: Remove role from group
+      description: Removes a role from a group.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /groups/{groupID}/users/{userID}:
+    parameters:
+      - $ref: "#/components/parameters/GroupID"
+      - $ref: "#/components/parameters/UserID"
+    put:
+      operationId: add-group-user
+      summary: Add user to group
+      description: Adds a user to a group.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: remove-group-user
+      summary: Remove user from group
+      description: Removes a user from a group.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /groups/{groupID}/api_keys/{apiKeyID}:
+    parameters:
+      - $ref: "#/components/parameters/GroupID"
+      - $ref: "#/components/parameters/APIKeyID"
+    put:
+      operationId: add-group-api-key
+      summary: Add API key to group
+      description: Adds an API key to a group.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+    delete:
+      operationId: remove-group-api-key
+      summary: Remove API key from group
+      description: Removes an API key from a group.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+  /systemactivities:
+    get:
+      operationId: list-audit-logs
+      summary: List audit logs
+      description: Returns the audit logs.
+      tags:
+        - admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                  - properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AuditLog"
+                    required:
+                      - result
+        4XX:
+          $ref: "#/components/responses/ClientError"
+        5XX:
+          $ref: "#/components/responses/ServerError"
+components:
+  parameters:
+    AddressOrAlias:
+      name: address-or-alias
+      in: path
+      description: An address or the alias of an address.
+      required: true
+      schema:
+        type: string
+        minLength: 1
+    BlockRef:
+      name: block
+      in: path
+      description: A block number, hash or 'latest' for the latest block.
+      required: true
+      schema:
+        type: string
+        pattern: "^(0|[1-9][0-9]*|0x[0-9a-f]{64}|0X[0-9A-F]{64}|latest)$"
+    ChainParam:
+      name: chain
+      in: path
+      description: The blockchain chain label.
+      required: true
+      schema:
+        $ref: "#/components/schemas/ChainName"
+    ClientID:
+      name: client_id
+      in: path
+      description: The HSM client ID.
+      required: true
+      schema:
+        type: string
+    ContractLabel:
+      name: contract
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/Label"
+    ContractVersion:
+      name: version
+      in: path
+      description: Contract Version.
+      required: true
+      schema:
+        type: string
+        minLength: 1
+    ETHAddress:
+      name: wallet_address
+      in: path
+      description: An Ethereum address.
+      required: true
+      schema:
+        $ref: "#/components/schemas/ETHAddress"
+    Method:
+      name: method
+      in: path
+      description: Contract function.
+      required: true
+      schema:
+        type: string
+        minLength: 1
+    Event:
+      name: event
+      in: path
+      description: Contract Event.
+      required: true
+      schema:
+        type: string
+        minLength: 1
+    EventQueryLabel:
+      name: event_query
+      in: path
+      required: true
+      description: An event query label.
+      schema:
+        $ref: "#/components/schemas/EventQueryLabel"
+    TransactionHash:
+      name: hash
+      in: path
+      description: A transaction hash.
+      required: true
+      schema:
+        $ref: "#/components/schemas/Hex"
+    PaginationOffset:
+      name: offset
+      in: query
+      style: form
+      explode: true
+      schema:
+        $ref: "#/components/schemas/PaginationOffset"
+    PaginationLimit:
+      name: limit
+      in: query
+      style: form
+      explode: true
+      schema:
+        $ref: "#/components/schemas/PaginationLimit"
+    Nonce:
+      name: nonce
+      in: path
+      description: Transaction nonce.
+      required: true
+      schema:
+        type: integer
+        format: int64
+    UserID:
+      name: userID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    GroupID:
+      name: groupID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    APIKeyID:
+      name: apiKeyID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    CORSOriginID:
+      name: originID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    RoleShortName:
+      name: roleShortName
+      in: path
+      required: true
+      schema:
+        type: string
+    GroupIDFilter:
+      name: groupID
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    UserIDFilter:
+      name: userID
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    ApiKeyIDFilter:
+      name: apiKeyID
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    AssignableRoleFlag:
+      name: assignable
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: boolean
+    InviteID:
+      name: inviteID
+      in: path
+      required: true
+      schema:
+        format: uuid
+        type: string
+    WebhookID:
+      name: webhookID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+  schemas:
+    GasParams:
+      title: GasParams
+      description: Specify custom gas parameters
+      properties:
+        gasPrice:
+          description: Gas price to use for the cancel/resubmit.
+          type: string
+        gasFeeCap:
+          description: Gas fee cap to use for the EIP-1559 cancel/resubmit.
+          type: string
+        gasTipCap:
+          description: Gas priority fee cap to use for the EIP-1559 cancel/resubmit.
+          type: string
+        gas:
+          description: Gas limit to set for the cancel/resubmit.
+          type: integer
+          format: int64
+    Address:
+      title: Address
+      description: An address details.
+      allOf:
+        - $ref: "#/components/schemas/AddressAlias"
+        - type: object
+          properties:
+            balance:
+              type: string
+            chain:
+              type: string
+            modules:
+              type: array
+              items:
+                type: string
+            nonce:
+              type: integer
+              format: int64
+              description: The next transaction nonce for this address (obtained from the blockchain node).
+            localNonce:
+              type: integer
+              format: int64
+              description: The next transaction nonce for this address when using the nonce management feature.
+            codeAt:
+              type: string
+              format: byte
+            contracts:
+              type: array
+              items:
+                $ref: "#/components/schemas/ContractMetadata"
+            contractLookup:
+              type: array
+              items:
+                $ref: "#/components/schemas/ContractLookup"
+          required:
+            - chain
+            - modules
+            - contracts
+    AddressAlias:
+      title: AddressAlias
+      type: object
+      description: An address and it's alias.
+      properties:
+        alias:
+          $ref: "#/components/schemas/Alias"
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+      required:
+        - alias
+        - address
+    BaseAPIKey:
+      description: An API key.
+      properties:
+        label:
+          $ref: "#/components/schemas/Label"
+      required:
+        - label
+    APIKey:
+      description: An API key.
+      allOf:
+        - $ref: "#/components/schemas/BaseAPIKey"
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            createdAt:
+              type: string
+              format: date-time
+              description: The time the API key was created.
+            lastUsedAt:
+              type: string
+              format: date-time
+              description: The time the API key was last used.
+            createdBy:
+              type: integer
+              format: int64
+              description: The ID of the user that created the API key.
+            signature:
+              type: string
+              description: The signature of the API key.
+          required:
+            - id
+            - createdAt
+            - createdBy
+            - signature
+    APIKeyWithSecret:
+      description: A freshly created API key with its secret.
+      allOf:
+        - $ref: "#/components/schemas/APIKey"
+        - type: object
+          properties:
+            key:
+              type: string
+              description: The secret key of the API key.
+          required:
+            - key
+    AzureKeyName:
+      type: string
+      title: AzureKeyName
+      description: The name of the key.
+      pattern: ^[a-zA-Z0-9-]{1,127}$
+    AzureKeyVersion:
+      type: string
+      pattern: ^[a-zA-Z0-9]{32}$
+      description: The version of the key.
+    BaseAzureAccount:
+      title: BaseAzureAccount
+      type: object
+      description: An Azure account.
+      properties:
+        label:
+          $ref: "#/components/schemas/Label"
+        clientID:
+          type: string
+          description: The Application ID that will be accessing the Key Vault.
+        clientSecret:
+          type: string
+          description: The application’s secret key that you generate when you first register the application in Azure.
+        tenantID:
+          type: string
+          description: Also known as Directory ID.
+        subscriptionID:
+          type: string
+          description: The ID linked to your subscription to Azure services.
+        baseGroupName:
+          type: string
+          description: The Resource Group Name for the resource being accessed.
+      required:
+        - label
+        - clientID
+        - clientSecret
+        - tenantID
+        - subscriptionID
+        - baseGroupName
+    AzureAccount:
+      title: AzureAccount
+      type: object
+      description: An Azure account.
+      allOf:
+        - $ref: "#/components/schemas/BaseAzureAccount"
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+          required:
+            - id
+    AzureHardwareWallet:
+      title: AzureHardwareWallet
+      type: object
+      description: An HSM Wallet
+      properties:
+        id:
+          type: integer
+          format: int64
+        azureAccountID:
+          type: integer
+          format: int64
+        vaultName:
+          type: string
+          description: The name given to the vault your key is stored in.
+        keyName:
+          $ref: "#/components/schemas/AzureKeyName"
+        keyVersion:
+          $ref: "#/components/schemas/AzureKeyVersion"
+        publicAddress:
+          $ref: "#/components/schemas/ETHAddress"
+      required:
+        - id
+        - azureAccountID
+        - vaultName
+        - keyName
+        - keyVersion
+        - publicAddress
+    AzureHardwareWalletSlice:
+      title: AzureHardwareWalletSlice
+      type: array
+      description: An array of Azure Hardware Wallets.
+      items:
+        $ref: "#/components/schemas/AzureHardwareWallet"
+    AzureWallet:
+      title: AzureWallet
+      type: object
+      description: An HSM Wallet returned when a new key is created
+      properties:
+        keyName:
+          $ref: "#/components/schemas/AzureKeyName"
+        keyVersion:
+          $ref: "#/components/schemas/AzureKeyVersion"
+        publicAddress:
+          $ref: "#/components/schemas/ETHAddress"
+      required:
+        - keyName
+        - keyVersion
+        - publicAddress
+    StandaloneWallet:
+      title: StandaloneWallet
+      type: object
+      description: An object containing an HSM wallet's details.
+      properties:
+        clientID:
+          type: string
+          description: The Application ID that accesses the Key Vault.
+        baseGroupName:
+          type: string
+          description: The Resource Group Name for the resource being accessed.
+        vaultName:
+          type: string
+          description: The name given to the vault your key is stored in.
+        keyName:
+          $ref: "#/components/schemas/AzureKeyName"
+        keyVersion:
+          $ref: "#/components/schemas/AzureKeyVersion"
+        publicAddress:
+          $ref: "#/components/schemas/ETHAddress"
+      required:
+        - baseGroupName
+        - keyName
+        - publicAddress
+    Block:
+      title: Block
+      type: object
+      description: A block in the Ethereum blockchain.
+      properties:
+        hash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        difficulty:
+          type: string
+        gasLimit:
+          type: integer
+          format: int64
+          minimum: 0
+        number:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+        receiptsRoot:
+          $ref: "#/components/schemas/Keccak256Hash"
+        parentHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        sha3Uncles:
+          $ref: "#/components/schemas/Keccak256Hash"
+        miner:
+          $ref: "#/components/schemas/ETHAddress"
+        stateRoot:
+          $ref: "#/components/schemas/Keccak256Hash"
+        transactionsRoot:
+          $ref: "#/components/schemas/Keccak256Hash"
+        logsBloom:
+          $ref: "#/components/schemas/Hex"
+        gasUsed:
+          type: integer
+          minimum: 0
+        nonce:
+          $ref: "#/components/schemas/Hex"
+        mixHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        extraData:
+          type: string
+          format: byte
+        baseFeePerGas:
+          type: string
+      required:
+        - hash
+        - difficulty
+        - gasLimit
+        - number
+        - timestamp
+        - transactions
+        - receiptsRoot
+        - parentHash
+        - sha3Uncles
+        - miner
+        - stateRoot
+        - transactionsRoot
+        - logsBloom
+        - gasUsed
+        - nonce
+        - mixHash
+        - extraData
+    ChainName:
+      type: string
+      title: ChainName
+      description: A blockchain chain name.
+      enum:
+        - ethereum
+    ChainStatus:
+      title: ChainStatus
+      type: object
+      description: The status of the Chain
+      properties:
+        blockNumber:
+          type: integer
+          format: int64
+        version:
+          type: string
+          description: The client version for this chain node.
+        chainID:
+          type: integer
+          format: int64
+        networkID:
+          type: integer
+          format: int64
+        baseFee:
+          type: string
+          description: The current base fee (only available for chains that support EIP-1559).
+      required:
+        - blockNumber
+        - version
+        - chainID
+        - networkID
+    ContractInstance:
+      title: ContractInstance
+      type: object
+      description: A contract instance
+      properties:
+        alias:
+          type: string
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+      required:
+        - alias
+        - address
+    ContractMetadata:
+      title: ContractMetadata
+      type: object
+      properties:
+        label:
+          $ref: "#/components/schemas/Label"
+        name:
+          $ref: "#/components/schemas/ContractName"
+        version:
+          $ref: "#/components/schemas/ContractVersion"
+      required:
+        - label
+        - name
+        - version
+    ContractABIType:
+      title: ContractABIType
+      type: object
+      description: A contract function or event argument type.
+      properties:
+        type:
+          type: string
+        size:
+          type: integer
+          format: int64
+        tupleElems:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractABIType"
+        tupleRawNames:
+          type: array
+          items:
+            type: string
+        elem:
+          $ref: "#/components/schemas/ContractABIType"
+      required:
+        - type
+    ContractABIMethodArgument:
+      title: ContractABIMethodArgument
+      type: object
+      description: A contract function argument.
+      properties:
+        name:
+          type: string
+        type:
+          $ref: "#/components/schemas/ContractABIType"
+        typeName:
+          type: string
+        typeConversion:
+          $ref: "#/components/schemas/ContractABITypeConversion"
+        notes:
+          type: string
+      required:
+        - name
+        - type
+        - typeName
+        - typeConversion
+        - notes
+    ContractABIMethod:
+      title: ContractABIMethod
+      type:
+        - object
+        - "null"
+      description: A contract function.
+      properties:
+        id:
+          $ref: "#/components/schemas/Hex"
+        name:
+          type: string
+          description: Name of the function.
+        signature:
+          type: string
+          description: The function signature.
+        const:
+          type: boolean
+        payable:
+          type: boolean
+        inputs:
+          type: array
+          description: List of function arguments.
+          items:
+            $ref: "#/components/schemas/ContractABIMethodArgument"
+        outputs:
+          type: array
+          description: List of function outputs.
+          items:
+            $ref: "#/components/schemas/ContractABIMethodArgument"
+        author:
+          type: string
+        notes:
+          type: string
+        description:
+          type: string
+          description: The function description.
+      required:
+        - id
+        - name
+        - signature
+        - const
+        - payable
+        - inputs
+        - outputs
+        - author
+        - notes
+        - description
+    ContractMethodInformation:
+      title: ContractMethodInformation
+      type: object
+      description: The contract method's information returned within the event or transaction.
+      properties:
+        name:
+          type: string
+          description: The name of the method.
+        signature:
+          type: string
+          description: The method signature.
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/MethodArg"
+      required:
+        - name
+        - signature
+        - inputs
+    ContractABIEventArgument:
+      title: ContractABIEventArgument
+      type: object
+      description: A contract event argument.
+      properties:
+        name:
+          type: string
+        type:
+          $ref: "#/components/schemas/ContractABIType"
+        typeName:
+          type: string
+        indexed:
+          type: boolean
+        typeConversion:
+          $ref: "#/components/schemas/ContractABITypeConversion"
+        notes:
+          type: string
+          description: The developer documentation.
+      required:
+        - name
+        - type
+        - typeName
+        - indexed
+        - typeConversion
+        - notes
+    ContractABIEvent:
+      title: ContractABIEvent
+      type: object
+      description: A contract event.
+      properties:
+        id:
+          $ref: "#/components/schemas/Keccak256Hash"
+        name:
+          type: string
+        signature:
+          type: string
+        anonymous:
+          type: boolean
+        inputs:
+          type: array
+          description: List of contract event's input arguments.
+          items:
+            $ref: "#/components/schemas/ContractABIEventArgument"
+        notes:
+          type: string
+          description: The developer documentation.
+        description:
+          type: string
+          description: The user documentation.
+      required:
+        - id
+        - name
+        - anonymous
+        - signature
+        - inputs
+        - notes
+        - description
+    ContractABIErrorArgument:
+      title: ContractABIErrorArgument
+      type: object
+      description: A contract error argument.
+      properties:
+        name:
+          type: string
+        type:
+          $ref: "#/components/schemas/ContractABIType"
+        typeName:
+          type: string
+        indexed:
+          type: boolean
+        notes:
+          type: string
+          description: The developer documentation.
+      required:
+        - name
+        - type
+        - typeName
+        - indexed
+        - notes
+    ContractABIError:
+      title: ContractABIError
+      type: object
+      description: A contract error.
+      properties:
+        id:
+          $ref: "#/components/schemas/Keccak256Hash"
+        name:
+          type: string
+        signature:
+          type: string
+        inputs:
+          type: array
+          description: List of contract event's input arguments.
+          items:
+            $ref: "#/components/schemas/ContractABIErrorArgument"
+        notes:
+          type: string
+          description: The developer documentation.
+        description:
+          type: string
+          description: The user documentation.
+      required:
+        - id
+        - name
+        - signature
+        - inputs
+    ContractABI:
+      title: ContractABI
+      type: object
+      description: The contract ABI.
+      properties:
+        constructor:
+          $ref: "#/components/schemas/ContractABIMethod"
+        methods:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ContractABIMethod"
+        events:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ContractABIEvent"
+        errors:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ContractABIError"
+        fallback:
+          $ref: "#/components/schemas/ContractABIMethod"
+        receive:
+          $ref: "#/components/schemas/ContractABIMethod"
+      required:
+        - constructor
+        - methods
+        - events
+        - fallback
+        - receive
+    BaseContract:
+      title: BaseContract
+      type: object
+      description: A contract.
+      properties:
+        label:
+          $ref: "#/components/schemas/Label"
+        contractName:
+          $ref: "#/components/schemas/ContractName"
+        version:
+          $ref: "#/components/schemas/ContractVersion"
+        bin:
+          $ref: "#/components/schemas/ByteCode"
+        rawAbi:
+          type: string
+          description: The contract raw ABI JSON string.
+        userDoc:
+          type: string
+          description: The user documentation JSON string.
+        developerDoc:
+          type: string
+          description: The developer documentation JSON string.
+        metadata:
+          type: string
+          description: The contract metadata JSON string.
+        isFavorite:
+          type: boolean
+      required:
+        - label
+        - contractName
+        - version
+        - rawAbi
+    Contract:
+      title: Contract
+      description: A returned contract.
+      allOf:
+        - $ref: "#/components/schemas/BaseContract"
+        - type: object
+          properties:
+            abi:
+              $ref: "#/components/schemas/ContractABI"
+            instances:
+              type: array
+              description: List of the contract instances.
+              items:
+                $ref: "#/components/schemas/ContractInstance"
+          required:
+            - abi
+    ContractInformation:
+      title: ContractInformation
+      type: object
+      description: The contract information within the event or transaction.
+      properties:
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+        addressAlias:
+          $ref: "#/components/schemas/Alias"
+        name:
+          type: string
+          description: The name of the contract.
+        label:
+          $ref: "#/components/schemas/Label"
+      required:
+        - address
+        - addressAlias
+        - name
+        - label
+    ContractOverview:
+      title: ContractOverview
+      type: object
+      description: A contract overview.
+      properties:
+        label:
+          $ref: "#/components/schemas/Label"
+        contractName:
+          $ref: "#/components/schemas/ContractName"
+        version:
+          $ref: "#/components/schemas/ContractVersion"
+        isFavorite:
+          type: boolean
+        deployable:
+          type: boolean
+        instances:
+          type: array
+          description: List of contract instances.
+          items:
+            $ref: "#/components/schemas/ContractInstance"
+      required:
+        - label
+        - contractName
+        - version
+        - deployable
+        - instances
+    ContractLookup:
+      title: ContractLookup
+      type: object
+      description: The contract lookup item.
+      properties:
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+        name:
+          $ref: "#/components/schemas/ContractName"
+        abi:
+          type: string
+          description: The contract ABI JSON string.
+        bytecode:
+          $ref: "#/components/schemas/ByteCode"
+        source:
+          type: string
+          description: The contract's source code.
+        userdoc:
+          type: string
+          description: The user documentation JSON string.
+        devdoc:
+          type: string
+          description: The developer documentation JSON string.
+        verified:
+          type: boolean
+          description: Indicates whether the contract has been verified.
+        verifiedSource:
+          type: string
+          description: The name of the service that provided the contract verification.
+        verifiedLink:
+          type: string
+          format: uri
+          description: The URL to the contract's verification details on the verification service.
+        proxy:
+          type: boolean
+          description: Indicates whether the contract is a proxy contract.
+      required:
+        - address
+        - abi
+        - verified
+        - proxy
+    DeployContractTransaction:
+      title: DeployContractTransaction
+      description: The transaction returned when you deploy a contracts.
+      allOf:
+        - $ref: "#/components/schemas/TransactionToSign"
+        - type: object
+          properties:
+            deployAt:
+              type: string
+            label:
+              $ref: "#/components/schemas/Label"
+    EventMonitorStatus:
+      title: EventMonitorStatus
+      type: object
+      description: Status of an Event Monitor
+      properties:
+        contractId:
+          type: integer
+          format: int64
+        addressId:
+          type: integer
+          format: int64
+        isProcessingPastLogs:
+          type: boolean
+        idealBlockRange:
+          type: integer
+          format: int64
+        latestBlockNumber:
+          type: integer
+          format: int64
+        latestBlockHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        startBlockNumber:
+          type: integer
+          format: int64
+        startBlockHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        updatedAt:
+          type: string
+      required:
+        - isProcessingPastLogs
+        - latestBlockNumber
+        - latestBlockHash
+        - startBlockNumber
+        - startBlockHash
+        - updatedAt
+    HSMSignRequestPersonalSign:
+      title: HSMSignRequestPersonalSign
+      type: object
+      description: Request to sign a message using a cloud wallet.
+      properties:
+        method:
+          type: string
+          description: The signing method to use.
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+        data:
+          $ref: "#/components/schemas/Hex"
+        chainId:
+          oneOf:
+            - type: integer
+              format: int64
+            - $ref: "#/components/schemas/Hex"
+          description: Optionally lock the message to a specific chain by encoding the chain ID in the signature per EIP-155.
+      required:
+        - method
+        - address
+        - data
+    HSMSignRequestTypedData:
+      title: HSMSignRequestTypedData
+      type: object
+      description: Request to sign typed data using a cloud wallet.
+      properties:
+        method:
+          type: string
+          description: The signing method to use.
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+        data:
+          $ref: "#/components/schemas/EIP712TypedData"
+      required:
+        - method
+        - address
+        - data
+    HSMSignRequest:
+      oneOf:
+        - $ref: "#/components/schemas/HSMSignRequestPersonalSign"
+        - $ref: "#/components/schemas/HSMSignRequestTypedData"
+      discriminator:
+        propertyName: method
+        mapping:
+          personal_sign: "#/components/schemas/HSMSignRequestPersonalSign"
+          eth_signTypedData_v4: "#/components/schemas/HSMSignRequestTypedData"
+    HSMSignResponse:
+      title: HSMSignResponse
+      type: object
+      description: Response body representing a sign-data response.
+      properties:
+        publicKey:
+          type: string
+        signature:
+          type: string
+      required:
+        - publicKey
+        - signature
+    Event:
+      title: Event
+      type: object
+      description: An event returned by the API call.
+      properties:
+        triggeredAt:
+          type: string
+          format: date-time
+          description: The time at which the event was triggered.
+        event:
+          $ref: "#/components/schemas/EventInformation"
+        transaction:
+          $ref: "#/components/schemas/TransactionInformation"
+      required:
+        - triggeredAt
+        - event
+        - transaction
+    EventInformation:
+      title: EventInformation
+      type: object
+      description: The event information returned as part of an event.
+      properties:
+        name:
+          type: string
+          description: The name of the event.
+        signature:
+          type: string
+          description: The event signature.
+        inputs:
+          type: array
+          description: The list of input arguments for the event.
+          items:
+            $ref: "#/components/schemas/EventField"
+        rawFields:
+          type: string
+          description: The raw output from an event. Omitted when returned as part of a transaction receipt.
+        contract:
+          $ref: "#/components/schemas/ContractInformation"
+        indexInLog:
+          type: integer
+          format: int64
+          description: The event's index in the log.
+      required:
+        - name
+        - signature
+        - inputs
+        - contract
+        - indexInLog
+    EventField:
+      title: EventField
+      type: object
+      description: Holds a field in the event's data.
+      properties:
+        name:
+          type: string
+          description: The input name.
+        value:
+          description: The input value.
+        hashed:
+          type: boolean
+          description: Has the value been hashed into a keccak256 string?
+        type:
+          type: string
+          description: The type of the argument.
+      required:
+        - name
+        - value
+        - hashed
+        - type
+    MethodArg:
+      title: MethodArg
+      type: object
+      description: An argument passed to a method call.
+      properties:
+        name:
+          type: string
+          description: The input name.
+        value:
+          description: The input value.
+        type:
+          type: string
+          description: The type of the argument.
+      required:
+        - name
+        - value
+        - type
+    HSMData:
+      title: HSMData
+      type: object
+      description: Response body for returning HSM Data.
+      properties:
+        configuration:
+          $ref: "#/components/schemas/AzureAccount"
+        wallets:
+          $ref: "#/components/schemas/AzureHardwareWalletSlice"
+      required:
+        - configuration
+        - wallets
+    AddKey:
+      title: AddKey
+      type: object
+      description: Add key request data.
+      properties:
+        clientID:
+          type: string
+          description: The Application ID that will be accessing the Key Vault.
+        keyName:
+          $ref: "#/components/schemas/AzureKeyName"
+        keyVersion:
+          $ref: "#/components/schemas/AzureKeyVersion"
+        vaultName:
+          type: string
+          description: The name given to the vault your key is stored in.
+      required:
+        - clientID
+        - keyName
+        - keyVersion
+        - vaultName
+    CreateKey:
+      title: CreateKey
+      type: object
+      description: Create Key request data.
+      properties:
+        clientID:
+          type: string
+          description: The Application ID that will be accessing the Key Vault.
+        keyName:
+          $ref: "#/components/schemas/AzureKeyName"
+        vaultName:
+          type: string
+          description: The name given to the vault your key is stored in.
+        useHardwareModule:
+          type: boolean
+      required:
+        - clientID
+        - keyName
+        - vaultName
+        - useHardwareModule
+    ContractABITypeConversion:
+      title: ContractABITypeConversion
+      type:
+        - object
+        - "null"
+      description: Holds JSON-compatible type conversion information.
+      properties:
+        mode:
+          type: string
+        decimalsAbsolute:
+          type:
+            - integer
+            - "null"
+          format: int64
+        decimalsFunction:
+          type:
+            - string
+            - "null"
+      required:
+        - mode
+        - decimalsAbsolute
+        - decimalsFunction
+    ContractParameter:
+      title: ContractParameter
+      type: object
+      description: Type conversion options for an input or an output of a function or an event.
+      properties:
+        typeConversion:
+          $ref: "#/components/schemas/ContractABITypeConversion"
+      required:
+        - typeConversion
+    ContractEventOptions:
+      title: ContractEventOptions
+      type: object
+      description: Type conversion options for an event.
+      properties:
+        signature:
+          type: string
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractParameter"
+      required:
+        - inputs
+    ContractMethodOptions:
+      title: ContractMethodOptions
+      type: object
+      description: Type conversion options for a function.
+      properties:
+        signature:
+          type: string
+          description: The function signature.
+        inputs:
+          type: array
+          description: List of function input parameters.
+          items:
+            $ref: "#/components/schemas/ContractParameter"
+        outputs:
+          type: array
+          description: List of function output parameters.
+          items:
+            $ref: "#/components/schemas/ContractParameter"
+      required:
+        - inputs
+    Log:
+      title: Log
+      type: object
+      description: A contract log event.
+      properties:
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+        topics:
+          type: array
+          description: A list of topics provided by the contract.
+          items:
+            $ref: "#/components/schemas/Keccak256Hash"
+        data:
+          $ref: "#/components/schemas/Hex"
+        blockNumber:
+          $ref: "#/components/schemas/Hex"
+        transactionHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        transactionIndex:
+          $ref: "#/components/schemas/Hex"
+        blockHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        logIndex:
+          $ref: "#/components/schemas/Hex"
+        removed:
+          type: boolean
+          description: True if this log was reverted due to a chain reorganization.
+      required:
+        - address
+        - topics
+        - data
+        - blockNumber
+        - transactionHash
+        - transactionIndex
+        - blockHash
+        - logIndex
+        - removed
+    TypeConversionOptions:
+      title: TypeConversionOptions
+      type: object
+      description: Represents the set of type conversions allowed for a particular input or output of a function (how it may be "cast").
+      properties:
+        types:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+    EventTypeConversionOptions:
+      title: EventTypeConversionOptions
+      type: object
+      description: Type conversion options for each of the inputs of an event.
+      properties:
+        inputs:
+          type: array
+          description: List of event's input parameters.
+          items:
+            $ref: "#/components/schemas/TypeConversionOptions"
+      required:
+        - inputs
+    MethodTypeConversionOptions:
+      title: MethodTypeConversionOptions
+      type: object
+      description: Type conversion options for each of the inputs and outputs of a function.
+      properties:
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/TypeConversionOptions"
+        outputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/TypeConversionOptions"
+      required:
+        - inputs
+        - outputs
+    PostMethodArgs:
+      title: PostMethodArgs
+      type: object
+      description: Arguments to be passed into a contract function.
+      properties:
+        signature:
+          type: string
+        args:
+          type: array
+          description: List of the function arguments.
+          items: {}
+        from:
+          $ref: "#/components/schemas/ETHAddress"
+        nonce:
+          description: Nonce to use for the transaction execution.
+          type: integer
+          format: int64
+        gasPrice:
+          description: Gas price to use for the transaction execution.
+          type: integer
+          format: int64
+        gasFeeCap:
+          description: Gas fee cap to use for the 1559 transaction execution.
+          type: integer
+          format: int64
+        gasTipCap:
+          description: Gas priority fee cap to use for the 1559 transaction execution.
+          type: integer
+          format: int64
+        gas:
+          description: Gas limit to set for the transaction execution.
+          type: integer
+          format: int64
+        to:
+          $ref: "#/components/schemas/ETHAddress"
+        value:
+          description: Amount (in wei) to send with the transaction.
+          type: string
+        signAndSubmit:
+          description: If the `from` address is an HSM address and this flag is set to `true`, the transaction will be automatically signed and submitted to the blockchain.
+          type: boolean
+          default: false
+        nonceManagement:
+          description: If the `from` address is an HSM address and this flag is set to `true`, MultiBaas will keep track of the nonce and set it accordingly. This is particularly useful when submitting multiple transactions concurrently or in a very short period of time. If this flag is set to `true` and a `nonce` is provided, it will reset the nonce tracker to the given nonce (useful if the nonce tracker is out of sync).
+          type: boolean
+          default: false
+        preEIP1559:
+          description: If set to `true`, forces a legacy type transaction. Otherwise an EIP-1559 transaction will created if the network supports it.
+          type: boolean
+          default: false
+        signer:
+          $ref: "#/components/schemas/ETHAddress"
+        formatInts:
+          description: |
+            Mode to format integer outputs in the function call's responses. There are 3 possible modes:
+              - `auto` (the default option), where number format is decided by its type:
+                - If the type has size at most 32 bits, then the number is returned verbatim.
+                - If the type has size larger than 32 bits, then the number is returned as a string.
+              - `as_numbers`, where all numbers are returned verbatim.
+              - `as_strings`, where all numbers are returned as strings.
+          type: string
+          default: auto
+        timestamp:
+          type: string
+          description: Call the function at a specific timestamp. Only available for read functions calls and if the `historical_blocks_feature` is enabled (see the plan endpoint). Mutually exclusive with the `blockNumber` parameter.
+        blockNumber:
+          type: string
+          description: Call the function at a specific block. Only available for read functions calls and if the `historical_blocks_feature` is enabled (see the plan endpoint). Mutually exclusive with the `timestamp` parameter.
+        contractOverride:
+          type: boolean
+          description: If set to true the given address and contract don't need to be linked for the function to be called.
+        preview:
+          $ref: "#/components/schemas/PreviewArgs"
+    PreviewArgs:
+      title: PreviewArgs
+      type: object
+      description: Ephemeral configuration for previewing the effect of a Type Conversion on a contract function call.
+      properties:
+        inputsOnly:
+          type: boolean
+          description: Only preview the effect of a Type Conversion on the inputs. Only applicable for write function calls, where the output is an unsigned transaction.
+        inputs:
+          type: array
+          description: Type Conversion information for the function inputs. The number of inputs must match that of the actual function inputs. The parameter is a contract function argument where only the type conversion information is used.
+          items:
+            $ref: "#/components/schemas/ContractABIMethodArgument"
+        outputs:
+          type: array
+          description: Type Conversion information for the function outputs. The number of outputs must match that of the actual function outputs. The parameter is a contract function argument where only the type conversion information is used.
+          items:
+            $ref: "#/components/schemas/ContractABIMethodArgument"
+      required:
+        - inputsOnly
+        - inputs
+        - outputs
+    Transaction:
+      title: Transaction
+      type: object
+      description: A transaction from the Ethereum Blockchain.
+      properties:
+        type:
+          $ref: "#/components/schemas/Hex"
+        chainId:
+          $ref: "#/components/schemas/HexOrNull"
+        nonce:
+          $ref: "#/components/schemas/Hex"
+        to:
+          $ref: "#/components/schemas/ETHAddressOrNull"
+        gas:
+          $ref: "#/components/schemas/Hex"
+        gasPrice:
+          $ref: "#/components/schemas/HexOrNull"
+        maxPriorityFeePerGas:
+          $ref: "#/components/schemas/HexOrNull"
+        maxFeePerGas:
+          $ref: "#/components/schemas/HexOrNull"
+        maxFeePerBlobGas:
+          $ref: "#/components/schemas/HexOrNull"
+        value:
+          $ref: "#/components/schemas/HexOrNull"
+        input:
+          $ref: "#/components/schemas/Hex"
+        accessList:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/AccessTuple"
+        blobVersionedHashes:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/Keccak256Hash"
+        authorizationList:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/SetCodeAuthorization"
+        v:
+          $ref: "#/components/schemas/Hex"
+        r:
+          $ref: "#/components/schemas/Hex"
+        s:
+          $ref: "#/components/schemas/Hex"
+        yParity:
+          $ref: "#/components/schemas/HexOrNull"
+        blobs:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/Blob"
+        commitments:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/Commitment"
+        proofs:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/Proof"
+        hash:
+          $ref: "#/components/schemas/Keccak256Hash"
+      required:
+        - type
+        - nonce
+        - gas
+        - to
+        - value
+        - input
+        - v
+        - r
+        - s
+        - hash
+    SetCodeAuthorization:
+      title: SetCodeAuthorization
+      type: object
+      description: Authorization data for setCode operations.
+      properties:
+        chainId:
+          $ref: "#/components/schemas/Hex"
+        address:
+          $ref: "#/components/schemas/ETHAddress"
+        nonce:
+          $ref: "#/components/schemas/Hex"
+        yParity:
+          $ref: "#/components/schemas/Hex"
+        r:
+          $ref: "#/components/schemas/Hex"
+        s:
+          $ref: "#/components/schemas/Hex"
+      required:
+        - chainId
+        - address
+        - nonce
+        - yParity
+        - r
+        - s
+    AccessTuple:
+      title: AccessTuple
+      type: object
+      description: An access tuple representing an address and its storage keys.
+      properties:
+        address:
+          $ref: "#/components/schemas/ETHAddressOrNull"
+        storageKeys:
+          type: array
+          items:
+            $ref: "#/components/schemas/Keccak256Hash"
+      required:
+        - address
+        - storageKeys
+    Blob:
+      title: Blob
+      type: string
+      description: A 4844 data blob (131072 bytes) encoded as a hex string.
+      pattern: "^0x[0-9a-fA-F]{262144}$"
+    Commitment:
+      title: Commitment
+      type: string
+      description: A serialized polynomial commitment (48 bytes) encoded as a hex string.
+      pattern: "^0x[0-9a-fA-F]{96}$"
+    Proof:
+      title: Proof
+      type: string
+      description: A serialized proof of the quotient polynomial (48 bytes) encoded as a hex string.
+      pattern: "^0x[0-9a-fA-F]{96}$"
+    SignedTransactionSubmission:
+      title: SignedTransactionSubmission
+      type: object
+      description: The object used to receive a pre-signed raw transaction.
+      properties:
+        signedTx:
+          type: string
+          description: The pre-signed raw transaction.
+      required:
+        - signedTx
+    SignedTransactionResponse:
+      title: SignedTransactionResponse
+      description: A transaction that was signed externally and submitted.
+      properties:
+        tx:
+          $ref: "#/components/schemas/Transaction"
+      required:
+        - tx
+    SetNonceRequest:
+      title: SetNonceRequest
+      type: object
+      description: Request body representing a set local nonce request.
+      properties:
+        nonce:
+          type: integer
+          format: int64
+          description: If nonce is specified the provided value is set, otherwise the value is read from the blockchain.
+    TransactionData:
+      title: TransactionData
+      type: object
+      description: The transaction data returned from a call to get transaction by hash.
+      properties:
+        data:
+          $ref: "#/components/schemas/Transaction"
+        isPending:
+          description: Whether the transaction has been included yet.
+          type: boolean
+        from:
+          $ref: "#/components/schemas/ETHAddress"
+          description: The address of the transaction signer.
+        blockHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        blockNumber:
+          type: string
+          description: The transaction block number.
+        contract:
+          $ref: "#/components/schemas/ContractInformation"
+        method:
+          $ref: "#/components/schemas/ContractMethodInformation"
+      required:
+        - data
+        - from
+        - isPending
+    TransactionInformation:
+      title: TransactionInformation
+      type: object
+      description: The transaction information returned as part of an event.
+      properties:
+        from:
+          $ref: "#/components/schemas/ETHAddress"
+        txData:
+          $ref: "#/components/schemas/Hex"
+        txHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        txIndexInBlock:
+          type: integer
+          format: int64
+          description: The location of the transaction in the block.
+        blockHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+        blockNumber:
+          type: integer
+          format: int64
+          description: The transaction block number.
+        contract:
+          $ref: "#/components/schemas/ContractInformation"
+        method:
+          $ref: "#/components/schemas/ContractMethodInformation"
+      required:
+        - from
+        - txData
+        - txHash
+        - txIndexInBlock
+        - blockHash
+        - blockNumber
+        - contract
+        - method
+    TransactionReceipt:
+      title: TransactionReceipt
+      type: object
+      description: Record of the transaction's outcome.
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              $ref: "#/components/schemas/Hex"
+            root:
+              $ref: "#/components/schemas/Hex"
+            status:
+              $ref: "#/components/schemas/Hex"
+            cumulativeGasUsed:
+              $ref: "#/components/schemas/Hex"
+            logsBloom:
+              $ref: "#/components/schemas/Hex"
+            logs:
+              type: array
+              items:
+                $ref: "#/components/schemas/Log"
+            transactionHash:
+              $ref: "#/components/schemas/Keccak256Hash"
+            contractAddress:
+              $ref: "#/components/schemas/ETHAddress"
+            gasUsed:
+              $ref: "#/components/schemas/Hex"
+            effectiveGasPrice:
+              $ref: "#/components/schemas/Hex"
+            blockNumber:
+              $ref: "#/components/schemas/Hex"
+            transactionIndex:
+              $ref: "#/components/schemas/Hex"
+            blockHash:
+              $ref: "#/components/schemas/Keccak256Hash"
+          required:
+            - root
+            - status
+            - cumulativeGasUsed
+            - logsBloom
+            - logs
+            - transactionHash
+            - contractAddress
+            - gasUsed
+            - effectiveGasPrice
+            - blockNumber
+            - transactionIndex
+            - blockHash
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventInformation"
+      required:
+        - data
+    CORSOrigin:
+      title: CORSOrigin
+      type: object
+      description: CORS Origin
+      properties:
+        id:
+          type: integer
+          format: int64
+        origin:
+          description: The CORS Origin
+          type: string
+    CloudWalletTXToSign:
+      title: CloudWalletTXToSign
+      type: object
+      description: A Cloud Wallet transaction to be signed.
+      properties:
+        tx:
+          type: object
+          description: An Ethereum transaction.
+          properties:
+            nonce:
+              description: Sender account nonce of the transaction
+              type: integer
+              format: int64
+            gasPrice:
+              description: Gas price of the transaction
+              type: string
+            gasFeeCap:
+              description: Fee cap per gas of the transaction
+              type: string
+            gasTipCap:
+              description: GasTipCap per gas of the transaction
+              type: string
+            gas:
+              description: Gas limit of the transaction
+              type: integer
+              format: int64
+            from:
+              $ref: "#/components/schemas/ETHAddress"
+            to:
+              $ref: "#/components/schemas/ETHAddressOrNull"
+            value:
+              description: Amount (in wei) to send with the transaction.
+              type: string
+            data:
+              $ref: "#/components/schemas/Hex"
+            hash:
+              $ref: "#/components/schemas/Keccak256Hash"
+            type:
+              description: Transaction type
+              type: integer
+              format: int64
+          required:
+            - gas
+            - from
+            - value
+            - data
+            - type
+      required:
+        - tx
+    PostMethodResponse:
+      title: PostMethodResponse
+      type: object
+      properties:
+        kind:
+          type: string
+          description: The response object type (discriminator).
+      required:
+        - kind
+      discriminator:
+        propertyName: kind
+        mapping:
+          TransactionToSignResponse: "#/components/schemas/TransactionToSignResponse"
+          MethodCallResponse: "#/components/schemas/MethodCallResponse"
+          MethodCallPreviewResponse: "#/components/schemas/MethodCallPreviewResponse"
+    TransactionToSignResponse:
+      title: TransactionToSignResponse
+      allOf:
+        - $ref: "#/components/schemas/PostMethodResponse"
+        - $ref: "#/components/schemas/TransactionToSign"
+    TransactionToSign:
+      title: TransactionToSign
+      description: A transaction to be signed.
+      type: object
+      properties:
+        tx:
+          type: object
+          description: An Ethereum transaction.
+          properties:
+            nonce:
+              description: Sender account nonce of the transaction
+              type: integer
+              format: int64
+            gasPrice:
+              description: Gas price of the transaction
+              type: string
+            gasFeeCap:
+              description: Fee cap per gas of the transaction
+              type: string
+            gasTipCap:
+              description: GasTipCap per gas of the transaction
+              type: string
+            gas:
+              description: Gas limit of the transaction
+              type: integer
+              format: int64
+            from:
+              $ref: "#/components/schemas/ETHAddress"
+            to:
+              $ref: "#/components/schemas/ETHAddressOrNull"
+            value:
+              description: Amount (in wei) to send with the transaction.
+              type: string
+            data:
+              $ref: "#/components/schemas/Hex"
+            hash:
+              $ref: "#/components/schemas/Keccak256Hash"
+            type:
+              description: Transaction type
+              type: integer
+              format: int64
+          required:
+            - gas
+            - from
+            - value
+            - data
+            - type
+            - nonce
+        submitted:
+          type: boolean
+      required:
+        - tx
+        - submitted
+    MethodCallResponse:
+      title: MethodCallResponse
+      description: The result of a function call.
+      allOf:
+        - $ref: "#/components/schemas/PostMethodResponse"
+        - type: object
+          properties:
+            output:
+              description: The function call output.
+          required:
+            - output
+    MethodCallPreviewResponse:
+      title: MethodCallPreviewResponse
+      description: The result of a preview function arguments call.
+      allOf:
+        - $ref: "#/components/schemas/PostMethodResponse"
+        - type: object
+          properties:
+            input:
+              type: array
+              items: {}
+              description: The function call inputs.
+            output:
+              description: The function call output.
+          required:
+            - output
+            - input
+    FieldType:
+      title: FieldType
+      type: string
+      description: The field type in a select or filter.
+      enum:
+        - input
+        - contract_label
+        - contract_name
+        - contract_address
+        - contract_address_alias
+        - block_number
+        - triggered_at
+        - event_signature
+        - block_hash
+        - tx_hash
+        - tx_from
+    EventQueryField:
+      title: EventQueryField
+      type: object
+      description: A single event field's query information.
+      properties:
+        type:
+          $ref: "#/components/schemas/FieldType"
+        name:
+          type: string
+          description: The field name. Either `name` or `inputIndex` is required if `fieldType == "input"`.
+        inputIndex:
+          type:
+            - integer
+            - "null"
+          format: int64
+          description: The field's index, can be used in place of `name`.
+        alias:
+          type: string
+          description: The name that will be used to return the field.
+        aggregator:
+          type:
+            - string
+            - "null"
+          description: The type of aggregation to perform on the field.
+          enum:
+            - add
+            - subtract
+            - last
+            - first
+            - min
+            - max
+            - null
+      required:
+        - type
+    EventQueryFilter:
+      title: EventQueryFilter
+      type: object
+      description: A event query filter.
+      properties:
+        rule:
+          type: string
+          description: The rule type, can be omitted if this is the last filter to be applied.
+          enum:
+            - and
+            - or
+        fieldType:
+          $ref: "#/components/schemas/FieldType"
+        inputIndex:
+          type:
+            - integer
+            - "null"
+          format: int64
+          description: The field's index, can be used in place of `name`.
+        operator:
+          type: string
+          description: The operator on the filter.
+          enum:
+            - equal
+            - notequal
+            - lessthan
+            - greaterthan
+            - lessthanorequal
+            - greaterthanorequal
+        value:
+          type: string
+          description: The value to be compared with.
+        children:
+          type: array
+          description: Other filters to be applied in succession with the rule specified.
+          items:
+            $ref: "#/components/schemas/EventQueryFilter"
+    EventQueryEvent:
+      title: EventQueryEvent
+      type: object
+      description: A query on a single event.
+      properties:
+        eventName:
+          type: string
+          description: The name of an event.
+        select:
+          type: array
+          description: The query information about all the fields to select from an event.
+          items:
+            $ref: "#/components/schemas/EventQueryField"
+        filter:
+          $ref: "#/components/schemas/EventQueryFilter"
+      required:
+        - eventName
+        - select
+    EventQuery:
+      title: EventQuery
+      type: object
+      description: An event query.
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventQueryEvent"
+        groupBy:
+          type: string
+          description: The results will be grouped according to this field. An aggregator for non Group By fields must be specified if groupBy is specified.
+        orderBy:
+          type: string
+          description: The results will be ordered according to this field.
+        order:
+          type: string
+          description: Specify ascending or descending order, the default is "ASC".
+          enum:
+            - ASC
+            - DESC
+      required:
+        - events
+    SavedEventQuery:
+      title: SavedEventQuery
+      type: object
+      description: A saved event query.
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          $ref: "#/components/schemas/EventQueryLabel"
+        query:
+          $ref: "#/components/schemas/EventQuery"
+        isSystem:
+          type: boolean
+          description: Specifies if this a system-generated query which is not modifiable by the user.
+      required:
+        - id
+        - label
+        - query
+        - isSystem
+    EventQueryResults:
+      title: EventQueryResults
+      type: object
+      description: Results of an executed event query.
+      properties:
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+      required:
+        - rows
+    WalletTransaction:
+      title: WalletTransaction
+      type: object
+      properties:
+        tx:
+          $ref: "#/components/schemas/Transaction"
+        status:
+          $ref: "#/components/schemas/TransactionStatus"
+        from:
+          $ref: "#/components/schemas/ETHAddress"
+        resubmissionAttempts:
+          type: integer
+          format: int64
+          description: The total number of resubmission attempts.
+        successfulResubmissions:
+          type: integer
+          format: int64
+          description: The total number of successful resubmission (added into the transaction pool).
+        createdAt:
+          type: string
+          format: date-time
+          description: The time the transaction was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The time the transaction was last updated.
+        failed:
+          type: boolean
+          description: Whether the transaction failed when it was included in a block.
+        blockNumber:
+          type: integer
+          format: int64
+          description: The block number that the transaction was included in.
+        blockHash:
+          $ref: "#/components/schemas/Keccak256Hash"
+      required:
+        - tx
+        - status
+        - from
+        - resubmissionAttempts
+        - successfulResubmissions
+        - createdAt
+        - updatedAt
+    BaseWebhookEndpoint:
+      title: BaseWebhookEndpoint
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL to send the webhook to.
+        label:
+          $ref: "#/components/schemas/Label"
+        subscriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/WebhookEventsType"
+          description: The events to subscribe to.
+      required:
+        - url
+        - label
+        - subscriptions
+    WebhookEndpoint:
+      title: WebhookEndpoint
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEndpoint"
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            nextAttempt:
+              type: string
+              format: date-time
+              description: The time the next attempt will be made.
+            lastAttempt:
+              type: string
+              format: date-time
+              description: The time the last attempt was made.
+            failedCalls:
+              type: integer
+              format: int64
+              description: The number of failed webhook endpoint calls since the last successful call.
+            lastError:
+              type: string
+              description: The last error received from the webhook endpoint.
+            createdAt:
+              type: string
+              format: date-time
+              description: The time the webhook was created.
+            updatedAt:
+              type: string
+              format: date-time
+              description: The time the webhook was last updated.
+            secret:
+              type: string
+              description: The secret key used to sign the webhook.
+          required:
+            - id
+            - failedCalls
+            - createdAt
+            - updatedAt
+            - secret
+    WebhookEvent:
+      title: WebhookEvent
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of the webhook event.
+        eventType:
+          $ref: "#/components/schemas/WebhookEventsType"
+        data:
+          type: object
+          description: The data associated with the event.
+        createdAt:
+          type: string
+          format: date-time
+          description: The time the webhook event was created.
+        deliveredAt:
+          type: string
+          format: date-time
+          description: The time the webhook event was last updated.
+      required:
+        - id
+        - eventType
+        - data
+        - createdAt
+    WebhookEventsType:
+      title: WebhookEventsType
+      type: string
+      description: The type of the webhook event.
+      enum:
+        - "transaction.included"
+        - "event.emitted"
+    BaseResponse:
+      type: object
+      description: Standard response.
+      properties:
+        status:
+          type: integer
+          format: int64
+          description: The status code.
+        message:
+          type: string
+          description: The human-readable status message.
+      required:
+        - status
+        - message
+    Error:
+      type: object
+      x-tags:
+        - error
+      example:
+        status: 404
+        message: Blockchain Not Found
+      description: An error response.
+      additionalProperties: false
+      properties:
+        status:
+          type: integer
+          format: int64
+          description: The unique error code.
+        message:
+          type: string
+          description: The human-readable error message.
+      required:
+        - status
+        - message
+    ETHAddress:
+      type: string
+      title: ETHAddress
+      description: An ethereum address.
+      pattern: "^0[xX][a-fA-F0-9]{40}$"
+    ETHAddressOrNull:
+      type:
+        - string
+        - "null"
+      title: ETHAddressOrNull
+      description: An ethereum address.
+      pattern: "^0[xX][a-fA-F0-9]{40}$"
+    ByteCode:
+      type: string
+      title: Hex
+      description: The smart-contract bytecode.
+      pattern: "^(0x[0-9a-f]*|0X[0-9A-F]*)$"
+    Hex:
+      type: string
+      title: Hex
+      description: A hex string.
+      pattern: "^(0x[0-9a-f]*|0X[0-9A-F]*)$"
+    HexOrNull:
+      type:
+        - string
+        - "null"
+      title: HexOrNull
+      description: A hex string or null.
+      pattern: "^(0x[0-9a-f]*|0X[0-9A-F]*)$"
+    Keccak256Hash:
+      type: string
+      title: Keccak256Hash
+      description: The keccak256 hash as a hex string of 256 bits.
+      minLength: 66
+      maxLength: 66
+      pattern: "^(0x[0-9a-f]{64}|0X[0-9A-F]{64})$"
+    Alias:
+      type: string
+      title: Alias
+      description: An alias to easily identify and reference addresses.
+      pattern: "^[a-z0-9_-]+$"
+    Label:
+      type: string
+      title: Label
+      description: An alias to easily identify and reference the entity in subsequent requests.
+      pattern: "^[a-z0-9_-]+$"
+    EventQueryLabel:
+      type: string
+      title: EventQueryLabel
+      pattern: '^[^<>?&\"''\`\/\\]*$'
+      description: An event query label.
+    ContractVersion:
+      type: string
+      title: ContractVersion
+      pattern: '^[^"#$%&''''()*+,/:;<>?[\\\]^\x60{}~]*$'
+      description: The contract version.
+    ContractName:
+      type: string
+      title: ContractName
+      description: The name of the contract.
+      pattern: '^[^"#$%&''''()*+,/:;<>?[\\\]^\x60{}~]*$'
+    PaginationLimit:
+      title: PaginationLimit
+      type: integer
+      format: int64
+      description: Specify the number of records that should be returned.
+      default: 10
+    PaginationOffset:
+      title: PaginationOffset
+      type: integer
+      format: int64
+      description: Specify the number of records that need to be skipped.
+    TransactionStatus:
+      title: TransactionStatus
+      type: string
+      description: The status of a TXM transaction.
+      enum:
+        - pending
+        - included
+        - replaced
+        - cancelled
+        - rejected
+        - exceeded retry limit
+    BaseUser:
+      title: BaseUser
+      type: object
+      description: A user.
+      properties:
+        email:
+          type: string
+          format: email
+          description: The user's email address.
+        name:
+          type: string
+          description: The user's name.
+      required:
+        - email
+        - name
+    User:
+      title: User
+      description: A user.
+      allOf:
+        - $ref: "#/components/schemas/BaseUser"
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              description: The user ID.
+          required:
+            - id
+            - name
+    Invite:
+      title: Invite
+      type: object
+      description: An invite with groups.
+      allOf:
+        - properties:
+            email:
+              type: string
+              format: email
+              description: The invitee's email address.
+            groupIDs:
+              type: array
+              items:
+                type: integer
+                format: int64
+                description: The group IDs to add the invited user to.
+          required:
+            - email
+    SignerWallet:
+      title: Signer Wallet
+      description: A signer wallet.
+      properties:
+        type:
+          type: string
+          description: The type of the signer.
+          enum:
+            - web3
+            - cloud
+            - multisig
+            - safe
+        wallet:
+          $ref: "#/components/schemas/ETHAddress"
+        signer:
+          $ref: "#/components/schemas/ETHAddress"
+        label:
+          type: string
+          description: The label of the signer.
+      required:
+        - type
+        - wallet
+        - signer
+        - label
+    SignerLabel:
+      title: Signer Label
+      description: A signer label.
+      properties:
+        label:
+          type: string
+          description: The label of the signer.
+      required:
+        - label
+    Group:
+      title: Group
+      type: object
+      description: A group.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The group ID.
+        name:
+          type: string
+          description: The group name.
+        shortName:
+          type: string
+          description: The group short name.
+        description:
+          type: string
+          description: The group description.
+        roles:
+          type: array
+          description: The group roles.
+          items:
+            $ref: "#/components/schemas/Role"
+      required:
+        - id
+        - name
+        - shortName
+        - description
+        - roles
+    Role:
+      title: Role
+      type: object
+      description: A role.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The role ID.
+        name:
+          type: string
+          description: The role name.
+        shortName:
+          type: string
+          description: The role short name.
+        description:
+          type: string
+          description: The role description.
+      required:
+        - id
+        - name
+        - shortName
+        - description
+    AuditLog:
+      title: AuditLog
+      type: object
+      description: An audit log entry.
+      properties:
+        actionByID:
+          type: integer
+          format: int64
+          description: The ID of the user who performed the action.
+        actionOnID:
+          type: integer
+          format: int64
+          description: The ID of the user who was acted upon.
+        actionByUserEmail:
+          type: string
+          format: email
+          description: The email of the user who performed the action.
+        actionOnUserEmail:
+          type: string
+          format: email
+          description: The email of the user who was acted upon.
+        type:
+          type: string
+          description: The type of action that was performed.
+        createdAt:
+          type: string
+          format: date-time
+          description: The time the action was performed.
+        activityData:
+          type: object
+          description: The data associated with the action.
+      required:
+        - actionByID
+        - actionByUserEmail
+        - type
+        - createdAt
+        - activityData
+    EIP712TypeEntry:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+      required:
+        - name
+        - type
+    EIP712Types:
+      type: object
+      description: A mapping of type names to arrays of fields.
+      properties:
+        EIP712Domain:
+          type: array
+          items:
+            $ref: "#/components/schemas/EIP712TypeEntry"
+      additionalProperties:
+        type: array
+        items:
+          $ref: "#/components/schemas/EIP712TypeEntry"
+      required:
+        - EIP712Domain
+    EIP712Domain:
+      type: object
+      description: The domain fields for EIP-712. All fields are optional per the specification.
+      properties:
+        name:
+          type: string
+          description: Human-readable name of the signing domain.
+        version:
+          type: string
+          description: Current major version of the signing domain.
+        chainId:
+          oneOf:
+            - type: integer
+              format: int64
+            - $ref: "#/components/schemas/Hex"
+          description: The EIP-155 chain ID of the application using the typed data.
+        verifyingContract:
+          $ref: "#/components/schemas/ETHAddress"
+        salt:
+          $ref: "#/components/schemas/Hex"
+    EIP712TypedData:
+      type: object
+      description: EIP-712 structured typed data object.
+      properties:
+        types:
+          $ref: "#/components/schemas/EIP712Types"
+        primaryType:
+          type: string
+          description: The root type of the message object. Must correspond to a key in the `types` object.
+        domain:
+          $ref: "#/components/schemas/EIP712Domain"
+        message:
+          type: object
+          description: The actual data, conforming to the `primaryType` definition in `types`.
+      required:
+        - types
+        - primaryType
+        - domain
+        - message
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    cookie:
+      type: apiKey
+      in: cookie
+      name: token
+  responses:
+    ClientError:
+      description: Client error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServerError:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+security:
+  - bearer: []
+  - cookie: []

@@ -4,7 +4,7 @@ All URIs are relative to *https://your_deployment.multibaas.com/api/v0*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**callContractFunction**](#callcontractfunction) | **POST** /chains/ethereum/addresses/{address-or-alias}/contracts/{contract}/methods/{method} | Call a contract function|
+|[**callContractFunction**](#callcontractfunction) | **POST** /chains/{chain}/addresses/{address-or-alias}/contracts/{contract}/methods/{method} | Call a contract function|
 |[**createContract**](#createcontract) | **POST** /contracts/{contract} | Create a contract|
 |[**createContracts**](#createcontracts) | **POST** /contracts | Create multiple contracts|
 |[**deleteContract**](#deletecontract) | **DELETE** /contracts/{contract} | Delete a contract|
@@ -14,15 +14,15 @@ All URIs are relative to *https://your_deployment.multibaas.com/api/v0*
 |[**getContract**](#getcontract) | **GET** /contracts/{contract} | Get a contract|
 |[**getContractVersion**](#getcontractversion) | **GET** /contracts/{contract}/{version} | Get a contract version|
 |[**getContractVersions**](#getcontractversions) | **GET** /contracts/{contract}/all | Get all contract versions|
-|[**getEventIndexingStatus**](#geteventindexingstatus) | **GET** /chains/ethereum/addresses/{address-or-alias}/contracts/{contract}/status | Get event indexing status|
+|[**getEventMonitorStatus**](#geteventmonitorstatus) | **GET** /chains/{chain}/addresses/{address-or-alias}/contracts/{contract}/status | Get event monitor status|
 |[**getEventTypeConversions**](#geteventtypeconversions) | **GET** /contracts/{contract}/{version}/events/{event} | Get event type conversions|
 |[**getFunctionTypeConversions**](#getfunctiontypeconversions) | **GET** /contracts/{contract}/{version}/methods/{method} | Get function type conversions|
-|[**linkAddressContract**](#linkaddresscontract) | **POST** /chains/ethereum/addresses/{address-or-alias}/contracts | Link address and contract|
+|[**linkAddressContract**](#linkaddresscontract) | **POST** /chains/{chain}/addresses/{address-or-alias}/contracts | Link address and contract|
 |[**listContractVersions**](#listcontractversions) | **GET** /contracts/{contract}/versions | List all contract versions|
 |[**listContracts**](#listcontracts) | **GET** /contracts | List contracts|
 |[**setEventTypeConversions**](#seteventtypeconversions) | **POST** /contracts/{contract}/{version}/events/{event} | Set event type conversions|
 |[**setFunctionTypeConversions**](#setfunctiontypeconversions) | **POST** /contracts/{contract}/{version}/methods/{method} | Set function type conversions|
-|[**unlinkAddressContract**](#unlinkaddresscontract) | **DELETE** /chains/ethereum/addresses/{address-or-alias}/contracts/{contract} | Unlink address and contract|
+|[**unlinkAddressContract**](#unlinkaddresscontract) | **DELETE** /chains/{chain}/addresses/{address-or-alias}/contracts/{contract} | Unlink address and contract|
 
 # **callContractFunction**
 > CallContractFunction200Response callContractFunction(postMethodArgs)
@@ -41,12 +41,14 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
+let chain: ChainName; //The blockchain chain label. (default to undefined)
 let addressOrAlias: string; //An address or the alias of an address. (default to undefined)
 let contract: string; // (default to undefined)
 let method: string; //Contract function. (default to undefined)
 let postMethodArgs: PostMethodArgs; //
 
 const { status, data } = await apiInstance.callContractFunction(
+    chain,
     addressOrAlias,
     contract,
     method,
@@ -59,6 +61,7 @@ const { status, data } = await apiInstance.callContractFunction(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **postMethodArgs** | **PostMethodArgs**|  | |
+| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **addressOrAlias** | [**string**] | An address or the alias of an address. | defaults to undefined|
 | **contract** | [**string**] |  | defaults to undefined|
 | **method** | [**string**] | Contract function. | defaults to undefined|
@@ -585,10 +588,10 @@ const { status, data } = await apiInstance.getContractVersions(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getEventIndexingStatus**
-> GetEventIndexingStatus200Response getEventIndexingStatus()
+# **getEventMonitorStatus**
+> GetEventMonitorStatus200Response getEventMonitorStatus()
 
-Returns the event indexing status for a given address and contract.
+Returns the event monitor status for a given address and contract.
 
 ### Example
 
@@ -601,10 +604,12 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
+let chain: ChainName; //The blockchain chain label. (default to undefined)
 let addressOrAlias: string; //An address or the alias of an address. (default to undefined)
 let contract: string; // (default to undefined)
 
-const { status, data } = await apiInstance.getEventIndexingStatus(
+const { status, data } = await apiInstance.getEventMonitorStatus(
+    chain,
     addressOrAlias,
     contract
 );
@@ -614,13 +619,14 @@ const { status, data } = await apiInstance.getEventIndexingStatus(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
+| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **addressOrAlias** | [**string**] | An address or the alias of an address. | defaults to undefined|
 | **contract** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**GetEventIndexingStatus200Response**
+**GetEventMonitorStatus200Response**
 
 ### Authorization
 
@@ -776,10 +782,12 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
+let chain: ChainName; //The blockchain chain label. (default to undefined)
 let addressOrAlias: string; //An address or the alias of an address. (default to undefined)
 let linkAddressContractRequest: LinkAddressContractRequest; //
 
 const { status, data } = await apiInstance.linkAddressContract(
+    chain,
     addressOrAlias,
     linkAddressContractRequest
 );
@@ -790,6 +798,7 @@ const { status, data } = await apiInstance.linkAddressContract(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **linkAddressContractRequest** | **LinkAddressContractRequest**|  | |
+| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **addressOrAlias** | [**string**] | An address or the alias of an address. | defaults to undefined|
 
 
@@ -1057,10 +1066,12 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
+let chain: ChainName; //The blockchain chain label. (default to undefined)
 let addressOrAlias: string; //An address or the alias of an address. (default to undefined)
 let contract: string; // (default to undefined)
 
 const { status, data } = await apiInstance.unlinkAddressContract(
+    chain,
     addressOrAlias,
     contract
 );
@@ -1070,6 +1081,7 @@ const { status, data } = await apiInstance.unlinkAddressContract(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
+| **chain** | **ChainName** | The blockchain chain label. | defaults to undefined|
 | **addressOrAlias** | [**string**] | An address or the alias of an address. | defaults to undefined|
 | **contract** | [**string**] |  | defaults to undefined|
 

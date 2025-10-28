@@ -1,14 +1,13 @@
 # Invite
 
-A user invitation to MultiBaas.
+An invite with groups.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **email** | **string** | The invitee\&#39;s email address. | [default to undefined]
-**createdAt** | **string** | The time the invite was created. | [default to undefined]
-**expiresAt** | **string** | The time the invite expires. | [default to undefined]
+**groupIDs** | **Array&lt;number&gt;** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -17,8 +16,7 @@ import { Invite } from '@curvegrid/multibaas-sdk';
 
 const instance: Invite = {
     email,
-    createdAt,
-    expiresAt,
+    groupIDs,
 };
 ```
 

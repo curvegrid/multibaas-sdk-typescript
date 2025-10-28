@@ -1,6 +1,6 @@
-# EventIndexingStatus
+# EventMonitorStatus
 
-Event indexing status
+Status of an Event Monitor
 
 ## Properties
 
@@ -19,9 +19,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { EventIndexingStatus } from '@curvegrid/multibaas-sdk';
+import { EventMonitorStatus } from '@curvegrid/multibaas-sdk';
 
-const instance: EventIndexingStatus = {
+const instance: EventMonitorStatus = {
     contractId,
     addressId,
     isProcessingPastLogs,

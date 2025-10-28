@@ -15,7 +15,6 @@ docs/AddressAlias.md
 docs/AddressesApi.md
 docs/AdminApi.md
 docs/AuditLog.md
-docs/AuthorizationExtraInfo.md
 docs/AzureAccount.md
 docs/AzureHardwareWallet.md
 docs/AzureWallet.md
@@ -29,6 +28,7 @@ docs/Block.md
 docs/CORSOrigin.md
 docs/CallContractFunction200Response.md
 docs/CallContractFunction200ResponseAllOfResult.md
+docs/ChainName.md
 docs/ChainStatus.md
 docs/ChainsApi.md
 docs/CloudWalletTXToSign.md
@@ -72,8 +72,8 @@ docs/EIP712Types.md
 docs/Error.md
 docs/Event.md
 docs/EventField.md
-docs/EventIndexingStatus.md
 docs/EventInformation.md
+docs/EventMonitorStatus.md
 docs/EventQueriesApi.md
 docs/EventQuery.md
 docs/EventQueryEvent.md
@@ -91,11 +91,10 @@ docs/GetChainStatus200Response.md
 docs/GetContract200Response.md
 docs/GetContractVersions200Response.md
 docs/GetEventCount200Response.md
-docs/GetEventIndexingStatus200Response.md
+docs/GetEventMonitorStatus200Response.md
 docs/GetEventQuery200Response.md
 docs/GetEventTypeConversions200Response.md
 docs/GetFunctionTypeConversions200Response.md
-docs/GetPlan200Response.md
 docs/GetTransaction200Response.md
 docs/GetTransactionReceipt200Response.md
 docs/Group.md
@@ -107,7 +106,6 @@ docs/HSMSignRequestTypedData.md
 docs/HSMSignResponse.md
 docs/HsmApi.md
 docs/Invite.md
-docs/InviteRequest.md
 docs/LinkAddressContractRequest.md
 docs/ListAddresses200Response.md
 docs/ListApiKeys200Response.md
@@ -121,7 +119,6 @@ docs/ListEvents200Response.md
 docs/ListGroups200Response.md
 docs/ListHsm200Response.md
 docs/ListHsmWallets200Response.md
-docs/ListInvites200Response.md
 docs/ListUserSigners200Response.md
 docs/ListUsers200Response.md
 docs/ListWalletTransactions200Response.md
@@ -129,13 +126,12 @@ docs/ListWebhookEvents200Response.md
 docs/ListWebhooks200Response.md
 docs/Log.md
 docs/MethodArg.md
+docs/MethodCallPreviewResponse.md
 docs/MethodCallResponse.md
 docs/MethodTypeConversionOptions.md
-docs/Plan.md
-docs/PlanFeature.md
-docs/PlanLimit.md
 docs/PostMethodArgs.md
 docs/PostMethodResponse.md
+docs/PreviewArgs.md
 docs/Role.md
 docs/SavedEventQuery.md
 docs/SetAddress201Response.md
