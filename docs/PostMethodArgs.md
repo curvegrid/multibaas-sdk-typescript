@@ -6,7 +6,7 @@ Arguments to be passed into a contract function.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**signature** | **string** |  | [optional] [default to undefined]
+**signature** | **string** | The function signature in the format &#x60;FunctionName(type1,type2,...)&#x60;, for example foo(uint32,int256). | [optional] [default to undefined]
 **args** | **Array&lt;any&gt;** | List of the function arguments. | [optional] [default to undefined]
 **from** | **string** | An Ethereum address (0x prefixed hex) or an address alias. | [optional] [default to undefined]
 **nonce** | **number** | Nonce to use for the transaction execution. | [optional] [default to undefined]

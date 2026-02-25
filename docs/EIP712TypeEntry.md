@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [default to undefined]
+**name** | **string** | The name of the entry. | [default to undefined]
 **type** | **string** |  | [default to undefined]
 
 ## Example

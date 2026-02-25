@@ -6,8 +6,8 @@ Type conversion options for an event.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**signature** | **string** |  | [optional] [default to undefined]
-**inputs** | [**Array&lt;ContractParameter&gt;**](ContractParameter.md) |  | [default to undefined]
+**signature** | **string** | The event signature in the format &#x60;EventName(type1,type2,...)&#x60;, for example foo(uint32,int256). | [optional] [default to undefined]
+**inputs** | [**Array&lt;ContractParameter&gt;**](ContractParameter.md) | List of type conversion configurations for each event input parameter. | [default to undefined]
 
 ## Example
 

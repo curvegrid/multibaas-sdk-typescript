@@ -6,7 +6,7 @@ A Cloud Wallet transaction to be signed.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**tx** | [**CloudWalletTXToSignTx**](CloudWalletTXToSignTx.md) |  | [default to undefined]
+**tx** | [**CloudWalletTx**](CloudWalletTx.md) |  | [default to undefined]
 
 ## Example
 

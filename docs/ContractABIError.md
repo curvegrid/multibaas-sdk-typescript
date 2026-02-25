@@ -7,8 +7,8 @@ A contract error.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **string** | The keccak256 hash as a hex string of 256 bits. | [default to undefined]
-**name** | **string** |  | [default to undefined]
-**signature** | **string** |  | [default to undefined]
+**name** | **string** | The name of the error. | [default to undefined]
+**signature** | **string** | The error signature in the format ErrorName(type1,type2,...), for example foo(uint32,int256). | [default to undefined]
 **inputs** | [**Array&lt;ContractABIErrorArgument&gt;**](ContractABIErrorArgument.md) | List of contract event\&#39;s input arguments. | [default to undefined]
 **notes** | **string** | The developer documentation. | [optional] [default to undefined]
 **description** | **string** | The user documentation. | [optional] [default to undefined]

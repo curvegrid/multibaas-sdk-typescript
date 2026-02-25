@@ -1,4 +1,4 @@
-## @curvegrid/multibaas-sdk@1.1.0
+## @curvegrid/multibaas-sdk@1.1.1
 
 This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
 
@@ -36,7 +36,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install @curvegrid/multibaas-sdk@1.1.0 --save
+npm install @curvegrid/multibaas-sdk@1.1.1 --save
 ```
 
 _unPublished (not recommended):_
@@ -170,8 +170,10 @@ Class | Method | HTTP request | Description
  - [CallContractFunction200Response](docs/CallContractFunction200Response.md)
  - [CallContractFunction200ResponseAllOfResult](docs/CallContractFunction200ResponseAllOfResult.md)
  - [ChainStatus](docs/ChainStatus.md)
+ - [CloudWalletBaseTx](docs/CloudWalletBaseTx.md)
+ - [CloudWalletSetCodeTx](docs/CloudWalletSetCodeTx.md)
  - [CloudWalletTXToSign](docs/CloudWalletTXToSign.md)
- - [CloudWalletTXToSignTx](docs/CloudWalletTXToSignTx.md)
+ - [CloudWalletTx](docs/CloudWalletTx.md)
  - [Contract](docs/Contract.md)
  - [ContractABI](docs/ContractABI.md)
  - [ContractABIError](docs/ContractABIError.md)

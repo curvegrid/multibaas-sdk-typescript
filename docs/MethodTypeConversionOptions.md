@@ -6,8 +6,8 @@ Type conversion options for each of the inputs and outputs of a function.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**inputs** | [**Array&lt;TypeConversionOptions&gt;**](TypeConversionOptions.md) |  | [default to undefined]
-**outputs** | [**Array&lt;TypeConversionOptions&gt;**](TypeConversionOptions.md) |  | [default to undefined]
+**inputs** | [**Array&lt;TypeConversionOptions&gt;**](TypeConversionOptions.md) | Type conversion options for each input parameter of the function. | [default to undefined]
+**outputs** | [**Array&lt;TypeConversionOptions&gt;**](TypeConversionOptions.md) | Type conversion options for each output parameter of the function. | [default to undefined]
 
 ## Example
 

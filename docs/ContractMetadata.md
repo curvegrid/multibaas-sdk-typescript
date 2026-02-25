@@ -1,13 +1,14 @@
 # ContractMetadata
 
+Lightweight reference information for a contract.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **label** | **string** | An alias to easily identify and reference the entity in subsequent requests. | [default to undefined]
-**name** | **string** | The name of the contract. | [default to undefined]
-**version** | **string** | The contract version. | [default to undefined]
+**name** | **string** | The name of the contract in MultiBaas. | [default to undefined]
+**version** | **string** | The version of the contract in MultiBaas. | [default to undefined]
 
 ## Example
 

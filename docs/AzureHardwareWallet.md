@@ -6,8 +6,8 @@ An HSM Wallet
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **number** |  | [default to undefined]
-**azureAccountID** | **number** |  | [default to undefined]
+**id** | **number** | The unique ID for this hardware wallet. | [default to undefined]
+**azureAccountID** | **number** | The ID of the associated Azure account configuration. | [default to undefined]
 **vaultName** | **string** | The name given to the vault your key is stored in. | [default to undefined]
 **keyName** | **string** | The name of the key. | [default to undefined]
 **keyVersion** | **string** | The version of the key. | [default to undefined]

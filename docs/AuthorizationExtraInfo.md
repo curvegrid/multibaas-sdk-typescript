@@ -7,7 +7,7 @@ Additional information about any EIP-7702 authorizations.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **authority** | **string** | An ethereum address. | [default to undefined]
-**formatValid** | **boolean** | Indicates whether the format of the authorization is valid. | [default to undefined]
+**formatValid** | **boolean** | Whether the format of the authorization is valid. | [default to undefined]
 **notes** | **string** | Additional notes about the validity of the authorization. | [default to undefined]
 
 ## Example

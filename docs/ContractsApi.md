@@ -42,7 +42,7 @@ const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
 let addressOrAlias: string; //An address or the alias of an address. (default to undefined)
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 let method: string; //Contract function. (default to undefined)
 let postMethodArgs: PostMethodArgs; //
 
@@ -60,7 +60,7 @@ const { status, data } = await apiInstance.callContractFunction(
 |------------- | ------------- | ------------- | -------------|
 | **postMethodArgs** | **PostMethodArgs**|  | |
 | **addressOrAlias** | [**string**] | An address or the alias of an address. | defaults to undefined|
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 | **method** | [**string**] | Contract function. | defaults to undefined|
 
 
@@ -104,7 +104,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 let baseContract: BaseContract; //
 
 const { status, data } = await apiInstance.createContract(
@@ -118,7 +118,7 @@ const { status, data } = await apiInstance.createContract(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **baseContract** | **BaseContract**|  | |
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -213,7 +213,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.deleteContract(
     contract
@@ -224,7 +224,7 @@ const { status, data } = await apiInstance.deleteContract(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -266,8 +266,8 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
-let version: string; //Contract Version. (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
+let version: string; //The version of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.deleteContractVersion(
     contract,
@@ -279,8 +279,8 @@ const { status, data } = await apiInstance.deleteContractVersion(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
-| **version** | [**string**] | Contract Version. | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
+| **version** | [**string**] | The version of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -323,7 +323,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 let postMethodArgs: PostMethodArgs; //
 
 const { status, data } = await apiInstance.deployContract(
@@ -337,7 +337,7 @@ const { status, data } = await apiInstance.deployContract(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **postMethodArgs** | **PostMethodArgs**|  | |
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -380,8 +380,8 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
-let version: string; //Contract Version. (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
+let version: string; //The version of the contract in MultiBaas. (default to undefined)
 let postMethodArgs: PostMethodArgs; //
 
 const { status, data } = await apiInstance.deployContractVersion(
@@ -396,8 +396,8 @@ const { status, data } = await apiInstance.deployContractVersion(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **postMethodArgs** | **PostMethodArgs**|  | |
-| **contract** | [**string**] |  | defaults to undefined|
-| **version** | [**string**] | Contract Version. | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
+| **version** | [**string**] | The version of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -439,7 +439,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.getContract(
     contract
@@ -450,7 +450,7 @@ const { status, data } = await apiInstance.getContract(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -492,8 +492,8 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
-let version: string; //Contract Version. (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
+let version: string; //The version of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.getContractVersion(
     contract,
@@ -505,8 +505,8 @@ const { status, data } = await apiInstance.getContractVersion(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
-| **version** | [**string**] | Contract Version. | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
+| **version** | [**string**] | The version of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -548,7 +548,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.getContractVersions(
     contract
@@ -559,7 +559,7 @@ const { status, data } = await apiInstance.getContractVersions(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -602,7 +602,7 @@ const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
 let addressOrAlias: string; //An address or the alias of an address. (default to undefined)
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.getEventIndexingStatus(
     addressOrAlias,
@@ -615,7 +615,7 @@ const { status, data } = await apiInstance.getEventIndexingStatus(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **addressOrAlias** | [**string**] | An address or the alias of an address. | defaults to undefined|
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -657,8 +657,8 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
-let version: string; //Contract Version. (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
+let version: string; //The version of the contract in MultiBaas. (default to undefined)
 let event: string; //Contract Event. (default to undefined)
 
 const { status, data } = await apiInstance.getEventTypeConversions(
@@ -672,8 +672,8 @@ const { status, data } = await apiInstance.getEventTypeConversions(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
-| **version** | [**string**] | Contract Version. | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
+| **version** | [**string**] | The version of the contract in MultiBaas. | defaults to undefined|
 | **event** | [**string**] | Contract Event. | defaults to undefined|
 
 
@@ -716,8 +716,8 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
-let version: string; //Contract Version. (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
+let version: string; //The version of the contract in MultiBaas. (default to undefined)
 let method: string; //Contract function. (default to undefined)
 
 const { status, data } = await apiInstance.getFunctionTypeConversions(
@@ -731,8 +731,8 @@ const { status, data } = await apiInstance.getFunctionTypeConversions(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
-| **version** | [**string**] | Contract Version. | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
+| **version** | [**string**] | The version of the contract in MultiBaas. | defaults to undefined|
 | **method** | [**string**] | Contract function. | defaults to undefined|
 
 
@@ -832,7 +832,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.listContractVersions(
     contract
@@ -843,7 +843,7 @@ const { status, data } = await apiInstance.listContractVersions(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type
@@ -932,8 +932,8 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
-let version: string; //Contract Version. (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
+let version: string; //The version of the contract in MultiBaas. (default to undefined)
 let event: string; //Contract Event. (default to undefined)
 let contractEventOptions: ContractEventOptions; //
 
@@ -950,8 +950,8 @@ const { status, data } = await apiInstance.setEventTypeConversions(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **contractEventOptions** | **ContractEventOptions**|  | |
-| **contract** | [**string**] |  | defaults to undefined|
-| **version** | [**string**] | Contract Version. | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
+| **version** | [**string**] | The version of the contract in MultiBaas. | defaults to undefined|
 | **event** | [**string**] | Contract Event. | defaults to undefined|
 
 
@@ -995,8 +995,8 @@ import {
 const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
-let contract: string; // (default to undefined)
-let version: string; //Contract Version. (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
+let version: string; //The version of the contract in MultiBaas. (default to undefined)
 let method: string; //Contract function. (default to undefined)
 let contractMethodOptions: ContractMethodOptions; //
 
@@ -1013,8 +1013,8 @@ const { status, data } = await apiInstance.setFunctionTypeConversions(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **contractMethodOptions** | **ContractMethodOptions**|  | |
-| **contract** | [**string**] |  | defaults to undefined|
-| **version** | [**string**] | Contract Version. | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
+| **version** | [**string**] | The version of the contract in MultiBaas. | defaults to undefined|
 | **method** | [**string**] | Contract function. | defaults to undefined|
 
 
@@ -1058,7 +1058,7 @@ const configuration = new Configuration();
 const apiInstance = new ContractsApi(configuration);
 
 let addressOrAlias: string; //An address or the alias of an address. (default to undefined)
-let contract: string; // (default to undefined)
+let contract: string; //The label of the contract in MultiBaas. (default to undefined)
 
 const { status, data } = await apiInstance.unlinkAddressContract(
     addressOrAlias,
@@ -1071,7 +1071,7 @@ const { status, data } = await apiInstance.unlinkAddressContract(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **addressOrAlias** | [**string**] | An address or the alias of an address. | defaults to undefined|
-| **contract** | [**string**] |  | defaults to undefined|
+| **contract** | [**string**] | The label of the contract in MultiBaas. | defaults to undefined|
 
 
 ### Return type

@@ -7,9 +7,9 @@ A contract event.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **string** | The keccak256 hash as a hex string of 256 bits. | [default to undefined]
-**name** | **string** |  | [default to undefined]
-**signature** | **string** |  | [default to undefined]
-**anonymous** | **boolean** |  | [default to undefined]
+**name** | **string** | The name of the event. | [default to undefined]
+**signature** | **string** | The event signature in the format EventName(type1,type2,...), for example foo(uint32,int256). | [default to undefined]
+**anonymous** | **boolean** | Whether this is an anonymous event (not logged with event signature). | [default to undefined]
 **inputs** | [**Array&lt;ContractABIEventArgument&gt;**](ContractABIEventArgument.md) | List of contract event\&#39;s input arguments. | [default to undefined]
 **notes** | **string** | The developer documentation. | [default to undefined]
 **description** | **string** | The user documentation. | [default to undefined]

@@ -6,7 +6,7 @@ Represents the set of type conversions allowed for a particular input or output 
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**types** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**types** | **Array&lt;string&gt;** | The list of supported type conversion modes for this parameter. | [optional] [default to undefined]
 
 ## Example
 

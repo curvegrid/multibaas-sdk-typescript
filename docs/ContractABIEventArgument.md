@@ -6,10 +6,10 @@ A contract event argument.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [default to undefined]
+**name** | **string** | The name of the argument. | [default to undefined]
 **type** | [**ContractABIType**](ContractABIType.md) |  | [default to undefined]
-**typeName** | **string** |  | [default to undefined]
-**indexed** | **boolean** |  | [default to undefined]
+**typeName** | **string** | The type name (e.g., uint256, address, string). | [default to undefined]
+**indexed** | **boolean** | Whether this argument is indexed and stored in the event log topics. | [default to undefined]
 **typeConversion** | [**ContractABITypeConversion**](ContractABITypeConversion.md) |  | [default to undefined]
 **notes** | **string** | The developer documentation. | [default to undefined]
 

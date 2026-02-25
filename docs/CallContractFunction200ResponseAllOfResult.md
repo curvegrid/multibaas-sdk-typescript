@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **kind** | **string** | The response object type (discriminator). | [default to undefined]
 **tx** | [**TransactionToSignTx**](TransactionToSignTx.md) |  | [default to undefined]
-**submitted** | **boolean** |  | [default to undefined]
+**submitted** | **boolean** | Indicates whether the transaction has been submitted to the blockchain. | [default to undefined]
 **output** | **any** | The function call output. | [default to undefined]
 
 ## Example

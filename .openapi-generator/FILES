@@ -31,8 +31,10 @@ docs/CallContractFunction200Response.md
 docs/CallContractFunction200ResponseAllOfResult.md
 docs/ChainStatus.md
 docs/ChainsApi.md
+docs/CloudWalletBaseTx.md
+docs/CloudWalletSetCodeTx.md
 docs/CloudWalletTXToSign.md
-docs/CloudWalletTXToSignTx.md
+docs/CloudWalletTx.md
 docs/Contract.md
 docs/ContractABI.md
 docs/ContractABIError.md

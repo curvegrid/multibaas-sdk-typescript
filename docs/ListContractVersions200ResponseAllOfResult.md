@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **label** | **string** | An alias to easily identify and reference the entity in subsequent requests. | [default to undefined]
-**versions** | **Array&lt;string&gt;** |  | [default to undefined]
+**versions** | **Array&lt;string&gt;** | The list of versions of the contract. | [default to undefined]
 
 ## Example
 

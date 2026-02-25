@@ -27,7 +27,8 @@ import {
   setSearchParams,
   serializeDataIfNeeded,
   toPathString,
-  createRequestFunction
+  createRequestFunction,
+  replaceWithSerializableTypeIfNeeded
 } from './common';
 import type { RequestArgs } from './base';
 // @ts-ignore
@@ -149,7 +150,13 @@ export interface Address {
    * An ethereum address.
    */
   address: string;
+  /**
+   * The balance of the address in wei.
+   */
   balance?: string;
+  /**
+   * The network ID.
+   */
   chain: string;
   /**
    * The next transaction nonce for this address (obtained from the blockchain node).
@@ -159,8 +166,17 @@ export interface Address {
    * The next transaction nonce for this address when using the nonce management feature.
    */
   localNonce?: number;
+  /**
+   * The bytecode deployed at this address.
+   */
   codeAt?: string;
+  /**
+   * The list of contracts linked to this address.
+   */
   contracts: Array<ContractMetadata>;
+  /**
+   * The list of contracts discovered at this address.
+   */
   contractLookup?: Array<ContractLookup>;
 }
 /**
@@ -218,7 +234,7 @@ export interface AuthorizationExtraInfo {
    */
   authority: string;
   /**
-   * Indicates whether the format of the authorization is valid.
+   * Whether the format of the authorization is valid.
    */
   formatValid: boolean;
   /**
@@ -260,7 +276,13 @@ export interface AzureAccount {
  * An HSM Wallet
  */
 export interface AzureHardwareWallet {
+  /**
+   * The unique ID for this hardware wallet.
+   */
   id: number;
+  /**
+   * The ID of the associated Azure account configuration.
+   */
   azureAccountID: number;
   /**
    * The name given to the vault your key is stored in.
@@ -343,11 +365,11 @@ export interface BaseContract {
    */
   label: string;
   /**
-   * The name of the contract.
+   * The name of the contract in MultiBaas.
    */
   contractName: string;
   /**
-   * The contract version.
+   * The version of the contract in MultiBaas.
    */
   version: string;
   /**
@@ -370,6 +392,9 @@ export interface BaseContract {
    * The contract metadata JSON string.
    */
   metadata?: string;
+  /**
+   * Whether the user has marked this contract as a favorite.
+   */
   isFavorite?: boolean;
 }
 /**
@@ -510,15 +535,9 @@ export interface ChainStatus {
   baseFee?: string;
 }
 /**
- * A Cloud Wallet transaction to be signed.
- */
-export interface CloudWalletTXToSign {
-  tx: CloudWalletTXToSignTx;
-}
-/**
  * An Ethereum transaction.
  */
-export interface CloudWalletTXToSignTx {
+export interface CloudWalletBaseTx {
   /**
    * Sender account nonce of the transaction
    */
@@ -565,6 +584,74 @@ export interface CloudWalletTXToSignTx {
   type: number;
 }
 /**
+ * An EIP-7702 SetCode transaction.
+ */
+export interface CloudWalletSetCodeTx {
+  /**
+   * Sender account nonce of the transaction
+   */
+  nonce?: number;
+  /**
+   * Gas price of the transaction
+   */
+  gasPrice?: string;
+  /**
+   * Fee cap per gas of the transaction
+   */
+  gasFeeCap?: string;
+  /**
+   * GasTipCap per gas of the transaction
+   */
+  gasTipCap?: string;
+  /**
+   * Gas limit of the transaction
+   */
+  gas: number;
+  /**
+   * An ethereum address.
+   */
+  from: string;
+  /**
+   * An ethereum address.
+   */
+  to: string;
+  /**
+   * Amount (in wei) to send with the transaction.
+   */
+  value: string;
+  /**
+   * A hex string.
+   */
+  data: string;
+  /**
+   * The keccak256 hash as a hex string of 256 bits.
+   */
+  hash?: string;
+  /**
+   * Transaction type
+   */
+  type: number;
+  /**
+   * EIP-7702 authorization list for SetCode transactions.
+   */
+  authorizationList: Array<SetCodeAuthorization>;
+}
+/**
+ * A Cloud Wallet transaction to be signed.
+ */
+export interface CloudWalletTXToSign {
+  tx: CloudWalletTx;
+}
+/**
+ * @type CloudWalletTx
+ */
+export type CloudWalletTx =
+  | ({ type: '0' } & CloudWalletBaseTx)
+  | ({ type: '1' } & CloudWalletBaseTx)
+  | ({ type: '2' } & CloudWalletBaseTx)
+  | ({ type: '4' } & CloudWalletSetCodeTx);
+
+/**
  * A returned contract.
  */
 export interface Contract {
@@ -573,11 +660,11 @@ export interface Contract {
    */
   label: string;
   /**
-   * The name of the contract.
+   * The name of the contract in MultiBaas.
    */
   contractName: string;
   /**
-   * The contract version.
+   * The version of the contract in MultiBaas.
    */
   version: string;
   /**
@@ -600,6 +687,9 @@ export interface Contract {
    * The contract metadata JSON string.
    */
   metadata?: string;
+  /**
+   * Whether the user has marked this contract as a favorite.
+   */
   isFavorite?: boolean;
   abi: ContractABI;
   /**
@@ -612,8 +702,17 @@ export interface Contract {
  */
 export interface ContractABI {
   constructor: ContractABIMethod | null;
+  /**
+   * A mapping of function signatures to their method definitions.
+   */
   methods: { [key: string]: ContractABIMethod };
+  /**
+   * A mapping of event signatures to their event definitions.
+   */
   events: { [key: string]: ContractABIEvent };
+  /**
+   * A mapping of error signatures to their error definitions.
+   */
   errors?: { [key: string]: ContractABIError };
   fallback: ContractABIMethod | null;
   receive: ContractABIMethod | null;
@@ -626,7 +725,13 @@ export interface ContractABIError {
    * The keccak256 hash as a hex string of 256 bits.
    */
   id: string;
+  /**
+   * The name of the error.
+   */
   name: string;
+  /**
+   * The error signature in the format ErrorName(type1,type2,...), for example foo(uint32,int256).
+   */
   signature: string;
   /**
    * List of contract event\'s input arguments.
@@ -645,9 +750,18 @@ export interface ContractABIError {
  * A contract error argument.
  */
 export interface ContractABIErrorArgument {
+  /**
+   * The name of the argument.
+   */
   name: string;
   type: ContractABIType;
+  /**
+   * The type name (e.g., uint256, address, string).
+   */
   typeName: string;
+  /**
+   * Whether this argument is indexed.
+   */
   indexed: boolean;
   /**
    * The developer documentation.
@@ -662,8 +776,17 @@ export interface ContractABIEvent {
    * The keccak256 hash as a hex string of 256 bits.
    */
   id: string;
+  /**
+   * The name of the event.
+   */
   name: string;
+  /**
+   * The event signature in the format EventName(type1,type2,...), for example foo(uint32,int256).
+   */
   signature: string;
+  /**
+   * Whether this is an anonymous event (not logged with event signature).
+   */
   anonymous: boolean;
   /**
    * List of contract event\'s input arguments.
@@ -682,9 +805,18 @@ export interface ContractABIEvent {
  * A contract event argument.
  */
 export interface ContractABIEventArgument {
+  /**
+   * The name of the argument.
+   */
   name: string;
   type: ContractABIType;
+  /**
+   * The type name (e.g., uint256, address, string).
+   */
   typeName: string;
+  /**
+   * Whether this argument is indexed and stored in the event log topics.
+   */
   indexed: boolean;
   typeConversion: ContractABITypeConversion | null;
   /**
@@ -708,7 +840,13 @@ export interface ContractABIMethod {
    * The function signature.
    */
   signature: string;
+  /**
+   * Indicates whether this method is read-only (constant).
+   */
   const: boolean;
+  /**
+   * Indicates whether this method accepts ether payments.
+   */
   payable: boolean;
   /**
    * List of function arguments.
@@ -718,7 +856,13 @@ export interface ContractABIMethod {
    * List of function outputs.
    */
   outputs: Array<ContractABIMethodArgument>;
+  /**
+   * The contract method author.
+   */
   author: string;
+  /**
+   * The developer documentation.
+   */
   notes: string;
   /**
    * The function description.
@@ -729,35 +873,71 @@ export interface ContractABIMethod {
  * A contract function argument.
  */
 export interface ContractABIMethodArgument {
+  /**
+   * The name of the argument.
+   */
   name: string;
   type: ContractABIType;
+  /**
+   * The type name (e.g., uint256, address, string).
+   */
   typeName: string;
   typeConversion: ContractABITypeConversion | null;
+  /**
+   * The developer documentation.
+   */
   notes: string;
 }
 /**
  * A contract function or event argument type.
  */
 export interface ContractABIType {
+  /**
+   * The type name (e.g., uint256, address, string).
+   */
   type: string;
+  /**
+   * The size of the type in bits, if applicable.
+   */
   size?: number;
+  /**
+   * For tuple types, the list of element types within the tuple.
+   */
   tupleElems?: Array<ContractABIType>;
+  /**
+   * For tuple types, the original names of the tuple elements as defined in the contract.
+   */
   tupleRawNames?: Array<string>;
   elem?: ContractABIType;
 }
 /**
- * Holds JSON-compatible type conversion information.
+ * Type conversion object for an input or an output of a function or an event.
  */
 export interface ContractABITypeConversion {
+  /**
+   * The type conversion mode to apply: `decimals` (for converting integer wei values to fixed-point decimal strings, e.g., wei to ether), `timestamp` (converts Unix timestamp integers to RFC 3339 formatted time strings), `stringBytes` (converts byte arrays to UTF-8 strings), `base64Bytes` (converts byte arrays to base64-encoded strings).
+   */
   mode: string;
+  /**
+   * The fixed number of decimal places to use for `decimals` mode conversion. Must be between 0-255.
+   */
   decimalsAbsolute: number | null;
+  /**
+   * The name of a contract function that dynamically determines decimal places for `decimals` mode conversion (e.g., `decimals()` for ERC-20 tokens). The function must take no parameters and return a uint value between 0-255. Mutually exclusive with `decimalsAbsolute`.
+   */
   decimalsFunction: string | null;
 }
 /**
  * Type conversion options for an event.
  */
 export interface ContractEventOptions {
+  /**
+   * The event signature in the format `EventName(type1,type2,...)`, for example foo(uint32,int256).
+   */
   signature?: string;
+  /**
+   * List of type conversion configurations for each event input parameter.
+   */
   inputs: Array<ContractParameter>;
 }
 /**
@@ -782,9 +962,12 @@ export interface ContractInformation {
   label: string;
 }
 /**
- * A contract instance
+ * A deployed instance of a contract at a specific blockchain address.
  */
 export interface ContractInstance {
+  /**
+   * The alias of the deployed instance.
+   */
   alias: string;
   /**
    * An ethereum address.
@@ -800,7 +983,7 @@ export interface ContractLookup {
    */
   address: string;
   /**
-   * The name of the contract.
+   * The name of the contract in MultiBaas.
    */
   name?: string;
   /**
@@ -824,7 +1007,7 @@ export interface ContractLookup {
    */
   devdoc?: string;
   /**
-   * Indicates whether the contract has been verified.
+   * Whether the contract has been verified.
    */
   verified: boolean;
   /**
@@ -836,21 +1019,24 @@ export interface ContractLookup {
    */
   verifiedLink?: string;
   /**
-   * Indicates whether the contract is a proxy contract.
+   * Whether the contract is a proxy contract.
    */
   proxy: boolean;
 }
+/**
+ * Lightweight reference information for a contract.
+ */
 export interface ContractMetadata {
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
    */
   label: string;
   /**
-   * The name of the contract.
+   * The name of the contract in MultiBaas.
    */
   name: string;
   /**
-   * The contract version.
+   * The version of the contract in MultiBaas.
    */
   version: string;
 }
@@ -894,17 +1080,23 @@ export interface ContractOverview {
    */
   label: string;
   /**
-   * The name of the contract.
+   * The name of the contract in MultiBaas.
    */
   contractName: string;
   /**
-   * The contract version.
+   * The version of the contract in MultiBaas.
    */
   version: string;
+  /**
+   * Whether the user has marked this contract as a favorite.
+   */
   isFavorite?: boolean;
+  /**
+   * Whether this contract has deployable bytecode and can be deployed to the blockchain.
+   */
   deployable: boolean;
   /**
-   * List of contract instances.
+   * List of addresses where this contract has been deployed and linked.
    */
   instances: Array<ContractInstance>;
 }
@@ -1044,7 +1236,13 @@ export interface DeployContract200Response {
  */
 export interface DeployContractTransaction {
   tx: TransactionToSignTx;
+  /**
+   * Indicates whether the transaction has been submitted to the blockchain.
+   */
   submitted: boolean;
+  /**
+   * The address where the contract will be deployed once the transaction is confirmed.
+   */
   deployAt?: string;
   /**
    * An alias to easily identify and reference the entity in subsequent requests.
@@ -1080,6 +1278,9 @@ export interface EIP712Domain {
 export type EIP712DomainChainId = number | string;
 
 export interface EIP712TypeEntry {
+  /**
+   * The name of the entry.
+   */
   name: string;
   type: string;
 }
@@ -1139,23 +1340,32 @@ export interface EventField {
   type: string;
 }
 /**
- * Event indexing status
+ * The status for a contract\'s event indexing at a specific address.
  */
 export interface EventIndexingStatus {
-  contractId?: number;
-  addressId?: number;
+  /**
+   * When true, the event indexer is syncing historical events from past blocks in order to catch up to the current state.
+   */
   isProcessingPastLogs: boolean;
-  idealBlockRange?: number;
+  /**
+   * The most recent block number that has been processed for event indexing.
+   */
   latestBlockNumber: number;
   /**
    * The keccak256 hash as a hex string of 256 bits.
    */
   latestBlockHash: string;
+  /**
+   * The block number from which event indexing began.
+   */
   startBlockNumber: number;
   /**
    * The keccak256 hash as a hex string of 256 bits.
    */
   startBlockHash: string;
+  /**
+   * The timestamp of the last update to the indexing status.
+   */
   updatedAt: string;
 }
 /**
@@ -1637,7 +1847,7 @@ export interface LinkAddressContractRequest {
    */
   label: string;
   /**
-   * The contract version.
+   * The version of the contract in MultiBaas.
    */
   version?: string;
   /**
@@ -1694,6 +1904,9 @@ export interface ListContractVersions200ResponseAllOfResult {
    * An alias to easily identify and reference the entity in subsequent requests.
    */
   label: string;
+  /**
+   * The list of versions of the contract.
+   */
   versions: Array<string>;
 }
 export interface ListContracts200Response {
@@ -1910,7 +2123,13 @@ export interface MethodCallResponse extends PostMethodResponse {
  * Type conversion options for each of the inputs and outputs of a function.
  */
 export interface MethodTypeConversionOptions {
+  /**
+   * Type conversion options for each input parameter of the function.
+   */
   inputs: Array<TypeConversionOptions>;
+  /**
+   * Type conversion options for each output parameter of the function.
+   */
   outputs: Array<TypeConversionOptions>;
 }
 /**
@@ -2011,6 +2230,9 @@ export type PlanLimitNameEnum = typeof PlanLimitNameEnum[keyof typeof PlanLimitN
  * Arguments to be passed into a contract function.
  */
 export interface PostMethodArgs {
+  /**
+   * The function signature in the format `FunctionName(type1,type2,...)`, for example foo(uint32,int256).
+   */
   signature?: string;
   /**
    * List of the function arguments.
@@ -2490,10 +2712,16 @@ export type TransactionStatus = typeof TransactionStatus[keyof typeof Transactio
  */
 export interface TransactionToSign {
   tx: TransactionToSignTx;
+  /**
+   * Indicates whether the transaction has been submitted to the blockchain.
+   */
   submitted: boolean;
 }
 export interface TransactionToSignResponse extends PostMethodResponse {
   tx: TransactionToSignTx;
+  /**
+   * Indicates whether the transaction has been submitted to the blockchain.
+   */
   submitted: boolean;
 }
 /**
@@ -2560,6 +2788,9 @@ export interface TransferEth200Response {
  * Represents the set of type conversions allowed for a particular input or output of a function (how it may be \"cast\").
  */
 export interface TypeConversionOptions {
+  /**
+   * The list of supported type conversion modes for this parameter.
+   */
   types?: Array<string> | null;
 }
 /**
@@ -2726,6 +2957,8 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -2775,6 +3008,8 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
         localVarQueryParameter['include'] = include;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -2808,6 +3043,8 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -2847,6 +3084,7 @@ export const AddressesApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3164,6 +3402,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3204,6 +3443,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3252,6 +3492,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3297,6 +3539,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3344,6 +3588,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3374,6 +3620,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3416,6 +3664,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3455,6 +3704,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3489,6 +3740,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3527,6 +3780,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3564,6 +3819,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3597,6 +3854,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3636,6 +3895,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3677,6 +3937,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
         localVarQueryParameter['all'] = all;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3711,6 +3973,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3744,6 +4008,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3799,6 +4065,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
         localVarQueryParameter['assignable'] = assignable;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3832,6 +4100,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3869,6 +4139,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3909,6 +4181,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
         localVarQueryParameter['groupID'] = groupID;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -3945,6 +4219,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3992,6 +4268,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -4037,6 +4315,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4084,6 +4364,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -4129,6 +4411,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4176,6 +4460,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -4222,6 +4508,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -4267,6 +4555,8 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4319,6 +4609,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4372,6 +4663,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4419,6 +4711,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6403,6 +6696,8 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -6436,6 +6731,8 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6486,6 +6783,8 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
         localVarQueryParameter['include'] = include;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -6535,6 +6834,8 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
         localVarQueryParameter['include'] = include;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -6576,6 +6877,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6620,6 +6922,7 @@ export const ChainsApiAxiosParamCreator = function (configuration?: Configuratio
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7050,7 +7353,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * Builds a transaction to call the given contract function. Returns a transaction to be signed and signs and submits to the blockchain it if the `signAndSubmit` flag is enabled.
      * @summary Call a contract function
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
@@ -7093,6 +7396,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7107,7 +7411,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Adds a contract.
      * @summary Create a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {BaseContract} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7140,6 +7444,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7183,6 +7488,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7197,7 +7503,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Deletes a contract and all its versions.
      * @summary Delete a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7222,6 +7528,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7234,8 +7542,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Deletes a specific contract version.
      * @summary Delete a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7268,6 +7576,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7280,7 +7590,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns a transaction to deploy the given contract to the blockchain.
      * @summary Deploy a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7316,6 +7626,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7330,8 +7641,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns a transaction to deploy the given contract version to the blockchain.
      * @summary Deploy a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7369,6 +7680,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7383,7 +7695,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns the given contract.
      * @summary Get a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7408,6 +7720,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7420,8 +7734,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns a specific contract version.
      * @summary Get a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7454,6 +7768,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7466,7 +7782,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns all the versions of a contract.
      * @summary Get all contract versions
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7491,6 +7807,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7504,7 +7822,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * Returns the event indexing status for a given address and contract.
      * @summary Get event indexing status
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7537,6 +7855,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7549,8 +7869,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns the type conversion options for a given contract and event signature.
      * @summary Get event type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} event Contract Event.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7588,6 +7908,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7600,8 +7922,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns the type conversion options for a given contract and function signature.
      * @summary Get function type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7638,6 +7960,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7687,6 +8011,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7705,7 +8030,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Returns a list of the versions of a contract.
      * @summary List all contract versions
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7732,6 +8057,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7767,6 +8094,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7779,8 +8108,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Sets the type conversion options for a given contract and event signature.
      * @summary Set event type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} event Contract Event.
      * @param {ContractEventOptions} contractEventOptions
      * @param {*} [options] Override http request option.
@@ -7823,6 +8152,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7837,8 +8167,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
     /**
      * Sets the type conversion options for a given contract and function signature.
      * @summary Set function type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {ContractMethodOptions} contractMethodOptions
      * @param {*} [options] Override http request option.
@@ -7881,6 +8211,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7896,7 +8227,7 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
      * Unlinks an address from a contract.
      * @summary Unlink address and contract
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7929,6 +8260,8 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -7951,7 +8284,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * Builds a transaction to call the given contract function. Returns a transaction to be signed and signs and submits to the blockchain it if the `signAndSubmit` flag is enabled.
      * @summary Call a contract function
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
@@ -7985,7 +8318,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Adds a contract.
      * @summary Create a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {BaseContract} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8033,7 +8366,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Deletes a contract and all its versions.
      * @summary Delete a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8056,8 +8389,8 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Deletes a specific contract version.
      * @summary Delete a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8081,7 +8414,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns a transaction to deploy the given contract to the blockchain.
      * @summary Deploy a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8106,8 +8439,8 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns a transaction to deploy the given contract version to the blockchain.
      * @summary Deploy a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8138,7 +8471,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns the given contract.
      * @summary Get a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8161,8 +8494,8 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns a specific contract version.
      * @summary Get a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8186,7 +8519,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns all the versions of a contract.
      * @summary Get all contract versions
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8210,7 +8543,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * Returns the event indexing status for a given address and contract.
      * @summary Get event indexing status
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8238,8 +8571,8 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns the type conversion options for a given contract and event signature.
      * @summary Get event type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} event Contract Event.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8270,8 +8603,8 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns the type conversion options for a given contract and function signature.
      * @summary Get function type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8331,7 +8664,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Returns a list of the versions of a contract.
      * @summary List all contract versions
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8375,8 +8708,8 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Sets the type conversion options for a given contract and event signature.
      * @summary Set event type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} event Contract Event.
      * @param {ContractEventOptions} contractEventOptions
      * @param {*} [options] Override http request option.
@@ -8410,8 +8743,8 @@ export const ContractsApiFp = function (configuration?: Configuration) {
     /**
      * Sets the type conversion options for a given contract and function signature.
      * @summary Set function type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {ContractMethodOptions} contractMethodOptions
      * @param {*} [options] Override http request option.
@@ -8446,7 +8779,7 @@ export const ContractsApiFp = function (configuration?: Configuration) {
      * Unlinks an address from a contract.
      * @summary Unlink address and contract
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8484,7 +8817,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * Builds a transaction to call the given contract function. Returns a transaction to be signed and signs and submits to the blockchain it if the `signAndSubmit` flag is enabled.
      * @summary Call a contract function
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
@@ -8504,7 +8837,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Adds a contract.
      * @summary Create a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {BaseContract} baseContract
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8529,7 +8862,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Deletes a contract and all its versions.
      * @summary Delete a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8539,8 +8872,8 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Deletes a specific contract version.
      * @summary Delete a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8554,7 +8887,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns a transaction to deploy the given contract to the blockchain.
      * @summary Deploy a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8569,8 +8902,8 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns a transaction to deploy the given contract version to the blockchain.
      * @summary Deploy a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {PostMethodArgs} postMethodArgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8588,7 +8921,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns the given contract.
      * @summary Get a contract
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8598,8 +8931,8 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns a specific contract version.
      * @summary Get a contract version
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8613,7 +8946,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns all the versions of a contract.
      * @summary Get all contract versions
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8627,7 +8960,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * Returns the event indexing status for a given address and contract.
      * @summary Get event indexing status
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8643,8 +8976,8 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns the type conversion options for a given contract and event signature.
      * @summary Get event type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} event Contract Event.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8662,8 +8995,8 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns the type conversion options for a given contract and function signature.
      * @summary Get function type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -8698,7 +9031,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Returns a list of the versions of a contract.
      * @summary List all contract versions
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8720,8 +9053,8 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Sets the type conversion options for a given contract and event signature.
      * @summary Set event type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} event Contract Event.
      * @param {ContractEventOptions} contractEventOptions
      * @param {*} [options] Override http request option.
@@ -8741,8 +9074,8 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
     /**
      * Sets the type conversion options for a given contract and function signature.
      * @summary Set function type conversions
-     * @param {string} contract
-     * @param {string} version Contract Version.
+     * @param {string} contract The label of the contract in MultiBaas.
+     * @param {string} version The version of the contract in MultiBaas.
      * @param {string} method Contract function.
      * @param {ContractMethodOptions} contractMethodOptions
      * @param {*} [options] Override http request option.
@@ -8763,7 +9096,7 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
      * Unlinks an address from a contract.
      * @summary Unlink address and contract
      * @param {string} addressOrAlias An address or the alias of an address.
-     * @param {string} contract
+     * @param {string} contract The label of the contract in MultiBaas.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -8787,7 +9120,7 @@ export interface ContractsApiInterface {
    * Builds a transaction to call the given contract function. Returns a transaction to be signed and signs and submits to the blockchain it if the `signAndSubmit` flag is enabled.
    * @summary Call a contract function
    * @param {string} addressOrAlias An address or the alias of an address.
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {string} method Contract function.
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
@@ -8804,7 +9137,7 @@ export interface ContractsApiInterface {
   /**
    * Adds a contract.
    * @summary Create a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {BaseContract} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -8827,7 +9160,7 @@ export interface ContractsApiInterface {
   /**
    * Deletes a contract and all its versions.
    * @summary Delete a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -8836,8 +9169,8 @@ export interface ContractsApiInterface {
   /**
    * Deletes a specific contract version.
    * @summary Delete a contract version
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -8846,7 +9179,7 @@ export interface ContractsApiInterface {
   /**
    * Returns a transaction to deploy the given contract to the blockchain.
    * @summary Deploy a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -8860,8 +9193,8 @@ export interface ContractsApiInterface {
   /**
    * Returns a transaction to deploy the given contract version to the blockchain.
    * @summary Deploy a contract version
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -8876,7 +9209,7 @@ export interface ContractsApiInterface {
   /**
    * Returns the given contract.
    * @summary Get a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -8885,8 +9218,8 @@ export interface ContractsApiInterface {
   /**
    * Returns a specific contract version.
    * @summary Get a contract version
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -8899,7 +9232,7 @@ export interface ContractsApiInterface {
   /**
    * Returns all the versions of a contract.
    * @summary Get all contract versions
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -8909,7 +9242,7 @@ export interface ContractsApiInterface {
    * Returns the event indexing status for a given address and contract.
    * @summary Get event indexing status
    * @param {string} addressOrAlias An address or the alias of an address.
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -8922,8 +9255,8 @@ export interface ContractsApiInterface {
   /**
    * Returns the type conversion options for a given contract and event signature.
    * @summary Get event type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} event Contract Event.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -8938,8 +9271,8 @@ export interface ContractsApiInterface {
   /**
    * Returns the type conversion options for a given contract and function signature.
    * @summary Get function type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} method Contract function.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -8968,7 +9301,7 @@ export interface ContractsApiInterface {
   /**
    * Returns a list of the versions of a contract.
    * @summary List all contract versions
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -8988,8 +9321,8 @@ export interface ContractsApiInterface {
   /**
    * Sets the type conversion options for a given contract and event signature.
    * @summary Set event type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} event Contract Event.
    * @param {ContractEventOptions} contractEventOptions
    * @param {*} [options] Override http request option.
@@ -9006,8 +9339,8 @@ export interface ContractsApiInterface {
   /**
    * Sets the type conversion options for a given contract and function signature.
    * @summary Set function type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} method Contract function.
    * @param {ContractMethodOptions} contractMethodOptions
    * @param {*} [options] Override http request option.
@@ -9025,7 +9358,7 @@ export interface ContractsApiInterface {
    * Unlinks an address from a contract.
    * @summary Unlink address and contract
    * @param {string} addressOrAlias An address or the alias of an address.
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9044,7 +9377,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * Builds a transaction to call the given contract function. Returns a transaction to be signed and signs and submits to the blockchain it if the `signAndSubmit` flag is enabled.
    * @summary Call a contract function
    * @param {string} addressOrAlias An address or the alias of an address.
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {string} method Contract function.
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
@@ -9065,7 +9398,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Adds a contract.
    * @summary Create a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {BaseContract} baseContract
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9092,7 +9425,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Deletes a contract and all its versions.
    * @summary Delete a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9105,8 +9438,8 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Deletes a specific contract version.
    * @summary Delete a contract version
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9119,7 +9452,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns a transaction to deploy the given contract to the blockchain.
    * @summary Deploy a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9133,8 +9466,8 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns a transaction to deploy the given contract version to the blockchain.
    * @summary Deploy a contract version
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {PostMethodArgs} postMethodArgs
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9153,7 +9486,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns the given contract.
    * @summary Get a contract
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9166,8 +9499,8 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns a specific contract version.
    * @summary Get a contract version
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9180,7 +9513,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns all the versions of a contract.
    * @summary Get all contract versions
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9194,7 +9527,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * Returns the event indexing status for a given address and contract.
    * @summary Get event indexing status
    * @param {string} addressOrAlias An address or the alias of an address.
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9207,8 +9540,8 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns the type conversion options for a given contract and event signature.
    * @summary Get event type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} event Contract Event.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9222,8 +9555,8 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns the type conversion options for a given contract and function signature.
    * @summary Get function type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} method Contract function.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -9260,7 +9593,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Returns a list of the versions of a contract.
    * @summary List all contract versions
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9285,8 +9618,8 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Sets the type conversion options for a given contract and event signature.
    * @summary Set event type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} event Contract Event.
    * @param {ContractEventOptions} contractEventOptions
    * @param {*} [options] Override http request option.
@@ -9307,8 +9640,8 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
   /**
    * Sets the type conversion options for a given contract and function signature.
    * @summary Set function type conversions
-   * @param {string} contract
-   * @param {string} version Contract Version.
+   * @param {string} contract The label of the contract in MultiBaas.
+   * @param {string} version The version of the contract in MultiBaas.
    * @param {string} method Contract function.
    * @param {ContractMethodOptions} contractMethodOptions
    * @param {*} [options] Override http request option.
@@ -9330,7 +9663,7 @@ export class ContractsApi extends BaseAPI implements ContractsApiInterface {
    * Unlinks an address from a contract.
    * @summary Unlink address and contract
    * @param {string} addressOrAlias An address or the alias of an address.
-   * @param {string} contract
+   * @param {string} contract The label of the contract in MultiBaas.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    */
@@ -9377,6 +9710,8 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -9416,6 +9751,8 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9470,6 +9807,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9527,6 +9865,8 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
         localVarQueryParameter['limit'] = limit;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -9567,6 +9907,8 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -9600,6 +9942,8 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9649,6 +9993,7 @@ export const EventQueriesApiAxiosParamCreator = function (configuration?: Config
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10246,6 +10591,8 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
         localVarQueryParameter['offset'] = offset;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -10347,6 +10694,8 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
       if (offset !== undefined) {
         localVarQueryParameter['offset'] = offset;
       }
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10795,6 +11144,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10835,6 +11185,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10875,6 +11226,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10910,6 +11262,8 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10995,6 +11349,8 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
         localVarQueryParameter['offset'] = offset;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -11031,6 +11387,8 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11071,6 +11429,8 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11120,6 +11480,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11163,6 +11524,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11203,6 +11565,7 @@ export const HsmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11936,6 +12299,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -11980,6 +12344,8 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -12054,6 +12420,8 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
         localVarQueryParameter['offset'] = offset;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -12105,6 +12473,7 @@ export const TxmApiAxiosParamCreator = function (configuration?: Configuration) 
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -12532,6 +12901,8 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -12565,6 +12936,8 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -12607,6 +12980,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -12646,6 +13020,8 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -12682,6 +13058,8 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
       // authentication bearer required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -12738,6 +13116,8 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
         localVarQueryParameter['offset'] = offset;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -12786,6 +13166,8 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
         localVarQueryParameter['offset'] = offset;
       }
 
+      localVarHeaderParameter['Accept'] = 'application/json';
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
@@ -12831,6 +13213,7 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter['Accept'] = 'application/json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};

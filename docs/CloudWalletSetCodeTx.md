@@ -1,6 +1,6 @@
-# CloudWalletTXToSignTx
+# CloudWalletSetCodeTx
 
-An Ethereum transaction.
+An EIP-7702 SetCode transaction.
 
 ## Properties
 
@@ -12,18 +12,19 @@ Name | Type | Description | Notes
 **gasTipCap** | **string** | GasTipCap per gas of the transaction | [optional] [default to undefined]
 **gas** | **number** | Gas limit of the transaction | [default to undefined]
 **from** | **string** | An ethereum address. | [default to undefined]
-**to** | **string** | An ethereum address. | [optional] [default to undefined]
+**to** | **string** | An ethereum address. | [default to undefined]
 **value** | **string** | Amount (in wei) to send with the transaction. | [default to undefined]
 **data** | **string** | A hex string. | [default to undefined]
 **hash** | **string** | The keccak256 hash as a hex string of 256 bits. | [optional] [default to undefined]
 **type** | **number** | Transaction type | [default to undefined]
+**authorizationList** | [**Array&lt;SetCodeAuthorization&gt;**](SetCodeAuthorization.md) | EIP-7702 authorization list for SetCode transactions. | [default to undefined]
 
 ## Example
 
 ```typescript
-import { CloudWalletTXToSignTx } from '@curvegrid/multibaas-sdk';
+import { CloudWalletSetCodeTx } from '@curvegrid/multibaas-sdk';
 
-const instance: CloudWalletTXToSignTx = {
+const instance: CloudWalletSetCodeTx = {
     nonce,
     gasPrice,
     gasFeeCap,
@@ -35,6 +36,7 @@ const instance: CloudWalletTXToSignTx = {
     data,
     hash,
     type,
+    authorizationList,
 };
 ```
 

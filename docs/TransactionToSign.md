@@ -7,7 +7,7 @@ A transaction to be signed.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **tx** | [**TransactionToSignTx**](TransactionToSignTx.md) |  | [default to undefined]
-**submitted** | **boolean** |  | [default to undefined]
+**submitted** | **boolean** | Indicates whether the transaction has been submitted to the blockchain. | [default to undefined]
 
 ## Example
 

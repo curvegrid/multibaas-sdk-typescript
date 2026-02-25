@@ -1,12 +1,12 @@
 # ContractInstance
 
-A contract instance
+A deployed instance of a contract at a specific blockchain address.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**alias** | **string** |  | [default to undefined]
+**alias** | **string** | The alias of the deployed instance. | [default to undefined]
 **address** | **string** | An ethereum address. | [default to undefined]
 
 ## Example

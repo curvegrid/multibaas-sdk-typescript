@@ -7,9 +7,9 @@ The contract ABI.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **constructor** | [**ContractABIMethod**](ContractABIMethod.md) |  | [default to undefined]
-**methods** | [**{ [key: string]: ContractABIMethod; }**](ContractABIMethod.md) |  | [default to undefined]
-**events** | [**{ [key: string]: ContractABIEvent; }**](ContractABIEvent.md) |  | [default to undefined]
-**errors** | [**{ [key: string]: ContractABIError; }**](ContractABIError.md) |  | [optional] [default to undefined]
+**methods** | [**{ [key: string]: ContractABIMethod; }**](ContractABIMethod.md) | A mapping of function signatures to their method definitions. | [default to undefined]
+**events** | [**{ [key: string]: ContractABIEvent; }**](ContractABIEvent.md) | A mapping of event signatures to their event definitions. | [default to undefined]
+**errors** | [**{ [key: string]: ContractABIError; }**](ContractABIError.md) | A mapping of error signatures to their error definitions. | [optional] [default to undefined]
 **fallback** | [**ContractABIMethod**](ContractABIMethod.md) |  | [default to undefined]
 **receive** | [**ContractABIMethod**](ContractABIMethod.md) |  | [default to undefined]
 

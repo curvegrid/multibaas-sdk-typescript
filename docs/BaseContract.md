@@ -7,14 +7,14 @@ A contract.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **label** | **string** | An alias to easily identify and reference the entity in subsequent requests. | [default to undefined]
-**contractName** | **string** | The name of the contract. | [default to undefined]
-**version** | **string** | The contract version. | [default to undefined]
+**contractName** | **string** | The name of the contract in MultiBaas. | [default to undefined]
+**version** | **string** | The version of the contract in MultiBaas. | [default to undefined]
 **bin** | **string** | The smart-contract bytecode. | [optional] [default to undefined]
 **rawAbi** | **string** | The contract raw ABI JSON string. | [default to undefined]
 **userDoc** | **string** | The user documentation JSON string. | [optional] [default to undefined]
 **developerDoc** | **string** | The developer documentation JSON string. | [optional] [default to undefined]
 **metadata** | **string** | The contract metadata JSON string. | [optional] [default to undefined]
-**isFavorite** | **boolean** |  | [optional] [default to undefined]
+**isFavorite** | **boolean** | Whether the user has marked this contract as a favorite. | [optional] [default to undefined]
 
 ## Example
 
