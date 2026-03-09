@@ -12,6 +12,7 @@
  * Do not edit the class manually.
  */
 
+// Trigger API re-generation
 import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';

@@ -16,17 +16,18 @@ on:
 
 env:
   # Go / Node / PostgreSQL version to use in the CI
-  NODE_VER: "20"
+  NODE_VER: "24"
 
 jobs:
   generate:
     name: Generate SDK
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
       OPENAPI_GENERATOR_VERSION: "${{ github.event.inputs.openapi-generator-version }}"
     permissions:
-      contents: write
+      id-token: write # Required for OIDC
+      contents: write # Required to push changes to the repository
     steps:
       - name: Check Tag
         id: check-tag
@@ -36,11 +37,11 @@ jobs:
               exit 1
           fi
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "${{ env.NODE_VER }}"
           registry-url: https://registry.npmjs.org/
@@ -66,6 +67,4 @@ jobs:
           git push origin "v${{ github.event.inputs.version }}"
           git push origin main
       - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         run: npm publish --access public
